@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<head>
+    <script src="js/lib/underscore.js"></script>
+    <script src="js/Css3D.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+    <script>
+        //创建场景
+        var s = new Css3D.Stage();
+        s.size("100%", "100%");
+        s.material({
+            color : "#cccccc"
+        });
+        s.update();
+        document.body.appendChild(s.el);
+        
+        //创建一个三维容器（创建以方便分组使用）
+        var sp = new Css3D.Sprite3D();
+        sp.position(0, 0, -500).update();
+        s.addChild(sp);
+
+        //创建20个平面放入容器，并定义鼠标事件
+        for (var i = 0; i < 20; i++) {
+            var p = new Css3D.Plane();
+            p.size(50);
+            p.position(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 250);
+            p.rotation(Math.random() * 300 - 150, Math.random() * 300 - 150, Math.random() * 300 - 150);
+            p.material({
+                color : Css3D.getRandomColor(),
+                alpha : Math.random() * 0.5 + 0.5
+            });
+            p.update();
+            sp.addChild(p);
+            p.on("mouseover", function() {
+                this.le.scale(1.2).update();
+            });
+            p.on("mouseout", function() {
+                this.le.scale(1).update();
+            });
+        }
+
+        //创建4个立方体放入容器，并定义鼠标事件
+        for (var i = 0; i < 4; i++) {
+            var p = new Css3D.Cube();
+            p.size(Math.random() * 150, Math.random() * 150, Math.random() * 150);
+            p.position(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 250);
+            p.rotation(Math.random() * 300 - 150, Math.random() * 300 - 150, Math.random() * 300 - 150);
+            p.material({
+                color : Css3D.getRandomColor(),
+                alpha : Math.random() * 0.5 + 0.5
+            });
+            p.update();
+            sp.addChild(p);
+            p.on("mouseover", function() {
+                this.le.scale(1.2).update();
+            });
+            p.on("mouseout", function() {
+                this.le.scale(1).update();
+            });
+        }
+
+        //响应屏幕调整尺寸
+        function resize() {
+            s.size(window.innerWidth, window.innerHeight).update();
+        };
+        window.onresize = function() {
+            resize();
+        };
+        resize();
+
+        //刷新场景
+        requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame ||
+        function(callback) {
+            setTimeout(callback, 1000 / 60);
+        };
+
+        function go() {
+            sp.rotate(0, 0.1, 0).update();
+            
+            // s.camera.move(0,0,-1).rotate(0,0.15,0);
+            // s.update();
+
+            requestAnimationFrame(go);
+        }
+
+        requestAnimationFrame(go);
+
+    </script>
+</body>
