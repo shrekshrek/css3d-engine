@@ -507,20 +507,6 @@
                 this.el.style[Css3D._transformProperty] = "translate3d(" + this.__position.x + "px," + this.__position.y + "px," + this.__position.z + "px) " + "rotateX(" + this.__rotation.x + "deg) " + "rotateY(" + this.__rotation.y + "deg) " + "rotateZ(" + this.__rotation.z + "deg) " + "scale3d(" + this.__scale.x + ", " + this.__scale.y + ", " + this.__scale.z + ") ";
             }
 
-            if (this.__isMaterialUpdate) {
-                this.__isMaterialUpdate = false;
-                if (this.__material) {
-                    if (this.__material.image) {
-                        this.el.style.background = "url(" + this.__material.image + ")";
-                        this.el.style.backgroundSize = "100% 100%";
-                    } else if (this.__material.color) {
-                        this.el.style.backgroundColor = this.__material.color;
-                    }
-                    if (this.__material.alpha) {
-                        this.el.style.opacity = this.__material.alpha;
-                    }
-                }
-            }
             return this;
         },
 
@@ -621,6 +607,20 @@
                 this.__fix2.position(-this.camera.x(), -this.camera.y(), -this.camera.z()).update();
             }
 
+            if (this.__isMaterialUpdate) {
+                this.__isMaterialUpdate = false;
+                if (this.__material) {
+                    if (this.__material.image) {
+                        this.el.style.background = "url(" + this.__material.image + ")";
+                        this.el.style.backgroundSize = "100% 100%";
+                    } else if (this.__material.color) {
+                        this.el.style.backgroundColor = this.__material.color;
+                    }
+                    if (this.__material.alpha) {
+                        this.el.style.opacity = this.__material.alpha;
+                    }
+                }
+            }
         },
         addChild : function(view) {
             this.__fix2.addChild(view);
@@ -680,6 +680,21 @@
                 this.el.style.height = _h + "px";
                 this.el.style.marginLeft = -_w / 2 + "px";
                 this.el.style.marginTop = -_h / 2 + "px";
+            }
+
+            if (this.__isMaterialUpdate) {
+                this.__isMaterialUpdate = false;
+                if (this.__material) {
+                    if (this.__material.image) {
+                        this.el.style.background = "url(" + this.__material.image + ")";
+                        this.el.style.backgroundSize = "100% 100%";
+                    } else if (this.__material.color) {
+                        this.el.style.backgroundColor = this.__material.color;
+                    }
+                    if (this.__material.alpha) {
+                        this.el.style.opacity = this.__material.alpha;
+                    }
+                }
             }
         }
     });
