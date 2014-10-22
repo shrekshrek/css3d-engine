@@ -90,23 +90,107 @@
         return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
     };
 
-    Css3D.calcDistance = function(pos1, pos2) {
-        return Math.pow(Math.pow(pos2.x - pos1.x, 2) + Math.pow(pos2.y - pos1.y, 2) + Math.pow(pos2.z - pos1.z, 2), 0.5);
+    Css3D.rgb2hex = function() {
+
     };
 
-    Css3D.calcRadian = function(pos1, pos2) {
+    Css3D.hex2rgb = function() {
+
+    };
+
+    Css3D.getDistance = function(o1, o2) {
+        switch (arguments.length) {
+        case 1 :
+            return Math.pow(Math.pow(o1[0], 2) + Math.pow(o1[1], 2) + Math.pow(o1[2], 2), 0.5);
+        case 2 :
+            return Math.pow(Math.pow(o2[0] - o1[0], 2) + Math.pow(o2[1] - o1[1], 2) + Math.pow(o2[2] - o1[2], 2), 0.5);
+        }
+    };
+
+    Css3D.getRadian = function(o1, o2) {
+        switch (arguments.length) {
+        case 1 :
+            return {
+                x : Math.atan2(o1[1], o1[2]),
+                y : Math.atan2(o1[2], o1[0]),
+                z : Math.atan2(o1[1], o1[0])
+            };
+        case 2 :
+            return {
+                x : Math.atan2(o2[1] - o1[1], o2[2] - o1[2]),
+                y : Math.atan2(o2[2] - o1[2], o2[0] - o1[0]),
+                z : Math.atan2(o2[1] - o1[1], o2[0] - o1[0])
+            };
+        }
+    };
+
+    Css3D.getDegree = function(o1, o2) {
+        switch (arguments.length) {
+        case 1 :
+            var _r = Css3D.getRadian(o1);
+            break;
+        case 2 :
+            var _r = Css3D.getRadian(o1, o2);
+            break;
+        }
         return {
-            x : Math.atan2(pos2.y - pos1.y, pos2.z - pos1.z),
-            y : Math.atan2(pos2.x - pos1.x, pos2.z - pos1.z),
-            z : Math.atan2(pos2.y - pos1.y, pos2.x - pos1.x)
+            x : _r.x / Math.PI * 180,
+            y : _r.y / Math.PI * 180,
+            z : _r.z / Math.PI * 180
         };
     };
 
-    Css3D.calcDegree = function(pos1, pos2) {
+    Css3D.positionRotate3D = function(o, r) {
+        var _sinx = Math.sin(r[0] / 180 * Math.PI);
+        var _cosx = Math.cos(r[0] / 180 * Math.PI);
+        var _x1 = o[0];
+        var _y1 = o[1] * _cosx + o[2] * _sinx;
+        var _z1 = o[2] * _cosx - o[1] * _sinx;
+
+        var _siny = Math.sin(r[1] / 180 * Math.PI);
+        var _cosy = Math.cos(r[1] / 180 * Math.PI);
+        var _x2 = _x1 * _cosy - _z1 * _siny;
+        var _y2 = _y1;
+        var _z2 = _z1 * _cosy + _x1 * _siny;
+
+        var _sinz = Math.sin(r[2] / 180 * Math.PI);
+        var _cosz = Math.cos(r[2] / 180 * Math.PI);
+        var _x3 = _x2 * _cosz - _y2 * _sinz;
+        var _y3 = _y2 * _cosz + _x2 * _sinz;
+        var _z3 = _z2;
+
         return {
-            x : Math.atan2(pos2.y - pos1.y, pos2.z - pos1.z) / Math.PI * 180,
-            y : Math.atan2(pos2.x - pos1.x, pos2.z - pos1.z) / Math.PI * 180,
-            z : Math.atan2(pos2.y - pos1.y, pos2.x - pos1.x) / Math.PI * 180
+            x : _x3,
+            y : _y3,
+            z : _z3
+        };
+    };
+
+    Css3D.positionRotate3D2 = function(o, r) {
+        var _sinx = Math.sin(r[0] / 180 * Math.PI);
+        var _cosx = Math.cos(r[0] / 180 * Math.PI);
+        var _siny = Math.sin(r[1] / 180 * Math.PI);
+        var _cosy = Math.cos(r[1] / 180 * Math.PI);
+        var _sinz = Math.sin(r[2] / 180 * Math.PI);
+        var _cosz = Math.cos(r[2] / 180 * Math.PI);
+
+        var x = o[0];
+        var y = o[1];
+        var z = o[2];
+
+        // rotate about x axis
+        var xy = _cosx * y - _sinx * z;
+        var xz = _sinx * y + _cosx * z;
+        // rotate about y axis
+        var yz = _cosy * xz - _siny * x;
+        var yx = _siny * xz + _cosy * x;
+        // rotate about z axis
+        var zx = _cosz * yx - _sinz * xy;
+        var zy = _sinz * yx + _cosz * xy;
+        return {
+            x : zx,
+            y : zy,
+            z : yz
         };
     };
 
@@ -737,12 +821,54 @@
                 var _h = this.__size.y;
                 var _d = this.__size.z;
 
-                this.front.size(_w, _h, 0).position(0, 0, -_d / 2).rotation(0, 0, 180).material(this.__material).update();
-                this.back.size(_w, _h, 0).position(0, 0, _d / 2).rotation(0, 0, 0).material(this.__material).update();
-                this.left.size(_d, _h, 0).position(-_w / 2, 0, 0).rotation(0, -90, 0).material(this.__material).update();
-                this.right.size(_d, _h, 0).position(_w / 2, 0, 0).rotation(0, 90, 0).material(this.__material).update();
-                this.top.size(_w, _d, 0).position(0, -_h / 2, 0).rotation(-90, 0, 0).material(this.__material).update();
-                this.bottom.size(_w, _d, 0).position(0, _h / 2, 0).rotation(90, 0, 0).material(this.__material).update();
+                this.front.size(_w, _h, 0).position(0, 0, -_d / 2).rotation(0, 0, 180).update();
+                this.back.size(_w, _h, 0).position(0, 0, _d / 2).rotation(0, 0, 0).update();
+                this.left.size(_d, _h, 0).position(-_w / 2, 0, 0).rotation(0, -90, 0).update();
+                this.right.size(_d, _h, 0).position(_w / 2, 0, 0).rotation(0, 90, 0).update();
+                this.top.size(_w, _d, 0).position(0, -_h / 2, 0).rotation(-90, 0, 0).update();
+                this.bottom.size(_w, _d, 0).position(0, _h / 2, 0).rotation(90, 0, 0).update();
+            }
+
+            if (this.__isMaterialUpdate) {
+                this.__isMaterialUpdate = false;
+                if (this.__material) {
+                    if (this.__material.front)
+                        this.front.material({
+                            image : this.__material.front
+                        }).update();
+                    else
+                        this.front.material(this.__material).update();
+                    if (this.__material.back)
+                        this.back.material({
+                            image : this.__material.back
+                        }).update();
+                    else
+                        this.back.material(this.__material).update();
+                    if (this.__material.left)
+                        this.left.material({
+                            image : this.__material.left
+                        }).update();
+                    else
+                        this.left.material(this.__material).update();
+                    if (this.__material.right)
+                        this.right.material({
+                            image : this.__material.right
+                        }).update();
+                    else
+                        this.right.material(this.__material).update();
+                    if (this.__material.top)
+                        this.top.material({
+                            image : this.__material.top
+                        }).update();
+                    else
+                        this.top.material(this.__material).update();
+                    if (this.__material.bottom)
+                        this.bottom.material({
+                            image : this.__material.bottom
+                        }).update();
+                    else
+                        this.bottom.material(this.__material).update();
+                }
             }
         }
     });
