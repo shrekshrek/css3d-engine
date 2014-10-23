@@ -140,57 +140,30 @@
         };
     };
 
+    //三维变换，css的rotation属性作用顺序依次是x,y,z.所以推倒计算时需要反过来，计算顺序是z,y,x
     Css3D.positionRotate3D = function(o, r) {
-        var _sinx = Math.sin(r[0] / 180 * Math.PI);
-        var _cosx = Math.cos(r[0] / 180 * Math.PI);
-        var _x1 = o[0];
-        var _y1 = o[1] * _cosx + o[2] * _sinx;
-        var _z1 = o[2] * _cosx - o[1] * _sinx;
+        var _sinz = Math.sin(r[2] / 180 * Math.PI);
+        var _cosz = Math.cos(r[2] / 180 * Math.PI);
+        var _x1 = o[0] * _cosz - o[1] * _sinz;
+        var _y1 = o[1] * _cosz + o[0] * _sinz;
+        var _z1 = o[2];
 
         var _siny = Math.sin(r[1] / 180 * Math.PI);
         var _cosy = Math.cos(r[1] / 180 * Math.PI);
-        var _x2 = _x1 * _cosy - _z1 * _siny;
+        var _x2 = _x1 * _cosy + _z1 * _siny;
         var _y2 = _y1;
-        var _z2 = _z1 * _cosy + _x1 * _siny;
+        var _z2 = _z1 * _cosy - _x1 * _siny;
 
-        var _sinz = Math.sin(r[2] / 180 * Math.PI);
-        var _cosz = Math.cos(r[2] / 180 * Math.PI);
-        var _x3 = _x2 * _cosz - _y2 * _sinz;
-        var _y3 = _y2 * _cosz + _x2 * _sinz;
-        var _z3 = _z2;
+        var _sinx = Math.sin(r[0] / 180 * Math.PI);
+        var _cosx = Math.cos(r[0] / 180 * Math.PI);
+        var _x3 = _x2;
+        var _y3 = _y2 * _cosx - _z2 * _sinx;
+        var _z3 = _z2 * _cosx + _y2 * _sinx;
 
         return {
             x : _x3,
             y : _y3,
             z : _z3
-        };
-    };
-
-    Css3D.positionRotate3D2 = function(o, r) {
-        var _sinx = Math.sin(r[0] / 180 * Math.PI);
-        var _cosx = Math.cos(r[0] / 180 * Math.PI);
-        var _siny = Math.sin(r[1] / 180 * Math.PI);
-        var _cosy = Math.cos(r[1] / 180 * Math.PI);
-        var _sinz = Math.sin(r[2] / 180 * Math.PI);
-        var _cosz = Math.cos(r[2] / 180 * Math.PI);
-
-        var x = o[0];
-        var y = o[1];
-        var z = o[2];
-
-        // rotate about x axis
-        var xy = _cosx * y - _sinx * z;
-        var xz = _sinx * y + _cosx * z;
-        // rotate about y axis
-        var yz = _cosy * xz - _siny * x;
-        var yx = _siny * xz + _cosy * x;
-        // rotate about z axis
-        var zx = _cosz * yx - _sinz * xy;
-        var zy = _sinz * yx + _cosz * xy;
-        return {
-            x : zx,
-            y : zy,
-            z : yz
         };
     };
 
@@ -276,6 +249,63 @@
                 this.__position.y += y;
                 this.__position.z += z;
                 this.__isPositionUpdate = true;
+                return this;
+            }
+        },
+
+        __origin : {
+            x : "50%",
+            y : "50%",
+            z : 0
+        },
+        __isOriginUpdate : false,
+        originX : function(n) {
+            if (arguments.length) {
+                this.__origin.x = n;
+                this.__isOriginUpdate = true;
+                return this;
+            } else {
+                return this.__origin.x;
+            }
+        },
+        originY : function(n) {
+            if (arguments.length) {
+                this.__origin.y = n;
+                this.__isOriginUpdate = true;
+                return this;
+            } else {
+                return this.__origin.y;
+            }
+        },
+        originZ : function(n) {
+            if (arguments.length) {
+                this.__origin.z = n;
+                this.__isOriginUpdate = true;
+                return this;
+            } else {
+                return this.__origin.z;
+            }
+        },
+        origin : function(x, y, z) {
+            switch (arguments.length) {
+            case 0 :
+                return this.__origin;
+            case 1 :
+                this.__origin.x = x;
+                this.__origin.y = x;
+                this.__origin.z = x;
+                this.__isOriginUpdate = true;
+                return this;
+            case 2 :
+                this.__origin.x = x;
+                this.__origin.y = y;
+                this.__isOriginUpdate = true;
+                return this;
+            case 3 :
+                this.__origin.x = x;
+                this.__origin.y = y;
+                this.__origin.z = z;
+                this.__isOriginUpdate = true;
                 return this;
             }
         },
@@ -482,6 +512,13 @@
             };
             this.__isPositionUpdate = true;
 
+            this.__origin = {
+                x : "50%",
+                y : "50%",
+                z : 0
+            };
+            this.__isOriginUpdate = true;
+
             this.__rotation = {
                 x : 0,
                 y : 0,
@@ -571,7 +608,7 @@
             }
             _dom.style[Css3D._browserPrefix + "Transform"] = "translateZ(0px)";
             _dom.style[Css3D._browserPrefix + "TransformStyle"] = "preserve-3d";
-            _dom.style[Css3D._browserPrefix + "TransformOrigin"] = "50% 50%";
+            // _dom.style[Css3D._browserPrefix + "TransformOrigin"] = "50% 50%";
             this.el = _dom;
             _dom.le = this;
         },
@@ -588,7 +625,15 @@
                 this.__isPositionUpdate = false;
                 this.__isRotationUpdate = false;
                 this.__isScaleUpdate = false;
-                this.el.style[Css3D._transformProperty] = "translate3d(" + this.__position.x + "px," + this.__position.y + "px," + this.__position.z + "px) " + "rotateX(" + this.__rotation.x + "deg) " + "rotateY(" + this.__rotation.y + "deg) " + "rotateZ(" + this.__rotation.z + "deg) " + "scale3d(" + this.__scale.x + ", " + this.__scale.y + ", " + this.__scale.z + ") ";
+                this.el.style[Css3D._browserPrefix + "Transform"] = "translate3d(" + this.__position.x + "px," + this.__position.y + "px," + this.__position.z + "px) " + "rotateX(" + this.__rotation.x + "deg) " + "rotateY(" + this.__rotation.y + "deg) " + "rotateZ(" + this.__rotation.z + "deg) " + "scale3d(" + this.__scale.x + ", " + this.__scale.y + ", " + this.__scale.z + ") ";
+            }
+
+            if (this.__isOriginUpdate) {
+                this.__isOriginUpdate = false;
+                var _ox = Number(this.__origin.x) ? this.__origin.x + "px" : this.__origin.x;
+                var _oy = Number(this.__origin.y) ? this.__origin.y + "px" : this.__origin.y;
+                var _oz = Number(this.__origin.z) ? this.__origin.z + "px" : this.__origin.z;
+                this.el.style[Css3D._browserPrefix + "TransformOrigin"] = _ox + " " + _oy + " " + _oz;
             }
 
             return this;
