@@ -18,22 +18,22 @@
 
         //创建一个三维容器（创建以方便分组使用）
         var sp = new Css3D.Sprite3D();
-        sp.position(0, 0, -500).rotation(0, 0, 90).update();
+        sp.position(0, 100, -500).rotation(0, 0, 70).update();
         s.addChild(sp);
 
         var p = new Css3D.Plane();
-        p.size(100).position(100, 0, 0).rotation(30, 50, 30).material({
+        p.size(100).position(100, 0, 0).rotation(90, 0, 0).material({
             color : Css3D.getRandomColor()
         }).update();
         sp.addChild(p);
 
         setTimeout(function() {
             var _o = Css3D.positionRotate3D([p.x(), p.y(), p.z()], [sp.rotationX(), sp.rotationY(), sp.rotationZ()]);
-            var _o2 = Css3D.positionRotate3D([p.rotationX(), p.rotationY(), p.rotationZ()], [sp.rotationZ(), sp.rotationY(), sp.rotationX()]);
-            console.log([p.rotationX(), p.rotationY(), p.rotationZ()], _o2);
+            var _sx = Math.sin(p.rotationX()/180*Math.PI);
+            var _cx = Math.cos(p.rotationX()/180*Math.PI);console.log(_sx,_cx);
             var _rx = sp.rotationX() + p.rotationX();
-            var _ry = sp.rotationY() + p.rotationY();
-            var _rz = sp.rotationZ() + p.rotationZ();
+            var _ry = sp.rotationY()*_cx + sp.rotationZ()*_cx + p.rotationY();
+            var _rz = -sp.rotationY()*_sx + sp.rotationZ()*_sx + p.rotationZ();
             // var _rx = sp.rotationX() + p.rotationX()*Math.cos(sp.rotationZ()/180*Math.PI);
             // var _ry = sp.rotationY() + p.rotationX()*Math.sin(sp.rotationZ()/180*Math.PI);
             // var _rz = sp.rotationZ() + 0;
