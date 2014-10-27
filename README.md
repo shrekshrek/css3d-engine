@@ -11,8 +11,9 @@ demo:http://shrekwang.duapp.com/demo/c3d/
 <script src="../underscore.js"></script>
 <script src="../css3d.js"></script>
 
-类
-Css3D.Object3D  三维元素基类，拥有如下方法  
+##类
+**Css3D.Object3D**  
+三维元素基类，拥有如下方法：  
 设置获取实例位置  
 .x(n);  
 .y(n);  
@@ -62,7 +63,8 @@ parent  父节点
 children  子节点数组  
 
 
-Css3D.Sprite3D  三维显示元素基类，一般用于作为容器使用，自身只会刷新位置，角度信息。拥有如下方法  
+**Css3D.Sprite3D**  
+三维显示元素基类，一般用于作为容器使用，自身只会刷新位置，角度信息。拥有如下方法：  
 绑定事件  
 .on();  
 
@@ -73,16 +75,21 @@ Css3D.Sprite3D  三维显示元素基类，一般用于作为容器使用，自�
 .material({color:'#ff0000',images:"",alpha:1});  
 
 
-Css3D.Stage  三维场景，需要首先创建，其他所有内容都通过addchild方法放入场景即可  
+**Css3D.Stage**  
+三维场景，需要首先创建，其他所有内容都通过addchild方法放入场景即可。  
 
 
-Css3D.Camera  摄像机，最基本的3D摄像机，场景创建时自动创建，通过stage.camera属性获取  
+**Css3D.Camera**  
+摄像机，最基本的3D摄像机，场景创建时自动创建，通过stage.camera属性获取。  
 
 
-Css3D.Plane  平面，顾名思义  
+**Css3D.Plane**  
+平面，顾名思义。  
 
 
-Css3D.Cube  立方体，顾名思义，指定材质时可以添加6面的图片定义{front:"",back:"",left:"",right:"",up:"",down:""}  
+**Css3D.Cube**  
+立方体，顾名思义，指定材质时可以添加6面的图片定义。  
+*eg.{front:"",back:"",left:"",right:"",up:"",down:""}*  
 
 
 
