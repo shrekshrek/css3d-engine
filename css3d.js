@@ -91,21 +91,15 @@
     };
 
     Css3D.rgb2hex = function(r, g, b) {
-
+        return ((r << 16) | (g << 8) | b).toString(16);
     };
 
-    Css3D.hex2rgb = function(n) {
-        var _n = Math.floor(n);
-
-        var _r = (_n >> 16 & 255 ) / 255;
-        var _g = (_n >> 8 & 255 ) / 255;
-        var _b = (_n & 255 ) / 255;
-
-        return {
-            r : _r,
-            g : _g,
-            b : _b
-        };
+    Css3D.hex2rgb = function(s) {
+        var _n = Math.floor('0x' + s);
+        var _r = _n >> 16 & 255;
+        var _g = _n >> 8 & 255;
+        var _b = _n & 255;
+        return [_r, _g, _b];
     };
 
     Css3D.getDistance = function(o1, o2) {
