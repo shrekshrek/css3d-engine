@@ -809,8 +809,8 @@
         back : null,
         left : null,
         right : null,
-        top : null,
-        bottom : null,
+        up : null,
+        down : null,
         initialize : function() {
             Css3D.Cube.__super__.initialize.apply(this);
 
@@ -826,11 +826,11 @@
             this.right = new Css3D.Plane();
             this.addChild(this.right);
 
-            this.top = new Css3D.Plane();
-            this.addChild(this.top);
+            this.up = new Css3D.Plane();
+            this.addChild(this.up);
 
-            this.bottom = new Css3D.Plane();
-            this.addChild(this.bottom);
+            this.down = new Css3D.Plane();
+            this.addChild(this.down);
 
         },
         update : function() {
@@ -842,12 +842,12 @@
                 var _h = this.__size.y;
                 var _d = this.__size.z;
 
-                this.front.size(_w, _h, 0).position(0, 0, -_d / 2).rotation(0, 0, 180).update();
+                this.front.size(_w, _h, 0).position(0, 0, -_d / 2).rotation(0, 180, 0).update();
                 this.back.size(_w, _h, 0).position(0, 0, _d / 2).rotation(0, 0, 0).update();
                 this.left.size(_d, _h, 0).position(-_w / 2, 0, 0).rotation(0, -90, 0).update();
                 this.right.size(_d, _h, 0).position(_w / 2, 0, 0).rotation(0, 90, 0).update();
-                this.top.size(_w, _d, 0).position(0, -_h / 2, 0).rotation(-90, 0, 0).update();
-                this.bottom.size(_w, _d, 0).position(0, _h / 2, 0).rotation(90, 0, 0).update();
+                this.up.size(_w, _d, 0).position(0, -_h / 2, 0).rotation(90, 0, 0).update();
+                this.down.size(_w, _d, 0).position(0, _h / 2, 0).rotation(-90, 0, 0).update();
             }
 
             if (this.__isMaterialUpdate) {
@@ -877,18 +877,18 @@
                         }).update();
                     else
                         this.right.material(this.__material).update();
-                    if (this.__material.top)
-                        this.top.material({
-                            image : this.__material.top
+                    if (this.__material.up)
+                        this.up.material({
+                            image : this.__material.up
                         }).update();
                     else
-                        this.top.material(this.__material).update();
-                    if (this.__material.bottom)
-                        this.bottom.material({
-                            image : this.__material.bottom
+                        this.up.material(this.__material).update();
+                    if (this.__material.down)
+                        this.down.material({
+                            image : this.__material.down
                         }).update();
                     else
-                        this.bottom.material(this.__material).update();
+                        this.down.material(this.__material).update();
                 }
             }
         }
