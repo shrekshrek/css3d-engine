@@ -638,6 +638,14 @@
             }
             return this;
         },
+        buttonMode : function(bool) {
+            if (bool) {
+                this.el.style.cursor = "pointer";
+            } else {
+                this.el.style.cursor = "auto";
+            }
+            return this;
+        },
 
         __material : null,
         __isMaterialUpdate : false,
