@@ -1,8 +1,10 @@
-/*
- * Css3D.js - v0.1.0
- * (c) 2014 shrek.wang
- * https://github.com/shrekshrek/css3d-engine
- */
+/*!
+ * VERSION: 0.1.0
+ * DATE: 2014-11-20
+ * GIT:https://github.com/shrekshrek/css3d-engine
+ * 
+ * @author: Shrek.wang, shrekshrek@gmail.com
+ **/
 
 (function() {
 
