@@ -613,8 +613,8 @@
         },
         removeChild : function(view) {
             Css3D.Sprite3D.__super__.removeChild.apply(this, [view]);
-            if (this.el && this.el.parentNode) {
-                this.el.parentNode.removeChild(this.el);
+            if (view.el && view.el.parentNode) {
+                view.el.parentNode.removeChild(view.el);
             }
             return this;
         },
