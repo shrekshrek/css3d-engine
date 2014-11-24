@@ -6,25 +6,25 @@
  * @author: Shrek.wang, shrekshrek@gmail.com
  **/
 
-(function() {
+(function(root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(['underscore', 'exports'], function(_, exports) {
+            root.Css3D = factory(root, exports, _);
+        });
 
-    var root = this;
+    } else if (typeof exports !== 'undefined') {
+        var _ = require('underscore');
+        factory(root, exports, _);
+
+    } else {
+        root.Css3D = factory(root, {}, root._);
+    }
+
+}(this, function(root, Css3D, _) {
 
     var previousCss3D = root.Css3D;
 
-    var Css3D;
-    if ( typeof exports !== 'undefined') {
-        Css3D = exports;
-    } else {
-        Css3D = root.Css3D = {};
-    }
-
     Css3D.VERSION = '0.1.0';
-
-    // Require Underscore, if we're on the server, and it's not already present.
-    var _ = root._;
-    if (!_ && ( typeof require !== 'undefined'))
-        _ = require('underscore');
 
     Css3D.noConflict = function() {
         root.Css3D = previousCss3D;
@@ -898,4 +898,4 @@
         }
     });
 
-}).call(this);
+}));
