@@ -778,7 +778,7 @@
                 this.__isSizeUpdate = false;
                 this.__isOriginUpdate = false;
                 var _w = Number(this.__size.x) ? this.__size.x : 0;
-                var _h = Number(this.__size.y) ? this.__size.x : 0;
+                var _h = Number(this.__size.y) ? this.__size.y : 0;
                 var _d = 0;
                 this.el.style.width = _w + "px";
                 this.el.style.height = _h + "px";
