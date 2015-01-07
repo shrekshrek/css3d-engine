@@ -83,33 +83,40 @@
 
         var isMoving = false;
         var lastMouseX = 0;
-        var lastMousey = 0;
+        var lastMouseY = 0;
         var curMouseX = 0;
         var curMouseY = 0;
         var lastAngleX = 0;
         var lastAngleY = 0;
         var angleX = 0;
         var angleY = 0;
-        document.addEventListener("mousedown", function(evt){
-            isMoving = true;
+
+        document.addEventListener("mousedown", mouseDownHandler);
+
+        document.addEventListener("mouseup", mouseUpHandler);
+
+        function mouseDownHandler(evt){
             lastMouseX = evt.pageX;
             lastMouseY = evt.pageY;
             lastAngleX = angleX;
             lastAngleY = angleY;
             curMouseX = evt.pageX;
             curMouseY = evt.pageY;
-        });
 
-        document.addEventListener("mousemove", function(evt){
+            document.addEventListener("mousemove", mouseMoveHandler);
+        }
+
+        function mouseMoveHandler(evt){
             curMouseX = evt.pageX;
             curMouseY = evt.pageY;
-        });
+        }
 
-        document.addEventListener("mouseup", function(evt){
-            isMoving = false;
+        function mouseUpHandler(evt){
             curMouseX = evt.pageX;
             curMouseY = evt.pageY;
-        });
+
+            document.removeEventListener("mousemove", mouseMoveHandler);
+        }
 
         //刷新场景
         requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame ||
@@ -120,7 +127,6 @@
         function go() {
             var _len = sp.children.length;
 
-            if(isMoving){
                 angleX += (curMouseX - lastMouseX + lastAngleX - angleX)*0.3;
                 angleY += (curMouseY - lastMouseY + lastAngleY - angleY)*0.3;
                 angleY = Math.max(-60, Math.min(60, angleY));
@@ -129,7 +135,6 @@
                     _p.rotation(-angleY, angleX, 0).update();
 //                    _p.rotate(0.0, 0.2, 0).update();
                 }
-            }
             requestAnimationFrame(go);
         }
 
