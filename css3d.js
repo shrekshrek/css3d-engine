@@ -24,7 +24,7 @@
 
     var previousCss3D = root.Css3D;
 
-    Css3D.VERSION = '0.1.0';
+    Css3D.VERSION = '0.2.0';
 
     Css3D.noConflict = function() {
         root.Css3D = previousCss3D;
