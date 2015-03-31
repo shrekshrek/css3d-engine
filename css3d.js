@@ -7,20 +7,9 @@
  **/
 
 (function(root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(['underscore', 'exports'], function(_, exports) {
-            root.Css3D = factory(root, exports, _);
-        });
+    root.Css3D = factory(root, {});
 
-    } else if (typeof exports !== 'undefined') {
-        var _ = require('underscore');
-        factory(root, exports, _);
-
-    } else {
-        root.Css3D = factory(root, {}, root._);
-    }
-
-}(this, function(root, Css3D, _) {
+}(this, function(root, Css3D) {
 
     var previousCss3D = root.Css3D;
 
@@ -31,29 +20,39 @@
         return this;
     };
 
-    // --------------------------------------------------------------------extend.from.backbone
+    // --------------------------------------------------------------------extend
+
+    var ext = function(obj){
+        var len = arguments.length;
+        if (len < 2 || obj == null) return obj;
+        for (var i = 1; i < len; i++) {
+            var source = arguments[i];
+            for (var j in source) {
+                obj[j] = source[j];
+            }
+        }
+        return obj;
+    };
+
     var extend = function(protoProps, staticProps) {
         var parent = this;
         var child;
 
-        if (protoProps && _.has(protoProps, 'constructor')) {
+        if (protoProps && Object.prototype.hasOwnProperty.call(protoProps, 'constructor')) {
             child = protoProps.constructor;
         } else {
-            child = function() {
-                return parent.apply(this, arguments);
-            };
+            child = function(){ return parent.apply(this, arguments); };
         }
 
-        _.extend(child, parent, staticProps);
+        ext(child, parent, staticProps);
 
-        var Surrogate = function() {
+        var Surrogate = function(){
             this.constructor = child;
         };
         Surrogate.prototype = parent.prototype;
         child.prototype = new Surrogate;
 
-        if (protoProps)
-            _.extend(child.prototype, protoProps);
+        if (protoProps) ext(child.prototype, protoProps);
 
         child.__super__ = parent.prototype;
 
@@ -145,7 +144,7 @@
         this.initialize.apply(this, arguments);
     };
 
-    _.extend(Css3D.Object3D.prototype, {
+    ext(Css3D.Object3D.prototype, {
         __position : {
             x : 0,
             y : 0,
@@ -516,9 +515,9 @@
             this.children = [];
         },
         destroy : function() {
-            _.each(this.children, function(obj) {
-                obj.destroy();
-            });
+            for(var i in this.children){
+                this.children[i].destroy();
+            }
             this.children = [];
         },
 
@@ -528,23 +527,23 @@
             if (view.parent)
                 view.parent.removeChild(view);
 
-            _.each(this.children, function(obj) {
-                if (obj === view)
+            for(var i in this.children){
+                if (this.children[i] === view)
                     return this;
-            });
+            }
             view.parent = this;
             this.children.push(view);
             return this;
         },
         removeChild : function(view) {
             var _self = this;
-            _.each(this.children, function(index, obj) {
-                if (obj === view) {
-                    _self.children.splice(index, 1);
+            for(var i = this.children.length-1; i>=0; i--){
+                if (this.children[i] === view) {
+                    _self.children.splice(i, 1);
                     view.parent = null;
                     return this;
                 }
-            });
+            }
             return this;
         },
         update : function() {
