@@ -2,12 +2,18 @@
  * VERSION: 0.2.0
  * DATE: 2015-01-03
  * GIT:https://github.com/shrekshrek/css3d-engine
- * 
+ *
  * @author: Shrek.wang, shrekshrek@gmail.com
  **/
 
 (function(root, factory) {
-    root.Css3D = factory(root, {});
+    if (typeof define === 'function' && define.amd) {
+        define(['exports'], function(exports) {
+            root.Css3D = factory(root, exports);
+        });
+    } else {
+        root.Css3D = factory(root, {});
+    }
 
 }(this, function(root, Css3D) {
 
@@ -890,6 +896,6 @@
             }
         }
     });
-    
+
     return Css3D;
 }));
