@@ -1,6 +1,6 @@
 /*!
- * VERSION: 0.2.0
- * DATE: 2015-01-03
+ * VERSION: 0.3.0
+ * DATE: 2015-04-22
  * GIT:https://github.com/shrekshrek/css3d-engine
  *
  * @author: Shrek.wang, shrekshrek@gmail.com
@@ -231,63 +231,6 @@
             }
         },
 
-        __origin : {
-            x : 0,
-            y : 0,
-            z : 0
-        },
-        __isOriginUpdate : false,
-        originX : function(n) {
-            if (arguments.length) {
-                this.__origin.x = n;
-                this.__isOriginUpdate = true;
-                return this;
-            } else {
-                return this.__origin.x;
-            }
-        },
-        originY : function(n) {
-            if (arguments.length) {
-                this.__origin.y = n;
-                this.__isOriginUpdate = true;
-                return this;
-            } else {
-                return this.__origin.y;
-            }
-        },
-        originZ : function(n) {
-            if (arguments.length) {
-                this.__origin.z = n;
-                this.__isOriginUpdate = true;
-                return this;
-            } else {
-                return this.__origin.z;
-            }
-        },
-        origin : function(x, y, z) {
-            switch (arguments.length) {
-            case 0 :
-                return this.__origin;
-            case 1 :
-                this.__origin.x = x;
-                this.__origin.y = x;
-                this.__origin.z = x;
-                this.__isOriginUpdate = true;
-                return this;
-            case 2 :
-                this.__origin.x = x;
-                this.__origin.y = y;
-                this.__isOriginUpdate = true;
-                return this;
-            case 3 :
-                this.__origin.x = x;
-                this.__origin.y = y;
-                this.__origin.z = z;
-                this.__isOriginUpdate = true;
-                return this;
-            }
-        },
-
         __rotation : {
             x : 0,
             y : 0,
@@ -490,13 +433,6 @@
             };
             this.__isPositionUpdate = true;
 
-            this.__origin = {
-                x : 0,
-                y : 0,
-                z : 0
-            };
-            this.__isOriginUpdate = true;
-
             this.__rotation = {
                 x : 0,
                 y : 0,
@@ -586,7 +522,6 @@
             }
             _dom.style[Css3D._browserPrefix + "Transform"] = "translateZ(0px)";
             _dom.style[Css3D._browserPrefix + "TransformStyle"] = "preserve-3d";
-            _dom.style[Css3D._browserPrefix + "TransformOrigin"] = "0px 0px 0px";
             this.el = _dom;
             _dom.le = this;
         },
@@ -607,18 +542,8 @@
                 var _w = Number(this.__size.x) ? this.__size.x : 0;
                 var _h = Number(this.__size.y) ? this.__size.y : 0;
                 var _d = Number(this.__size.z) ? this.__size.z : 0;
+                //this.el.style.margin = '-50% 0 0 -50%';
                 this.el.style[Css3D._browserPrefix + "Transform"] = "translate3d(" + (this.__position.x - _w/2) + "px," + (this.__position.y - _h/2) + "px," + (this.__position.z - _d/2) + "px) " + "rotateX(" + this.__rotation.x + "deg) " + "rotateY(" + this.__rotation.y + "deg) " + "rotateZ(" + this.__rotation.z + "deg) " + "scale3d(" + this.__scale.x + ", " + this.__scale.y + ", " + this.__scale.z + ") ";
-            }
-
-            if (this.__isOriginUpdate) {
-                this.__isOriginUpdate = false;
-                var _w = Number(this.__size.x) ? this.__size.x : 0;
-                var _h = Number(this.__size.y) ? this.__size.y : 0;
-                var _d = Number(this.__size.z) ? this.__size.z : 0;
-                var _ox = (Number(this.__origin.x) ? this.__origin.x : 0) + _w / 2 + "px";
-                var _oy = (Number(this.__origin.y) ? this.__origin.y : 0) + _h / 2 + "px";
-                var _oz = (Number(this.__origin.z) ? this.__origin.z : 0) + _d / 2 + "px";
-                this.el.style[Css3D._browserPrefix + "TransformOrigin"] = _ox + " " + _oy + " " + _oz;
             }
 
             return this;
@@ -689,8 +614,8 @@
             if (!(params && params.el)) {
                 this.el.style.top = "0px";
                 this.el.style.left = "0px";
-                this.el.style.width = "100%";
-                this.el.style.height = "100%";
+                this.el.style.width = "0px";
+                this.el.style.height = "0px";
             }
             this.el.style[Css3D._browserPrefix + "Perspective"] = "800px";
             this.el.style[Css3D._browserPrefix + "TransformStyle"] = "flat";
@@ -712,8 +637,8 @@
                 this.__isSizeUpdate = false;
                 var _w = this.__size.x;
                 var _h = this.__size.y;
-                this.el.style.width = Number(_w) ? _w + "px" : _w;
-                this.el.style.height = Number(_h) ? _h + "px" : _h;
+                this.el.style.width = parseInt(_w) + "px";
+                this.el.style.height = parseInt(_h) + "px";
 
                 this.camera.__isFovUpdate = false;
                 var _fov = 0.5 / Math.tan((this.camera.fov() * 0.5) / 180 * Math.PI) * this.height();
@@ -787,6 +712,7 @@
                 var _h = Number(this.__size.y) ? this.__size.y : 0;
                 this.el.style.width = _w + "px";
                 this.el.style.height = _h + "px";
+                this.__size.z = 0;
             }
 
             Css3D.Plane.__super__.update.apply(this);
@@ -843,14 +769,18 @@
                 var _h = this.__size.y;
                 var _d = this.__size.z;
 
-                this.front.size(_w, _h, 0).position(_w/2, _h/2, 0).rotation(0, 180, 0).update();
-                this.back.size(_w, _h, 0).position(_w/2, _h/2, _d).rotation(0, 0, 0).update();
-                this.left.size(_d, _h, 0).position(0, _h/2, _d/2).rotation(0, -90, 0).update();
-                this.right.size(_d, _h, 0).position(_w, _h/2, _d/2).rotation(0, 90, 0).update();
-                this.up.size(_w, _d, 0).position(_w/2, 0, _d/2).rotation(90, 0, 0).update();
-                this.down.size(_w, _d, 0).position(_w/2, _h, _d/2).rotation(-90, 0, 0).update();
+                this.front.size(_w, _h, 0).position(0, 0, -_d/2).rotation(0, 180, 0).update();
+                this.back.size(_w, _h, 0).position(0, 0, _d/2).rotation(0, 0, 0).update();
+                this.left.size(_d, _h, 0).position(-_w/2, 0, 0).rotation(0, -90, 0).update();
+                this.right.size(_d, _h, 0).position(_w/2, 0, 0).rotation(0, 90, 0).update();
+                this.up.size(_w, _d, 0).position(0, -_h/2, 0).rotation(90, 0, 0).update();
+                this.down.size(_w, _d, 0).position(0, _h/2, 0).rotation(-90, 0, 0).update();
             }
 
+            this.__size.x = 0;
+            this.__size.y = 0;
+            this.__size.z = 0;
+            this.__isSizeUpdate = false;
             Css3D.Cube.__super__.update.apply(this);
 
             if (this.__isMaterialUpdate) {
