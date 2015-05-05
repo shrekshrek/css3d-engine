@@ -769,12 +769,12 @@
                 var _h = this.__size.y;
                 var _d = this.__size.z;
 
-                this.front.size(_w, _h, 0).position(0, 0, -_d/2).rotation(0, 180, 0).update();
-                this.back.size(_w, _h, 0).position(0, 0, _d/2).rotation(0, 0, 0).update();
-                this.left.size(_d, _h, 0).position(-_w/2, 0, 0).rotation(0, -90, 0).update();
-                this.right.size(_d, _h, 0).position(_w/2, 0, 0).rotation(0, 90, 0).update();
-                this.up.size(_w, _d, 0).position(0, -_h/2, 0).rotation(90, 0, 0).update();
-                this.down.size(_w, _d, 0).position(0, _h/2, 0).rotation(-90, 0, 0).update();
+                this.front.size(_w, _h, 0).position(0, 0, -_d/2).rotation(0, 0, 0).update();
+                this.back.size(_w, _h, 0).position(0, 0, _d/2).rotation(0, 180, 0).update();
+                this.left.size(_d, _h, 0).position(-_w/2, 0, 0).rotation(0, 90, 0).update();
+                this.right.size(_d, _h, 0).position(_w/2, 0, 0).rotation(0, -90, 0).update();
+                this.up.size(_w, _d, 0).position(0, -_h/2, 0).rotation(-90, 0, 0).update();
+                this.down.size(_w, _d, 0).position(0, _h/2, 0).rotation(90, 0, 0).update();
             }
 
             this.__size.x = 0;
