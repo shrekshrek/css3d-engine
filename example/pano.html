@@ -37,7 +37,7 @@
         s.addChild(c);
 
         //响应屏幕调整尺寸
-        function resize() {console.log(window.innerWidth, window.innerHeight);
+        function resize() {
             s.size(window.innerWidth, window.innerHeight).update();
         };
         window.onresize = function() {
@@ -52,7 +52,7 @@
         };
 
         function go() {
-            c.rotate(0, 1, 0).update();
+            c.rotate(0, 0.1, 0).update();
 
             // sp.move(0, 1, 0).update();
 
