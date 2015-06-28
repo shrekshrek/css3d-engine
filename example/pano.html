@@ -15,7 +15,7 @@
 </div>
     <script>
         //创建场景
-        var s = new Css3D.Stage();
+        var s = new C3D.Stage();
         s.size(window.innerWidth, window.innerHeight);
 //        s.camera.fov(-300);
         s.material({
@@ -25,7 +25,7 @@
         document.getElementById('main').appendChild(s.el);
 
         //创建1个立方体放入场景
-        var c = new Css3D.Cube();
+        var c = new C3D.Cube();
         c.size(1000).position(0).material({
             front : "images/cube_FR.jpg",
             back : "images/cube_BK.jpg",

@@ -7,7 +7,7 @@
 <body>
     <script>
         //创建场景
-        var s = new Css3D.Stage();
+        var s = new C3D.Stage();
         s.size(window.innerWidth, window.innerHeight);
         s.material({
             color : "#cccccc"
@@ -16,15 +16,15 @@
         document.body.appendChild(s.el);
 
         //创建一个三维容器（创建以方便分组使用）
-        var sp = new Css3D.Sprite3D();
+        var sp = new C3D.Sprite3D();
         sp.position(0, 0, -500).update();
         s.addChild(sp);
 
         //创建1个平面放入场景
         for(var j=0; j<6; j++){
             for(var i = 0; i < 9; i++){
-                var p = new Css3D.Sprite3D();
-                var p2 = new Css3D.Plane();
+                var p = new C3D.Sprite3D();
+                var p2 = new C3D.Plane();
                 p.addChild(p2);
                 var _x = 0;
                 var _y = 0;
@@ -72,7 +72,7 @@
                         update();
                 p2.size(100,100,0).
                         material({
-                            color : Css3D.getRandomColor()
+                            color : C3D.getRandomColor()
                         }).
                         update();
                 sp.addChild(p);

@@ -7,7 +7,7 @@
 <body>
     <script>
         //创建场景
-        var s = new Css3D.Stage();
+        var s = new C3D.Stage();
         s.size("100%", "100%");
         s.material({
             color : "#cccccc"
@@ -16,18 +16,18 @@
         document.body.appendChild(s.el);
 
         //创建一个三维容器（创建以方便分组使用）
-        var sp = new Css3D.Sprite3D();
+        var sp = new C3D.Sprite3D();
         sp.position(0, 0, -500).update();
         s.addChild(sp);
 
         //创建20个平面放入容器，并定义鼠标事件
         for (var i = 0; i < 20; i++) {
-            var p = new Css3D.Plane();
+            var p = new C3D.Plane();
             p.size(100);
             p.position(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 250);
             p.rotation(Math.random() * 300 - 150, Math.random() * 300 - 150, Math.random() * 300 - 150);
             p.material({
-                color : Css3D.getRandomColor()
+                color : C3D.getRandomColor()
             });
             p.buttonMode(true);
             p.update();
@@ -42,12 +42,12 @@
 
         //创建4个立方体放入容器，并定义鼠标事件
         for (var i = 0; i < 4; i++) {
-            var p = new Css3D.Cube();
+            var p = new C3D.Cube();
             p.size(100);
             p.position(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 250);
             p.rotation(Math.random() * 300 - 150, Math.random() * 300 - 150, Math.random() * 300 - 150);
             p.material({
-                color : Css3D.getRandomColor()
+                color : C3D.getRandomColor()
             });
             p.buttonMode(true);
             p.update();

@@ -7,7 +7,7 @@
 <body>
     <script>
         //创建场景
-        var s = new Css3D.Stage();
+        var s = new C3D.Stage();
         s.size("100%", "100%");
         s.material({
             color : "#cccccc"
@@ -16,16 +16,16 @@
         document.body.appendChild(s.el);
 
         //创建1个平面放入场景
-        var p = new Css3D.Plane();
+        var p = new C3D.Plane();
         p.size(100,100).position(0, 100, -500).rotate(0, 0, 0).material({
-            color : Css3D.getRandomColor()
+            color : C3D.getRandomColor()
         }).update();
         s.addChild(p);
 
         //创建1个立方体放入场景
-        var c = new Css3D.Cube();
+        var c = new C3D.Cube();
         c.size(100).position(0, -100, -500).rotate(0, 0, 0).material({
-            color : Css3D.getRandomColor()
+            color : C3D.getRandomColor()
         }).update();
         s.addChild(c);
 

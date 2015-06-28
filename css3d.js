@@ -1,46 +1,60 @@
 /*!
  * VERSION: 0.3.0
  * DATE: 2015-04-22
- * GIT:https://github.com/shrekshrek/css3d-engine
+ * GIT:https://github.com/shrekshrek/C3D-engine
  *
  * @author: Shrek.wang, shrekshrek@gmail.com
  **/
 
-(function(root, factory) {
+(function(factory) {
+    var root = (typeof self == 'object' && self.self == self && self) ||
+        (typeof global == 'object' && global.global == global && global);
+
     if (typeof define === 'function' && define.amd) {
         define(['exports'], function(exports) {
-            root.Css3D = factory(root, exports);
+            root.C3D = factory(root, exports);
         });
+    } else if (typeof exports !== 'undefined') {
+        factory(root, exports);
     } else {
-        root.Css3D = factory(root, {});
+        root.C3D = factory(root, {});
     }
 
-}(this, function(root, Css3D) {
+}(function(root, C3D) {
+    var previousCss3D = root.C3D;
 
-    var previousCss3D = root.Css3D;
+    C3D.VERSION = '0.2.0';
 
-    Css3D.VERSION = '0.2.0';
-
-    Css3D.noConflict = function() {
-        root.Css3D = previousCss3D;
+    C3D.noConflict = function() {
+        root.C3D = previousCss3D;
         return this;
     };
 
     // --------------------------------------------------------------------extend
+    var keys = function(obj){
+        var keys = [];
+        for(var key in obj){
+            keys.push(key);
+        }
+        return keys;
+    };
 
-    var ext = function(obj){
-        var len = arguments.length;
-        if (len < 2 || obj == null) return obj;
-        for (var i = 1; i < len; i++) {
-            var source = arguments[i];
-            for (var j in source) {
-                obj[j] = source[j];
+    var extend = function(obj){
+        var length = arguments.length;
+        if (length < 2 || obj == null) return obj;
+        for (var index = 1; index < length; index++) {
+            var source = arguments[index],
+                ks = keys(source),
+                l = ks.length;
+            for (var i = 0; i < l; i++) {
+                var key = ks[i];
+                obj[key] = source[key];
             }
         }
         return obj;
     };
 
-    var extend = function(protoProps, staticProps) {
+    var extend2 = function(protoProps, staticProps) {
         var parent = this;
         var child;
 
@@ -50,7 +64,7 @@
             child = function(){ return parent.apply(this, arguments); };
         }
 
-        ext(child, parent, staticProps);
+        extend(child, parent, staticProps);
 
         var Surrogate = function(){
             this.constructor = child;
@@ -58,7 +72,7 @@
         Surrogate.prototype = parent.prototype;
         child.prototype = new Surrogate;
 
-        if (protoProps) ext(child.prototype, protoProps);
+        if (protoProps) extend(child.prototype, protoProps);
 
         child.__super__ = parent.prototype;
 
@@ -66,42 +80,42 @@
     };
 
     // --------------------------------------------------------------------全局属性
-    Css3D._isSupported = false;
-    Css3D._browserPrefix = "webkit";
-    Css3D._transformProperty = "webkitTransform";
+    C3D._isSupported = false;
+    C3D._browserPrefix = "webkit";
+    C3D._transformProperty = "webkitTransform";
 
-    Css3D.checkSupport = function() {
+    C3D.checkSupport = function() {
         var _d = document.createElement("div"), _prefixes = ["", "webkit", "Moz", "O", "ms"], _len = _prefixes.length, i;
 
         for ( i = 0; i < _len; i++) {
             if ((_prefixes[i] + "Perspective") in _d.style) {
-                Css3D._transformProperty = _prefixes[i] + "Transform";
-                Css3D._isSupported = true;
-                Css3D._browserPrefix = _prefixes[i];
+                C3D._transformProperty = _prefixes[i] + "Transform";
+                C3D._isSupported = true;
+                C3D._browserPrefix = _prefixes[i];
                 return true;
             }
         }
         return false;
     };
 
-    Css3D.browserPrefix = function(str) {
+    C3D.browserPrefix = function(str) {
         if (arguments.length) {
-            return Css3D._browserPrefix + str;
+            return C3D._browserPrefix + str;
         } else {
-            return Css3D._browserPrefix;
+            return C3D._browserPrefix;
         }
     };
 
     // --------------------------------------------------------------------辅助方法
-    Css3D.getRandomColor = function() {
+    C3D.getRandomColor = function() {
         return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
     };
 
-    Css3D.rgb2hex = function(r, g, b) {
+    C3D.rgb2hex = function(r, g, b) {
         return ((r << 16) | (g << 8) | b).toString(16);
     };
 
-    Css3D.hex2rgb = function(s) {
+    C3D.hex2rgb = function(s) {
         var _n = Math.floor('0x' + s);
         var _r = _n >> 16 & 255;
         var _g = _n >> 8 & 255;
@@ -109,7 +123,7 @@
         return [_r, _g, _b];
     };
 
-    Css3D.getDistance = function(o1, o2) {
+    C3D.getDistance = function(o1, o2) {
         switch (arguments.length) {
         case 1 :
             return Math.pow(Math.pow(o1.x(), 2) + Math.pow(o1.y(), 2) + Math.pow(o1.z(), 2), 0.5);
@@ -119,7 +133,7 @@
     };
 
     //三维变换，css的rotation属性作用顺序依次是x,y,z.所以推倒计算时需要反过来，计算顺序是z,y,x
-    Css3D.positionRotate3D = function(o, r) {
+    C3D.positionRotate3D = function(o, r) {
         var _sinz = Math.sin(r[2] / 180 * Math.PI);
         var _cosz = Math.cos(r[2] / 180 * Math.PI);
         var _x1 = o.x() * _cosz - o.y() * _sinz;
@@ -146,11 +160,11 @@
     };
 
     // --------------------------------------------------------------------3d元素基类
-    Css3D.Object3D = function() {
+    C3D.Object3D = function() {
         this.initialize.apply(this, arguments);
     };
 
-    ext(Css3D.Object3D.prototype, {
+    extend(C3D.Object3D.prototype, {
         __position : {
             x : 0,
             y : 0,
@@ -492,17 +506,17 @@
             return this;
         }
     });
-    Css3D.Object3D.extend = extend;
+    C3D.Object3D.extend = extend2;
 
-    Css3D.Sprite3D = Css3D.Object3D.extend({
+    C3D.Sprite3D = C3D.Object3D.extend({
         el : null,
         initialize : function(params) {
-            Css3D.Sprite3D.__super__.initialize.apply(this, [params]);
+            C3D.Sprite3D.__super__.initialize.apply(this, [params]);
 
             //this.__isMaterialUpdate = true;
 
-            if (!(Css3D._isSupported || Css3D.checkSupport())) {
-                throw "this browser does not support css3d!!!";
+            if (!(C3D._isSupported || C3D.checkSupport())) {
+                throw "this browser does not support C3D!!!";
                 return;
             }
 
@@ -520,19 +534,19 @@
                 _style.margin = "0px";
                 _style.padding = "0px";
             }
-            _dom.style[Css3D._browserPrefix + "Transform"] = "translateZ(0px)";
-            _dom.style[Css3D._browserPrefix + "TransformStyle"] = "preserve-3d";
+            _dom.style[C3D._browserPrefix + "Transform"] = "translateZ(0px)";
+            _dom.style[C3D._browserPrefix + "TransformStyle"] = "preserve-3d";
             this.el = _dom;
             _dom.le = this;
         },
         destroy : function() {
-            Css3D.Sprite3D.__super__.destroy.apply(this);
+            C3D.Sprite3D.__super__.destroy.apply(this);
             if (this.el && this.el.parentNode) {
                 this.el.parentNode.removeChild(this.el);
             }
         },
         update : function() {
-            Css3D.Sprite3D.__super__.update.apply(this);
+            C3D.Sprite3D.__super__.update.apply(this);
 
             if (this.__isPositionUpdate || this.__isRotationUpdate || this.__isScaleUpdate || this.__isSizeUpdate) {
                 this.__isPositionUpdate = false;
@@ -543,21 +557,21 @@
                 var _h = Number(this.__size.y) ? this.__size.y : 0;
                 var _d = Number(this.__size.z) ? this.__size.z : 0;
                 //this.el.style.margin = '-50% 0 0 -50%';
-                this.el.style[Css3D._browserPrefix + "Transform"] = "translate3d(" + (this.__position.x - _w/2) + "px," + (this.__position.y - _h/2) + "px," + (this.__position.z - _d/2) + "px) " + "rotateX(" + this.__rotation.x + "deg) " + "rotateY(" + this.__rotation.y + "deg) " + "rotateZ(" + this.__rotation.z + "deg) " + "scale3d(" + this.__scale.x + ", " + this.__scale.y + ", " + this.__scale.z + ") ";
+                this.el.style[C3D._browserPrefix + "Transform"] = "translate3d(" + (this.__position.x - _w/2) + "px," + (this.__position.y - _h/2) + "px," + (this.__position.z - _d/2) + "px) " + "rotateX(" + this.__rotation.x + "deg) " + "rotateY(" + this.__rotation.y + "deg) " + "rotateZ(" + this.__rotation.z + "deg) " + "scale3d(" + this.__scale.x + ", " + this.__scale.y + ", " + this.__scale.z + ") ";
             }
 
             return this;
         },
 
         addChild : function(view) {
-            Css3D.Sprite3D.__super__.addChild.apply(this, [view]);
+            C3D.Sprite3D.__super__.addChild.apply(this, [view]);
             if (this.el && view.el) {
                 this.el.appendChild(view.el);
             }
             return this;
         },
         removeChild : function(view) {
-            Css3D.Sprite3D.__super__.removeChild.apply(this, [view]);
+            C3D.Sprite3D.__super__.removeChild.apply(this, [view]);
             if (view.el && view.el.parentNode) {
                 view.el.parentNode.removeChild(view.el);
             }
@@ -604,12 +618,12 @@
     });
 
     // --------------------------------------------------------------------3d核心元件
-    Css3D.Stage = Css3D.Sprite3D.extend({
+    C3D.Stage = C3D.Sprite3D.extend({
         camera : null,
         __fix1 : null,
         __fix2 : null,
         initialize : function(params) {
-            Css3D.Stage.__super__.initialize.apply(this, [params]);
+            C3D.Stage.__super__.initialize.apply(this, [params]);
 
             if (!(params && params.el)) {
                 this.el.style.top = "0px";
@@ -617,20 +631,20 @@
                 this.el.style.width = "0px";
                 this.el.style.height = "0px";
             }
-            this.el.style[Css3D._browserPrefix + "Perspective"] = "800px";
-            this.el.style[Css3D._browserPrefix + "TransformStyle"] = "flat";
-            this.el.style[Css3D._browserPrefix + "Transform"] = "";
+            this.el.style[C3D._browserPrefix + "Perspective"] = "800px";
+            this.el.style[C3D._browserPrefix + "TransformStyle"] = "flat";
+            this.el.style[C3D._browserPrefix + "Transform"] = "";
             this.el.style.overflow = "hidden";
 
-            this.__fix1 = new Css3D.Sprite3D();
+            this.__fix1 = new C3D.Sprite3D();
             this.__fix1.el.style.top = "50%";
             this.__fix1.el.style.left = "50%";
             this.el.appendChild(this.__fix1.el);
 
-            this.__fix2 = new Css3D.Sprite3D();
+            this.__fix2 = new C3D.Sprite3D();
             this.__fix1.el.appendChild(this.__fix2.el);
 
-            this.camera = new Css3D.Camera();
+            this.camera = new C3D.Camera();
         },
         update : function() {
             if (this.__isSizeUpdate || this.camera.__isFovUpdate) {
@@ -642,7 +656,7 @@
 
                 this.camera.__isFovUpdate = false;
                 var _fov = 0.5 / Math.tan((this.camera.fov() * 0.5) / 180 * Math.PI) * this.height();
-                this.el.style[Css3D._browserPrefix + "Perspective"] = _fov + "px";
+                this.el.style[C3D._browserPrefix + "Perspective"] = _fov + "px";
                 this.__fix1.position(0, 0, _fov).update();
             }
 
@@ -676,12 +690,12 @@
         }
     });
 
-    Css3D.Camera = Css3D.Object3D.extend({
+    C3D.Camera = C3D.Object3D.extend({
         __fov : null,
         __target : null,
         __isFovUpdate : null,
         initialize : function(params) {
-            Css3D.Camera.__super__.initialize.apply(this, [params]);
+            C3D.Camera.__super__.initialize.apply(this, [params]);
             this.__fov = 75;
             this.__isFovUpdate = true;
             this.__target = {
@@ -702,9 +716,9 @@
     });
 
     // --------------------------------------------------------------------3d显示元件
-    Css3D.Plane = Css3D.Sprite3D.extend({
+    C3D.Plane = C3D.Sprite3D.extend({
         initialize : function() {
-            Css3D.Plane.__super__.initialize.apply(this);
+            C3D.Plane.__super__.initialize.apply(this);
         },
         update : function() {
             if (this.__isSizeUpdate) {
@@ -715,7 +729,7 @@
                 this.__size.z = 0;
             }
 
-            Css3D.Plane.__super__.update.apply(this);
+            C3D.Plane.__super__.update.apply(this);
 
             if (this.__isMaterialUpdate) {
                 this.__isMaterialUpdate = false;
@@ -734,7 +748,7 @@
         }
     });
 
-    Css3D.Cube = Css3D.Sprite3D.extend({
+    C3D.Cube = C3D.Sprite3D.extend({
         front : null,
         back : null,
         left : null,
@@ -742,24 +756,24 @@
         up : null,
         down : null,
         initialize : function() {
-            Css3D.Cube.__super__.initialize.apply(this);
+            C3D.Cube.__super__.initialize.apply(this);
 
-            this.front = new Css3D.Plane();
+            this.front = new C3D.Plane();
             this.addChild(this.front);
 
-            this.back = new Css3D.Plane();
+            this.back = new C3D.Plane();
             this.addChild(this.back);
 
-            this.left = new Css3D.Plane();
+            this.left = new C3D.Plane();
             this.addChild(this.left);
 
-            this.right = new Css3D.Plane();
+            this.right = new C3D.Plane();
             this.addChild(this.right);
 
-            this.up = new Css3D.Plane();
+            this.up = new C3D.Plane();
             this.addChild(this.up);
 
-            this.down = new Css3D.Plane();
+            this.down = new C3D.Plane();
             this.addChild(this.down);
 
         },
@@ -781,7 +795,7 @@
             this.__size.y = 0;
             this.__size.z = 0;
             this.__isSizeUpdate = false;
-            Css3D.Cube.__super__.update.apply(this);
+            C3D.Cube.__super__.update.apply(this);
 
             if (this.__isMaterialUpdate) {
                 this.__isMaterialUpdate = false;
@@ -827,5 +841,5 @@
         }
     });
 
-    return Css3D;
+    return C3D;
 }));
