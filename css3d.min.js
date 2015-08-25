@@ -1,7 +1,7 @@
 /*!
  * VERSION: 0.3.0
  * DATE: 2015-04-22
- * GIT:https://github.com/shrekshrek/C3D-engine
+ * GIT:https://github.com/shrekshrek/css3d-engine
  *
  * @author: Shrek.wang, shrekshrek@gmail.com
  **/
