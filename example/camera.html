@@ -14,18 +14,19 @@
     document.body.appendChild(s.el);
 
     //创建1个平面放入场景
-    var p = new C3D.Plane();
-    p.size(100,100,100).position(0, 100, -500).rotation(0, 0, 0).material({
-        color : C3D.getRandomColor()
-    }).update();
-    s.addChild(p);
+    var c = new C3D.TargetCamera();
+    c.position(100, 100, -500).update();
+    s.camera = c;
 
     //创建1个立方体放入场景
-    var c = new C3D.Cube();
-    c.size(100,100,100).position(0, -100, -500).rotation(0, 0, 0).material({
+    var b = new C3D.Cube();
+    b.size(10,10,10).position(0, 0, -500).rotation(0, 0, 0).material({
         color : C3D.getRandomColor()
     }).update();
-    s.addChild(c);
+    s.addChild(b);
+
+    c.target = b;
+    c.update();
 
     //响应屏幕调整尺寸
     function resize() {
@@ -42,11 +43,29 @@
         setTimeout(callback, 1000 / 60);
     };
 
+    var vx = 1;
+    var vy = 1;
+    var vz = 1;
     function go() {
-        p.rotate(0, 1, 0).updateT();
-        c.rotate(0, -1, 0).updateT();
+        if(c.y > 50){
+            vy = -vy;
+        }else if(c.y < -50){
+            vy = -vy;
+        }
+        if(c.x > 50){
+            vx = -vx;
+        }else if(c.x < -50){
+            vx = -vx;
+        }
+        if(c.z > 50){
+            vz = -vz;
+        }else if(c.z < -50){
+            vz = -vz;
+        }
+//        c.move(0, vy, 0).update();
+//        s.updateT();
 
-        // sp.move(0, 1, 0).update();
+//        b.rotate(1, 0, 0).update();
 
         // s.camera.move(0,0,-1).rotate(0,0.15,0);
         // s.update();

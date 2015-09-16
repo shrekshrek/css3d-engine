@@ -8,11 +8,9 @@
     <script>
         //创建场景
         var s = new C3D.Stage();
-        s.size("100%", "100%");
-        s.material({
+        s.size("100%", "100%").material({
             color : "#cccccc"
-        });
-        s.update();
+        }).update();
         document.body.appendChild(s.el);
 
         //创建一个三维容器（创建以方便分组使用）
@@ -23,14 +21,14 @@
         //创建20个平面放入容器，并定义鼠标事件
         for (var i = 0; i < 20; i++) {
             var p = new C3D.Plane();
-            p.size(100);
-            p.position(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 250);
-            p.rotation(Math.random() * 300 - 150, Math.random() * 300 - 150, Math.random() * 300 - 150);
-            p.material({
-                color : C3D.getRandomColor()
-            });
-            p.buttonMode(true);
-            p.update();
+            p.size(100, 100, 100)
+                    .position(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 250)
+                    .rotation(Math.random() * 300 - 150, Math.random() * 300 - 150, Math.random() * 300 - 150)
+                    .material({
+                        color : C3D.getRandomColor()
+                    })
+                    .buttonMode(true)
+                    .update();
             sp.addChild(p);
             p.on("mouseover", function() {
                 this.le.scale(1.1).update();
@@ -43,14 +41,14 @@
         //创建4个立方体放入容器，并定义鼠标事件
         for (var i = 0; i < 4; i++) {
             var p = new C3D.Cube();
-            p.size(100);
-            p.position(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 250);
-            p.rotation(Math.random() * 300 - 150, Math.random() * 300 - 150, Math.random() * 300 - 150);
-            p.material({
-                color : C3D.getRandomColor()
-            });
-            p.buttonMode(true);
-            p.update();
+            p.size(100, 100, 100)
+                    .position(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 250)
+                    .rotation(Math.random() * 300 - 150, Math.random() * 300 - 150, Math.random() * 300 - 150)
+                    .material({
+                        color : C3D.getRandomColor()
+                    })
+                    .buttonMode(true)
+                    .update();
             sp.addChild(p);
             p.on("mouseover", function() {
                 this.le.scale(1.1).update();
@@ -76,7 +74,7 @@
         };
 
         function go() {
-            sp.rotate(0, 0.1, 0).update();
+            sp.rotate(0, 0.1, 0).updateT();
             // sp.move(0, 1, 0).update();
 
             // s.camera.move(0,0,-1).rotate(0,0.15,0);

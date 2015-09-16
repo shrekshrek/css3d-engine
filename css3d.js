@@ -1,17 +1,17 @@
 /*!
- * VERSION: 0.3.0
- * DATE: 2015-04-22
+ * VERSION: 0.4.0
+ * DATE: 2015-09-15
  * GIT:https://github.com/shrekshrek/css3d-engine
  *
  * @author: Shrek.wang, shrekshrek@gmail.com
  **/
 
-(function(factory) {
+(function (factory) {
     var root = (typeof self == 'object' && self.self == self && self) ||
         (typeof global == 'object' && global.global == global && global);
 
     if (typeof define === 'function' && define.amd) {
-        define(['exports'], function(exports) {
+        define(['exports'], function (exports) {
             root.C3D = factory(root, exports);
         });
     } else if (typeof exports !== 'undefined') {
@@ -20,26 +20,26 @@
         root.C3D = factory(root, {});
     }
 
-}(function(root, C3D) {
+}(function (root, C3D) {
     var previousCss3D = root.C3D;
 
-    C3D.VERSION = '0.2.0';
+    C3D.VERSION = '0.4.0';
 
-    C3D.noConflict = function() {
+    C3D.noConflict = function () {
         root.C3D = previousCss3D;
         return this;
     };
 
     // --------------------------------------------------------------------extend
-    var keys = function(obj){
+    var keys = function (obj) {
         var keys = [];
-        for(var key in obj){
+        for (var key in obj) {
             keys.push(key);
         }
         return keys;
     };
 
-    var extend = function(obj){
+    var extend = function (obj) {
         var length = arguments.length;
         if (length < 2 || obj == null) return obj;
         for (var index = 1; index < length; index++) {
@@ -54,19 +54,21 @@
         return obj;
     };
 
-    var extend2 = function(protoProps, staticProps) {
+    var extend2 = function (protoProps, staticProps) {
         var parent = this;
         var child;
 
         if (protoProps && Object.prototype.hasOwnProperty.call(protoProps, 'constructor')) {
             child = protoProps.constructor;
         } else {
-            child = function(){ return parent.apply(this, arguments); };
+            child = function () {
+                return parent.apply(this, arguments);
+            };
         }
 
         extend(child, parent, staticProps);
 
-        var Surrogate = function(){
+        var Surrogate = function () {
             this.constructor = child;
         };
         Surrogate.prototype = parent.prototype;
@@ -79,43 +81,33 @@
         return child;
     };
 
-    // --------------------------------------------------------------------全局属性
-    C3D._isSupported = false;
-    C3D._browserPrefix = "webkit";
-    C3D._transformProperty = "webkitTransform";
 
-    C3D.checkSupport = function() {
-        var _d = document.createElement("div"), _prefixes = ["", "webkit", "Moz", "O", "ms"], _len = _prefixes.length, i;
+    // --------------------------------------------------------------------检测是否支持,浏览器补全方法
+    var prefix = '';
 
-        for ( i = 0; i < _len; i++) {
-            if ((_prefixes[i] + "Perspective") in _d.style) {
-                C3D._transformProperty = _prefixes[i] + "Transform";
-                C3D._isSupported = true;
-                C3D._browserPrefix = _prefixes[i];
-                return true;
+    (function () {
+        var _d = document.createElement('div');
+        var _prefixes = ['Webkit', 'Moz', 'Ms', 'O'];
+
+        for (var i in _prefixes) {
+            if ((_prefixes[i] + 'Transform') in _d.style) {
+                prefix = _prefixes[i];
+                break;
             }
         }
-        return false;
-    };
+    }());
 
-    C3D.browserPrefix = function(str) {
-        if (arguments.length) {
-            return C3D._browserPrefix + str;
-        } else {
-            return C3D._browserPrefix;
-        }
-    };
 
-    // --------------------------------------------------------------------辅助方法
-    C3D.getRandomColor = function() {
+    // --------------------------------------------------------------------color辅助方法
+    C3D.getRandomColor = function () {
         return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
     };
 
-    C3D.rgb2hex = function(r, g, b) {
+    C3D.rgb2hex = function (r, g, b) {
         return ((r << 16) | (g << 8) | b).toString(16);
     };
 
-    C3D.hex2rgb = function(s) {
+    C3D.hex2rgb = function (s) {
         var _n = Math.floor('0x' + s);
         var _r = _n >> 16 & 255;
         var _g = _n >> 8 & 255;
@@ -123,367 +115,131 @@
         return [_r, _g, _b];
     };
 
-    C3D.getDistance = function(o1, o2) {
-        switch (arguments.length) {
-        case 1 :
-            return Math.pow(Math.pow(o1.x(), 2) + Math.pow(o1.y(), 2) + Math.pow(o1.z(), 2), 0.5);
-        case 2 :
-            return Math.pow(Math.pow(o2.x() - o1.x(), 2) + Math.pow(o2.y() - o1.y(), 2) + Math.pow(o2.z() - o1.z(), 2), 0.5);
-        }
-    };
+
+    // --------------------------------------------------------------------3d辅助方法
+    //C3D.getDistance = function(o1, o2) {
+    //    switch (arguments.length) {
+    //    case 1 :
+    //        return Math.pow(Math.pow(o1.x, 2) + Math.pow(o1.y, 2) + Math.pow(o1.z, 2), 0.5);
+    //    case 2 :
+    //        return Math.pow(Math.pow(o2.x - o1.x, 2) + Math.pow(o2.y - o1.y, 2) + Math.pow(o2.z - o1.z, 2), 0.5);
+    //    }
+    //};
 
     //三维变换，css的rotation属性作用顺序依次是x,y,z.所以推倒计算时需要反过来，计算顺序是z,y,x
-    C3D.positionRotate3D = function(o, r) {
-        var _sinz = Math.sin(r[2] / 180 * Math.PI);
-        var _cosz = Math.cos(r[2] / 180 * Math.PI);
-        var _x1 = o.x() * _cosz - o.y() * _sinz;
-        var _y1 = o.y() * _cosz + o.x() * _sinz;
-        var _z1 = o.z();
-
-        var _siny = Math.sin(r[1] / 180 * Math.PI);
-        var _cosy = Math.cos(r[1] / 180 * Math.PI);
-        var _x2 = _x1 * _cosy + _z1 * _siny;
-        var _y2 = _y1;
-        var _z2 = _z1 * _cosy - _x1 * _siny;
-
-        var _sinx = Math.sin(r[0] / 180 * Math.PI);
-        var _cosx = Math.cos(r[0] / 180 * Math.PI);
-        var _x3 = _x2;
-        var _y3 = _y2 * _cosx - _z2 * _sinx;
-        var _z3 = _z2 * _cosx + _y2 * _sinx;
-
-        return {
-            x : _x3,
-            y : _y3,
-            z : _z3
-        };
-    };
+    //C3D.positionRotate3D = function(o, r) {
+    //    var _sinz = Math.sin(r[2] / 180 * Math.PI);
+    //    var _cosz = Math.cos(r[2] / 180 * Math.PI);
+    //    var _x1 = o.x * _cosz - o.y * _sinz;
+    //    var _y1 = o.y * _cosz + o.x * _sinz;
+    //    var _z1 = o.z;
+    //
+    //    var _siny = Math.sin(r[1] / 180 * Math.PI);
+    //    var _cosy = Math.cos(r[1] / 180 * Math.PI);
+    //    var _x2 = _x1 * _cosy + _z1 * _siny;
+    //    var _y2 = _y1;
+    //    var _z2 = _z1 * _cosy - _x1 * _siny;
+    //
+    //    var _sinx = Math.sin(r[0] / 180 * Math.PI);
+    //    var _cosx = Math.cos(r[0] / 180 * Math.PI);
+    //    var _x3 = _x2;
+    //    var _y3 = _y2 * _cosx - _z2 * _sinx;
+    //    var _z3 = _z2 * _cosx + _y2 * _sinx;
+    //
+    //    return {
+    //        x : _x3,
+    //        y : _y3,
+    //        z : _z3
+    //    };
+    //};
 
     // --------------------------------------------------------------------3d元素基类
-    C3D.Object3D = function() {
-        this.initialize.apply(this, arguments);
+    C3D.Object3D = function () {
+        this.init.apply(this, arguments);
     };
 
     extend(C3D.Object3D.prototype, {
-        __position : {
-            x : 0,
-            y : 0,
-            z : 0
+        x: 0,
+        y: 0,
+        z: 0,
+        position: function (x, y, z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            return this;
         },
-        __isPositionUpdate : false,
-        x : function(n) {
-            if (arguments.length) {
-                this.__position.x = n;
-                this.__isPositionUpdate = true;
-                return this;
-            } else {
-                return this.__position.x;
-            }
-        },
-        y : function(n) {
-            if (arguments.length) {
-                this.__position.y = n;
-                this.__isPositionUpdate = true;
-                return this;
-            } else {
-                return this.__position.y;
-            }
-        },
-        z : function(n) {
-            if (arguments.length) {
-                this.__position.z = n;
-                this.__isPositionUpdate = true;
-                return this;
-            } else {
-                return this.__position.z;
-            }
-        },
-        position : function(x, y, z) {
-            switch (arguments.length) {
-            case 0 :
-                return this.__position;
-            case 1 :
-                this.__position.x = x;
-                this.__position.y = x;
-                this.__position.z = x;
-                this.__isPositionUpdate = true;
-                return this;
-            case 2 :
-                this.__position.x = x;
-                this.__position.y = y;
-                this.__isPositionUpdate = true;
-                return this;
-            case 3 :
-                this.__position.x = x;
-                this.__position.y = y;
-                this.__position.z = z;
-                this.__isPositionUpdate = true;
-                return this;
-            }
-        },
-        move : function(x, y, z) {
-            switch (arguments.length) {
-            case 0 :
-                return this.__position;
-            case 1 :
-                this.__position.x += x;
-                this.__position.y += x;
-                this.__position.z += x;
-                this.__isPositionUpdate = true;
-                return this;
-            case 2 :
-                this.__position.x += x;
-                this.__position.y += y;
-                this.__isPositionUpdate = true;
-                return this;
-            case 3 :
-                this.__position.x += x;
-                this.__position.y += y;
-                this.__position.z += z;
-                this.__isPositionUpdate = true;
-                return this;
-            }
+        move: function (x, y, z) {
+            this.x += x;
+            this.y += y;
+            this.z += z;
+            return this;
         },
 
-        __rotation : {
-            x : 0,
-            y : 0,
-            z : 0
+        rotationX: 0,
+        rotationY: 0,
+        rotationZ: 0,
+        rotation: function (x, y, z) {
+            this.rotationX = x;
+            this.rotationY = y;
+            this.rotationZ = z;
+            return this;
         },
-        __isRotationUpdate : false,
-        rotationX : function(n) {
-            if (arguments.length) {
-                this.__rotation.x = n;
-                this.__isRotationUpdate = true;
-                return this;
-            } else {
-                return this.__rotation.x;
-            }
-        },
-        rotationY : function(n) {
-            if (arguments.length) {
-                this.__rotation.y = n;
-                this.__isRotationUpdate = true;
-                return this;
-            } else {
-                return this.__rotation.y;
-            }
-        },
-        rotationZ : function(n) {
-            if (arguments.length) {
-                this.__rotation.z = n;
-                this.__isRotationUpdate = true;
-                return this;
-            } else {
-                return this.__rotation.z;
-            }
-        },
-        rotation : function(x, y, z) {
-            switch (arguments.length) {
-            case 0 :
-                return this.__rotation;
-            case 1 :
-                this.__rotation.x = x;
-                this.__rotation.y = x;
-                this.__rotation.z = x;
-                this.__isRotationUpdate = true;
-                return this;
-            case 2 :
-                this.__rotation.x = x;
-                this.__rotation.y = y;
-                this.__isRotationUpdate = true;
-                return this;
-            case 3 :
-                this.__rotation.x = x;
-                this.__rotation.y = y;
-                this.__rotation.z = z;
-                this.__isRotationUpdate = true;
-                return this;
-            }
-        },
-        rotate : function(x, y, z) {
-            switch (arguments.length) {
-            case 0 :
-                return this.__rotation;
-            case 1 :
-                this.__rotation.x += x;
-                this.__rotation.y += x;
-                this.__rotation.z += x;
-                this.__isRotationUpdate = true;
-                return this;
-            case 2 :
-                this.__rotation.x += x;
-                this.__rotation.y += y;
-                this.__isRotationUpdate = true;
-                return this;
-            case 3 :
-                this.__rotation.x += x;
-                this.__rotation.y += y;
-                this.__rotation.z += z;
-                this.__isRotationUpdate = true;
-                return this;
-            }
+        rotate: function (x, y, z) {
+            this.rotationX += x;
+            this.rotationY += y;
+            this.rotationZ += z;
+            return this;
         },
 
-        __scale : {
-            x : 0,
-            y : 0,
-            z : 0
-        },
-        __isScaleUpdate : false,
-        scaleX : function(n) {
-            if (arguments.length) {
-                this.__scale.x = n;
-                this.__isScaleUpdate = true;
-                return this;
-            } else {
-                return this.__scale.x;
-            }
-        },
-        scaleY : function(n) {
-            if (arguments.length) {
-                this.__scale.y = n;
-                this.__isScaleUpdate = true;
-                return this;
-            } else {
-                return this.__scale.y;
-            }
-        },
-        scaleZ : function(n) {
-            if (arguments.length) {
-                this.__scale.z = n;
-                this.__isScaleUpdate = true;
-                return this;
-            } else {
-                return this.__scale.z;
-            }
-        },
-        scale : function(x, y, z) {
-            switch (arguments.length) {
-            case 0 :
-                return this.__scale;
-            case 1 :
-                this.__scale.x = x;
-                this.__scale.y = x;
-                this.__scale.z = x;
-                this.__isScaleUpdate = true;
-                return this;
-            case 2 :
-                this.__scale.x = x;
-                this.__scale.y = y;
-                this.__isScaleUpdate = true;
-                return this;
-            case 3 :
-                this.__scale.x = x;
-                this.__scale.y = y;
-                this.__scale.z = z;
-                this.__isScaleUpdate = true;
-                return this;
-            }
+        scaleX: 1,
+        scaleY: 1,
+        scaleZ: 1,
+        scale: function (x, y, z) {
+            this.scaleX = x;
+            this.scaleY = y;
+            this.scaleZ = z;
+            return this;
         },
 
-        __size : {
-            x : 0,
-            y : 0,
-            z : 0
-        },
-        __isSizeUpdate : false,
-        width : function(n) {
-            if (arguments.length) {
-                this.__size.x = n;
-                this.__isSizeUpdate = true;
-                return this;
-            } else {
-                return this.__size.x;
-            }
-        },
-        height : function(n) {
-            if (arguments.length) {
-                this.__size.y = n;
-                this.__isSizeUpdate = true;
-                return this;
-            } else {
-                return this.__size.y;
-            }
-        },
-        depth : function(n) {
-            if (arguments.length) {
-                this.__size.z = n;
-                this.__isSizeUpdate = true;
-                return this;
-            } else {
-                return this.__size.z;
-            }
-        },
-        size : function(x, y, z) {
-            switch (arguments.length) {
-            case 0 :
-                return this.__size;
-            case 1 :
-                this.__size.x = x;
-                this.__size.y = x;
-                this.__size.z = x;
-                this.__isSizeUpdate = true;
-                return this;
-            case 2 :
-                this.__size.x = x;
-                this.__size.y = y;
-                this.__isSizeUpdate = true;
-                return this;
-            case 3 :
-                this.__size.x = x;
-                this.__size.y = y;
-                this.__size.z = z;
-                this.__isSizeUpdate = true;
-                return this;
-            }
+        width: 0,
+        height: 0,
+        depth: 0,
+        size: function (x, y, z) {
+            this.width = x;
+            this.height = y;
+            this.depth = z;
+            return this;
         },
 
-        initialize : function() {
-            this.__position = {
-                x : 0,
-                y : 0,
-                z : 0
-            };
-            this.__isPositionUpdate = true;
-
-            this.__rotation = {
-                x : 0,
-                y : 0,
-                z : 0
-            };
-            this.__isRotationUpdate = true;
-
-            this.__scale = {
-                x : 1,
-                y : 1,
-                z : 1
-            };
-            this.__isScaleUpdate = true;
-
-            this.__size = {
-                x : 0,
-                y : 0,
-                z : 0
-            };
-            this.__isSizeUpdate = true;
-
+        init: function () {
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+            this.rotationX = 0;
+            this.rotationY = 0;
+            this.rotationZ = 0;
+            this.scaleX = 1;
+            this.scaleY = 1;
+            this.scaleZ = 1;
+            this.width = 0;
+            this.height = 0;
+            this.depth = 0;
             this.children = [];
         },
-        destroy : function() {
-            for(var i in this.children){
+        destroy: function () {
+            for (var i in this.children) {
                 this.children[i].destroy();
             }
             this.children = [];
         },
 
-        parent : null,
-        children : null,
-        addChild : function(view) {
+        parent: null,
+        children: null,
+        addChild: function (view) {
             if (view.parent)
                 view.parent.removeChild(view);
 
-            for(var i in this.children){
+            for (var i in this.children) {
                 if (this.children[i] === view)
                     return this;
             }
@@ -491,9 +247,9 @@
             this.children.push(view);
             return this;
         },
-        removeChild : function(view) {
+        removeChild: function (view) {
             var _self = this;
-            for(var i = this.children.length-1; i>=0; i--){
+            for (var i = this.children.length - 1; i >= 0; i--) {
                 if (this.children[i] === view) {
                     _self.children.splice(i, 1);
                     view.parent = null;
@@ -501,85 +257,91 @@
                 }
             }
             return this;
-        },
-        update : function() {
-            return this;
         }
+
     });
     C3D.Object3D.extend = extend2;
 
     C3D.Sprite3D = C3D.Object3D.extend({
-        el : null,
-        initialize : function(params) {
-            C3D.Sprite3D.__super__.initialize.apply(this, [params]);
-
-            //this.__isMaterialUpdate = true;
-
-            if (!(C3D._isSupported || C3D.checkSupport())) {
-                throw "this browser does not support C3D!!!";
-                return;
-            }
+        el: null,
+        mat: null,
+        init: function (params) {
+            C3D.Sprite3D.__super__.init.apply(this, [params]);
 
             var _dom;
             var _style;
             if (params && params.el) {
                 _dom = params.el;
                 _style = _dom.style;
+                this.width = parseInt(_style.width);
+                this.height = parseInt(_style.height);
                 if (_style.position === "static")
                     _style.position = "relative";
             } else {
                 _dom = document.createElement("div");
                 _style = _dom.style;
                 _style.position = "absolute";
-                _style.margin = "0px";
-                _style.padding = "0px";
             }
-            _dom.style[C3D._browserPrefix + "Transform"] = "translateZ(0px)";
-            _dom.style[C3D._browserPrefix + "TransformStyle"] = "preserve-3d";
+            _dom.style[prefix + "Transform"] = "translateZ(0px)";
+            _dom.style[prefix + "TransformStyle"] = "preserve-3d";
             this.el = _dom;
             _dom.le = this;
         },
-        destroy : function() {
+        destroy: function () {
             C3D.Sprite3D.__super__.destroy.apply(this);
             if (this.el && this.el.parentNode) {
                 this.el.parentNode.removeChild(this.el);
             }
         },
-        update : function() {
-            C3D.Sprite3D.__super__.update.apply(this);
 
-            if (this.__isPositionUpdate || this.__isRotationUpdate || this.__isScaleUpdate || this.__isSizeUpdate) {
-                this.__isPositionUpdate = false;
-                this.__isRotationUpdate = false;
-                this.__isScaleUpdate = false;
-                this.__isSizeUpdate = false;
-                var _w = Number(this.__size.x) ? this.__size.x : 0;
-                var _h = Number(this.__size.y) ? this.__size.y : 0;
-                var _d = Number(this.__size.z) ? this.__size.z : 0;
-                //this.el.style.margin = '-50% 0 0 -50%';
-                this.el.style[C3D._browserPrefix + "Transform"] = "translate3d(" + (this.__position.x - _w/2) + "px," + (this.__position.y - _h/2) + "px," + (this.__position.z - _d/2) + "px) " + "rotateX(" + this.__rotation.x + "deg) " + "rotateY(" + this.__rotation.y + "deg) " + "rotateZ(" + this.__rotation.z + "deg) " + "scale3d(" + this.__scale.x + ", " + this.__scale.y + ", " + this.__scale.z + ") ";
-            }
-
+        update: function () {
+            this.updateS();
+            this.updateM();
+            this.updateT();
             return this;
         },
 
-        addChild : function(view) {
+        updateS: function () {
+            return this;
+        },
+
+        updateM: function () {
+            if (this.mat) {
+                if (this.mat.image) {
+                    this.el.style.background = "url(" + this.mat.image + ")";
+                    this.el.style.backgroundSize = "100% 100%";
+                }
+                if (this.mat.color) {
+                    this.el.style.backgroundColor = this.mat.color;
+                }
+                if (this.mat.alpha) {
+                    this.el.style.opacity = this.mat.alpha;
+                }
+            }
+            return this;
+        },
+
+        updateT: function () {
+            this.el.style[prefix + "Transform"] = "translate3d(" + this.x + "px," + this.y + "px," + this.z + "px) " + "rotateX(" + this.rotationX + "deg) " + "rotateY(" + this.rotationY + "deg) " + "rotateZ(" + this.rotationZ + "deg) " + "scale3d(" + this.scaleX + ", " + this.scaleY + ", " + this.scaleZ + ") ";
+            return this;
+        },
+
+        addChild: function (view) {
             C3D.Sprite3D.__super__.addChild.apply(this, [view]);
-            if (this.el && view.el) {
+            if (this.el && view.el)
                 this.el.appendChild(view.el);
-            }
             return this;
         },
-        removeChild : function(view) {
+        removeChild: function (view) {
             C3D.Sprite3D.__super__.removeChild.apply(this, [view]);
-            if (view.el && view.el.parentNode) {
+            if (view.el && view.el.parentNode)
                 view.el.parentNode.removeChild(view.el);
-            }
             return this;
         },
-        on : function(events) {
-            if ( typeof (events) === "object") {
-                for (var i in events ) {
+
+        on: function (events) {
+            if (typeof (events) === "object") {
+                for (var i in events) {
                     this.el.addEventListener(i, events[i], false);
                 }
             } else if (arguments.length === 2) {
@@ -589,9 +351,9 @@
             }
             return this;
         },
-        off : function(events) {
-            if ( typeof (events) === "object") {
-                for (var i in events ) {
+        off: function (events) {
+            if (typeof (events) === "object") {
+                for (var i in events) {
                     this.el.removeEventListener(i, events[i], false);
                 }
             } else if (arguments.length === 2) {
@@ -599,7 +361,8 @@
             }
             return this;
         },
-        buttonMode : function(bool) {
+
+        buttonMode: function (bool) {
             if (bool) {
                 this.el.style.cursor = "pointer";
             } else {
@@ -608,22 +371,19 @@
             return this;
         },
 
-        __material : null,
-        __isMaterialUpdate : false,
-        material : function(params) {
-            this.__material = params;
-            this.__isMaterialUpdate = true;
+        material: function (obj) {
+            this.mat = obj;
             return this;
         }
     });
 
     // --------------------------------------------------------------------3d核心元件
     C3D.Stage = C3D.Sprite3D.extend({
-        camera : null,
-        __fix1 : null,
-        __fix2 : null,
-        initialize : function(params) {
-            C3D.Stage.__super__.initialize.apply(this, [params]);
+        camera: null,
+        __fix1: null,
+        __fix2: null,
+        init: function (params) {
+            C3D.Stage.__super__.init.apply(this, [params]);
 
             if (!(params && params.el)) {
                 this.el.style.top = "0px";
@@ -631,9 +391,9 @@
                 this.el.style.width = "0px";
                 this.el.style.height = "0px";
             }
-            this.el.style[C3D._browserPrefix + "Perspective"] = "800px";
-            this.el.style[C3D._browserPrefix + "TransformStyle"] = "flat";
-            this.el.style[C3D._browserPrefix + "Transform"] = "";
+            this.el.style[prefix + "Perspective"] = "800px";
+            this.el.style[prefix + "TransformStyle"] = "flat";
+            this.el.style[prefix + "Transform"] = "";
             this.el.style.overflow = "hidden";
 
             this.__fix1 = new C3D.Sprite3D();
@@ -646,117 +406,71 @@
 
             this.camera = new C3D.Camera();
         },
-        update : function() {
-            if (this.__isSizeUpdate || this.camera.__isFovUpdate) {
-                this.__isSizeUpdate = false;
-                var _w = this.__size.x;
-                var _h = this.__size.y;
-                this.el.style.width = parseInt(_w) + "px";
-                this.el.style.height = parseInt(_h) + "px";
 
-                this.camera.__isFovUpdate = false;
-                var _fov = 0.5 / Math.tan((this.camera.fov() * 0.5) / 180 * Math.PI) * this.height();
-                this.el.style[C3D._browserPrefix + "Perspective"] = _fov + "px";
-                this.__fix1.position(0, 0, _fov).update();
-            }
-
-            if (this.camera.__isPositionUpdate || this.camera.__isRotationUpdate) {
-                this.camera.__isPositionUpdate = false;
-                this.camera.__isRotationUpdate = false;
-                this.__fix1.rotation(-this.camera.rotationX(), -this.camera.rotationY(), -this.camera.rotationZ()).update();
-                this.__fix2.position(-this.camera.x(), -this.camera.y(), -this.camera.z()).update();
-            }
-
-            if (this.__isMaterialUpdate) {
-                this.__isMaterialUpdate = false;
-                if (this.__material) {
-                    if (this.__material.image) {
-                        this.el.style.background = "url(" + this.__material.image + ")";
-                        this.el.style.backgroundSize = "100% 100%";
-                    } else if (this.__material.color) {
-                        this.el.style.backgroundColor = this.__material.color;
-                    }
-                    if (this.__material.alpha) {
-                        this.el.style.opacity = this.__material.alpha;
-                    }
-                }
-            }
+        updateS: function () {
+            this.el.style.width = parseInt(this.width) + "px";
+            this.el.style.height = parseInt(this.height) + "px";
+            return this;
         },
-        addChild : function(view) {
+        updateT: function () {
+            var _fov = 0.5 / Math.tan((this.camera.fov * 0.5) / 180 * Math.PI) * this.height;
+            this.el.style[prefix + "Perspective"] = _fov + "px";
+            this.__fix1.position(0, 0, _fov).rotation(-this.camera.rotationX, -this.camera.rotationY, -this.camera.rotationZ).updateT();
+            this.__fix2.position(-this.camera.x, -this.camera.y, -this.camera.z).updateT();
+            return this;
+        },
+
+        addChild: function (view) {
             this.__fix2.addChild(view);
+            return this;
         },
-        removeChild : function(view) {
+        removeChild: function (view) {
             this.__fix2.removeChild(view);
+            return this;
         }
     });
 
     C3D.Camera = C3D.Object3D.extend({
-        __fov : null,
-        __target : null,
-        __isFovUpdate : null,
-        initialize : function(params) {
-            C3D.Camera.__super__.initialize.apply(this, [params]);
-            this.__fov = 75;
-            this.__isFovUpdate = true;
-            this.__target = {
-                x : 0,
-                y : 0,
-                z : 0
-            };
-        },
-        fov : function(n) {
-            if (arguments.length) {
-                this.__fov = n;
-                this.__isFovUpdate = true;
-                return this;
-            } else {
-                return this.__fov;
-            }
+        fov: null,
+        init: function (params) {
+            C3D.Camera.__super__.init.apply(this, [params]);
+            this.fov = 75;
         }
     });
 
     // --------------------------------------------------------------------3d显示元件
     C3D.Plane = C3D.Sprite3D.extend({
-        initialize : function() {
-            C3D.Plane.__super__.initialize.apply(this);
+        init: function (params) {
+            C3D.Plane.__super__.init.apply(this, [params]);
         },
-        update : function() {
-            if (this.__isSizeUpdate) {
-                var _w = Number(this.__size.x) ? this.__size.x : 0;
-                var _h = Number(this.__size.y) ? this.__size.y : 0;
-                this.el.style.width = _w + "px";
-                this.el.style.height = _h + "px";
-                this.__size.z = 0;
-            }
 
-            C3D.Plane.__super__.update.apply(this);
-
-            if (this.__isMaterialUpdate) {
-                this.__isMaterialUpdate = false;
-                if (this.__material) {
-                    if (this.__material.image) {
-                        this.el.style.background = "url(" + this.__material.image + ")";
-                        this.el.style.backgroundSize = "100% 100%";
-                    } else if (this.__material.color) {
-                        this.el.style.backgroundColor = this.__material.color;
-                    }
-                    if (this.__material.alpha) {
-                        this.el.style.opacity = this.__material.alpha;
-                    }
-                }
-            }
+        updateS: function () {
+            var _w = parseInt(this.width);
+            var _h = parseInt(this.height);
+            var _d = 0;
+            this.el.style.width = _w + "px";
+            this.el.style.height = _h + "px";
+            this.el.style[prefix + "TransformOrigin"] = _w / 2 + "px " + _h / 2 + "px " + _d/2 + "px ";
+            return this;
+        },
+        updateT: function () {
+            var _w = parseInt(this.width);
+            var _h = parseInt(this.height);
+            var _d = 0;
+            this.el.style[prefix + "Transform"] = "translate3d(" + (this.x - _w / 2) + "px," + (this.y - _h / 2) + "px," + (this.z - _d / 2) + "px) " + "rotateX(" + this.rotationX + "deg) " + "rotateY(" + this.rotationY + "deg) " + "rotateZ(" + this.rotationZ + "deg) " + "scale3d(" + this.scaleX + ", " + this.scaleY + ", " + this.scaleZ + ") ";
+            return this;
         }
     });
 
     C3D.Cube = C3D.Sprite3D.extend({
-        front : null,
-        back : null,
-        left : null,
-        right : null,
-        up : null,
-        down : null,
-        initialize : function() {
-            C3D.Cube.__super__.initialize.apply(this);
+        front: null,
+        back: null,
+        left: null,
+        right: null,
+        up: null,
+        down: null,
+        init: function (params) {
+            C3D.Cube.__super__.init.apply(this, [params]);
 
             this.front = new C3D.Plane();
             this.addChild(this.front);
@@ -777,67 +491,66 @@
             this.addChild(this.down);
 
         },
-        update : function() {
-            if (this.__isSizeUpdate) {
-                var _w = this.__size.x;
-                var _h = this.__size.y;
-                var _d = this.__size.z;
 
-                this.front.size(_w, _h, 0).position(0, 0, -_d/2).rotation(0, 0, 0).update();
-                this.back.size(_w, _h, 0).position(0, 0, _d/2).rotation(0, 180, 0).update();
-                this.left.size(_d, _h, 0).position(-_w/2, 0, 0).rotation(0, 90, 0).update();
-                this.right.size(_d, _h, 0).position(_w/2, 0, 0).rotation(0, -90, 0).update();
-                this.up.size(_w, _d, 0).position(0, -_h/2, 0).rotation(-90, 0, 0).update();
-                this.down.size(_w, _d, 0).position(0, _h/2, 0).rotation(90, 0, 0).update();
+        updateS: function () {
+            var _w = parseInt(this.width);
+            var _h = parseInt(this.height);
+            var _d = parseInt(this.depth);
+
+            this.front.size(_w, _h, 0).position(0, 0, -_d/2).rotation(0, 0, 0).updateS().updateT();
+            this.back.size(_w, _h, 0).position(0, 0, _d/2).rotation(0, 180, 0).updateS().updateT();
+            this.left.size(_d, _h, 0).position(-_w/2, 0, 0).rotation(0, 90, 0).updateS().updateT();
+            this.right.size(_d, _h, 0).position(_w/2, 0, 0).rotation(0, -90, 0).updateS().updateT();
+            this.up.size(_w, _d, 0).position(0, -_h/2, 0).rotation(-90, 0, 0).updateS().updateT();
+            this.down.size(_w, _d, 0).position(0, _h/2, 0).rotation(90, 0, 0).updateS().updateT();
+
+            return this;
+        },
+        updateM: function () {
+            if (this.mat) {
+                if (this.mat.front)
+                    this.front.material({
+                        image: this.mat.front
+                    }).updateM();
+                else
+                    this.front.material(this.mat).updateM();
+
+                if (this.mat.back)
+                    this.back.material({
+                        image: this.mat.back
+                    }).updateM();
+                else
+                    this.back.material(this.mat).updateM();
+
+                if (this.mat.left)
+                    this.left.material({
+                        image: this.mat.left
+                    }).updateM();
+                else
+                    this.left.material(this.mat).updateM();
+
+                if (this.mat.right)
+                    this.right.material({
+                        image: this.mat.right
+                    }).updateM();
+                else
+                    this.right.material(this.mat).updateM();
+
+                if (this.mat.up)
+                    this.up.material({
+                        image: this.mat.up
+                    }).updateM();
+                else
+                    this.up.material(this.mat).updateM();
+
+                if (this.mat.down)
+                    this.down.material({
+                        image: this.mat.down
+                    }).updateM();
+                else
+                    this.down.material(this.mat).updateM();
             }
-
-            this.__size.x = 0;
-            this.__size.y = 0;
-            this.__size.z = 0;
-            this.__isSizeUpdate = false;
-            C3D.Cube.__super__.update.apply(this);
-
-            if (this.__isMaterialUpdate) {
-                this.__isMaterialUpdate = false;
-                if (this.__material) {
-                    if (this.__material.front)
-                        this.front.material({
-                            image : this.__material.front
-                        }).update();
-                    else
-                        this.front.material(this.__material).update();
-                    if (this.__material.back)
-                        this.back.material({
-                            image : this.__material.back
-                        }).update();
-                    else
-                        this.back.material(this.__material).update();
-                    if (this.__material.left)
-                        this.left.material({
-                            image : this.__material.left
-                        }).update();
-                    else
-                        this.left.material(this.__material).update();
-                    if (this.__material.right)
-                        this.right.material({
-                            image : this.__material.right
-                        }).update();
-                    else
-                        this.right.material(this.__material).update();
-                    if (this.__material.up)
-                        this.up.material({
-                            image : this.__material.up
-                        }).update();
-                    else
-                        this.up.material(this.__material).update();
-                    if (this.__material.down)
-                        this.down.material({
-                            image : this.__material.down
-                        }).update();
-                    else
-                        this.down.material(this.__material).update();
-                }
-            }
+            return this;
         }
     });
 

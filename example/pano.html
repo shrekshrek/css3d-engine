@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <head>
-    <script src="../css3d.min.js"></script>
+    <script src="../css3d.js"></script>
     <style>
         #main{
             width: 500px;
@@ -16,17 +16,14 @@
     <script>
         //创建场景
         var s = new C3D.Stage();
-        s.size(window.innerWidth, window.innerHeight);
-//        s.camera.fov(-300);
-        s.material({
+        s.size(window.innerWidth, window.innerHeight).material({
             color : "#cccccc"
-        });
-        s.update();
+        }).update();
         document.getElementById('main').appendChild(s.el);
 
         //创建1个立方体放入场景
         var c = new C3D.Cube();
-        c.size(1000).position(0).material({
+        c.size(1000, 1000, 1000).position(0, 0, 0).material({
             front : "images/cube_FR.jpg",
             back : "images/cube_BK.jpg",
             left : "images/cube_LF.jpg",
@@ -52,7 +49,7 @@
         };
 
         function go() {
-            c.rotate(0, 0.1, 0).update();
+            c.rotate(0, 0.1, 0).updateT();
 
             // sp.move(0, 1, 0).update();
 

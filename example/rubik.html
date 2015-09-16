@@ -1,145 +1,139 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <script src="../css3d.min.js"></script>
+    <script src="../css3d.js"></script>
 
 </head>
 <body>
-    <script>
-        //创建场景
-        var s = new C3D.Stage();
-        s.size(window.innerWidth, window.innerHeight);
-        s.material({
-            color : "#cccccc"
-        });
-        s.update();
-        document.body.appendChild(s.el);
+<script>
+    //创建场景
+    var s = new C3D.Stage();
+    s.size(window.innerWidth, window.innerHeight).material({
+        color: "#cccccc"
+    }).update();
+    document.body.appendChild(s.el);
 
-        //创建一个三维容器（创建以方便分组使用）
-        var sp = new C3D.Sprite3D();
-        sp.position(0, 0, -500).update();
-        s.addChild(sp);
+    //创建一个三维容器（创建以方便分组使用）
+    var sp = new C3D.Sprite3D();
+    sp.position(0, 0, -500).update();
+    s.addChild(sp);
 
-        //创建1个平面放入场景
-        for(var j=0; j<6; j++){
-            for(var i = 0; i < 9; i++){
-                var p = new C3D.Sprite3D();
-                var p2 = new C3D.Plane();
-                p.addChild(p2);
-                var _x = 0;
-                var _y = 0;
-                var _z = 0;
-                switch(j){
-                    case 0:
-                        _x = -100 + (i%3) * 100;
-                        _y = -100 + (i/3|0) * 100;
-                        _z = -150;
-                        p2.rotate(0, 0, 0);
-                        break;
-                    case 1:
-                        _y = -100 + (i%3) * 100;
-                        _z = -100 + (i/3|0) * 100;
-                        _x = -150;
-                        p2.rotate(0, 90, 0);
-                        break;
-                    case 2:
-                        _x = 100 - (i%3) * 100;
-                        _y = 100 - (i/3|0) * 100;
-                        _z = 150;
-                        p2.rotate(0, 180, 0);
-                        break;
-                    case 3:
-                        _y = 100 - (i%3) * 100;
-                        _z = 100 - (i/3|0) * 100;
-                        _x = 150;
-                        p2.rotate(0, 270, 0);
-                        break;
-                    case 4:
-                        _z = -100 + (i%3) * 100;
-                        _x = -100 + (i/3|0) * 100;
-                        _y = -150;
-                        p2.rotate(90, 0, 0);
-                        break;
-                    case 5:
-                        _z = 100 - (i%3) * 100;
-                        _x = 100 - (i/3|0) * 100;
-                        _y = 150;
-                        p2.rotate(-90, 0, 0);
-                        break;
-                }
-                p.
-                        position(_x, _y, _z).
-                        update();
-                p2.size(100,100,0).
-                        material({
-                            color : C3D.getRandomColor()
-                        }).
-                        update();
-                sp.addChild(p);
+    //创建1个平面放入场景
+    for (var j = 0; j < 6; j++) {
+        for (var i = 0; i < 9; i++) {
+            var p = new C3D.Sprite3D();
+            var p2 = new C3D.Plane();
+            p.addChild(p2);
+            var _x = 0;
+            var _y = 0;
+            var _z = 0;
+            switch (j) {
+                case 0:
+                    _x = -100 + (i % 3) * 100;
+                    _y = -100 + (i / 3 | 0) * 100;
+                    _z = -150;
+                    p2.rotation(0, 0, 0);
+                    break;
+                case 1:
+                    _y = -100 + (i % 3) * 100;
+                    _z = -100 + (i / 3 | 0) * 100;
+                    _x = -150;
+                    p2.rotation(0, 90, 0);
+                    break;
+                case 2:
+                    _x = 100 - (i % 3) * 100;
+                    _y = 100 - (i / 3 | 0) * 100;
+                    _z = 150;
+                    p2.rotation(0, 180, 0);
+                    break;
+                case 3:
+                    _y = 100 - (i % 3) * 100;
+                    _z = 100 - (i / 3 | 0) * 100;
+                    _x = 150;
+                    p2.rotation(0, 270, 0);
+                    break;
+                case 4:
+                    _z = -100 + (i % 3) * 100;
+                    _x = -100 + (i / 3 | 0) * 100;
+                    _y = -150;
+                    p2.rotation(90, 0, 0);
+                    break;
+                case 5:
+                    _z = 100 - (i % 3) * 100;
+                    _x = 100 - (i / 3 | 0) * 100;
+                    _y = 150;
+                    p2.rotation(-90, 0, 0);
+                    break;
             }
+            p.position(_x, _y, _z).update();
+            p2.size(100, 100, 0).material({
+                color: C3D.getRandomColor()
+            }).update();
+            sp.addChild(p);
         }
+    }
 
-        var isMoving = false;
-        var lastMouseX = 0;
-        var lastMouseY = 0;
-        var curMouseX = 0;
-        var curMouseY = 0;
-        var lastAngleX = 0;
-        var lastAngleY = 0;
-        var angleX = 0;
-        var angleY = 0;
+    var isMoving = false;
+    var lastMouseX = 0;
+    var lastMouseY = 0;
+    var curMouseX = 0;
+    var curMouseY = 0;
+    var lastAngleX = 0;
+    var lastAngleY = 0;
+    var angleX = 0;
+    var angleY = 0;
 
-        document.addEventListener("mousedown", mouseDownHandler);
+    document.addEventListener("mousedown", mouseDownHandler);
 
-        document.addEventListener("mouseup", mouseUpHandler);
+    document.addEventListener("mouseup", mouseUpHandler);
 
-        function mouseDownHandler(evt){
-            lastMouseX = evt.pageX;
-            lastMouseY = evt.pageY;
-            lastAngleX = angleX;
-            lastAngleY = angleY;
-            curMouseX = evt.pageX;
-            curMouseY = evt.pageY;
+    function mouseDownHandler(evt) {
+        lastMouseX = evt.pageX;
+        lastMouseY = evt.pageY;
+        lastAngleX = angleX;
+        lastAngleY = angleY;
+        curMouseX = evt.pageX;
+        curMouseY = evt.pageY;
 
-            document.addEventListener("mousemove", mouseMoveHandler);
-        }
+        document.addEventListener("mousemove", mouseMoveHandler);
+    }
 
-        function mouseMoveHandler(evt){
-            curMouseX = evt.pageX;
-            curMouseY = evt.pageY;
-        }
+    function mouseMoveHandler(evt) {
+        curMouseX = evt.pageX;
+        curMouseY = evt.pageY;
+    }
 
-        function mouseUpHandler(evt){
-            curMouseX = evt.pageX;
-            curMouseY = evt.pageY;
+    function mouseUpHandler(evt) {
+        curMouseX = evt.pageX;
+        curMouseY = evt.pageY;
 
-            document.removeEventListener("mousemove", mouseMoveHandler);
-        }
+        document.removeEventListener("mousemove", mouseMoveHandler);
+    }
 
-        //刷新场景
-        requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame ||
-        function(callback) {
-            setTimeout(callback, 1000 / 60);
-        };
+    //刷新场景
+    requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame ||
+    function (callback) {
+        setTimeout(callback, 1000 / 60);
+    };
 
-        function go() {
+    function go() {
 //            var _len = sp.children.length;
 //
-            angleX += (curMouseX - lastMouseX + lastAngleX - angleX)*0.3;
-            angleY += (curMouseY - lastMouseY + lastAngleY - angleY)*0.3;
-            angleY = Math.max(-60, Math.min(60, angleY));
+        angleX += (curMouseX - lastMouseX + lastAngleX - angleX) * 0.3;
+        angleY += (curMouseY - lastMouseY + lastAngleY - angleY) * 0.3;
+        angleY = Math.max(-60, Math.min(60, angleY));
 //            for(var i=0; i<_len; i++){
 //                var _p = sp.children[i];
 //                _p.rotation(-angleY, angleX, 0).update();
 ////                    _p.rotate(0.0, 0.2, 0).update();
 //            }
 
-            sp.rotation(-angleY, angleX, 0).update();
-
-            requestAnimationFrame(go);
-        }
+        sp.rotation(-angleY, angleX, 0).updateT();
 
         requestAnimationFrame(go);
-    </script>
+    }
+
+    requestAnimationFrame(go);
+</script>
 </body>
 </html>
