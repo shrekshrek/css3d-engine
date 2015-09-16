@@ -6,46 +6,36 @@ css 3d引擎，为方便工作需要制作
 具体使用请看案例
 demo:http://shrekwang.duapp.com/demo/c3d/
 
-使用：
-强依赖underscore.js。请先引入underscore,再引入css3d就可以。
-<script src="../underscore.js"></script>
-<script src="../css3d.js"></script>
 
 ##类
 **Css3D.Object3D**  
 三维元素基类，拥有如下方法：  
 设置获取实例位置  
-.x(n);  
-.y(n);  
-.z(n);  
+.x;  
+.y;  
+.z;  
 .position(x,y,z);  
 增量移动  
 .move(x,y,z);  
 
-设置获取实例旋转中心  
-.originX(n);  
-.originY(n);  
-.originZ(n);  
-.origin(x,y,z);  
-
 设置获取实例旋转角度  
-.rotationX(n);  
-.rotationY(n);  
-.rotationZ(n);  
+.rotationX;  
+.rotationY;  
+.rotationZ;  
 .rotation(x,y,z);  
 增量旋转  
 .rotate(x,y,z);  
 
 设置获取实例缩放比  
-.scaleX(n);  
-.scaleY(n);  
-.scaleZ(n);  
+.scaleX;  
+.scaleY;  
+.scaleZ;  
 .scale(x,y,z);  
 
 设置获取实例  
-.width(n);  
-.height(n);  
-.depth(n);  
+.width;  
+.height;  
+.depth;  
 .size(x,y,z);  
 
 添加删除子节点  
@@ -54,6 +44,15 @@ demo:http://shrekwang.duapp.com/demo/c3d/
 
 刷新相应的dom内容，位置，角度，尺寸，材质等信息只有在执行此命令后才会被作用到dom节点，以正常显示。  
 .update();  
+
+刷新尺寸  
+.updateS();  
+
+刷新位置，角度  
+.updateT();  
+
+刷新材质  
+.updateM();  
 
 销毁自身，从场景中移除  
 .destroy();  
@@ -99,6 +98,9 @@ children  子节点数组
 欢迎研讨。QQ:274924021  
 
 
+
+ * VERSION: 0.4.0
+ * DATE: 2015-09-15
 
  * VERSION: 0.2.0
  * DATE: 2015-01-03
