@@ -275,15 +275,15 @@
                 _style = _dom.style;
                 this.width = parseInt(_style.width);
                 this.height = parseInt(_style.height);
-                if (_style.position === "static")
-                    _style.position = "relative";
+                if (_style.position === 'static')
+                    _style.position = 'relative';
             } else {
-                _dom = document.createElement("div");
+                _dom = document.createElement('div');
                 _style = _dom.style;
-                _style.position = "absolute";
+                _style.position = 'absolute';
             }
-            _dom.style[prefix + "Transform"] = "translateZ(0px)";
-            _dom.style[prefix + "TransformStyle"] = "preserve-3d";
+            _dom.style[prefix + 'Transform'] = 'translateZ(0px)';
+            _dom.style[prefix + 'TransformStyle'] = 'preserve-3d';
             this.el = _dom;
             _dom.le = this;
         },
@@ -306,23 +306,34 @@
         },
 
         updateM: function () {
-            if (this.mat) {
-                if (this.mat.image) {
-                    this.el.style.background = "url(" + this.mat.image + ")";
-                    this.el.style.backgroundSize = "100% 100%";
-                }
-                if (this.mat.color) {
-                    this.el.style.backgroundColor = this.mat.color;
-                }
-                if (this.mat.alpha) {
-                    this.el.style.opacity = this.mat.alpha;
-                }
-            }
+            if (!this.mat) return this;
+
+            if (this.mat.image)
+                this.el.style.backgroundImage = this.mat.image !== '' ? ('url(' + this.mat.image + ')') : '';
+
+            if (this.mat.color)
+                this.el.style.backgroundColor = this.mat.color;
+
+            if (this.mat.position)
+                this.el.style.backgroundPosition = this.mat.position;
+
+            if (this.mat.size)
+                this.el.style.backgroundSize = this.mat.size;
+
+            if (this.mat.repeat)
+                this.el.style.backgroundRepeat = this.mat.repeat;
+
+            if (this.mat.origin)
+                this.el.style.backgroundOrigin = this.mat.origin;
+
+            if (this.mat.alpha)
+                this.el.style.opacity = this.mat.alpha;
+
             return this;
         },
 
         updateT: function () {
-            this.el.style[prefix + "Transform"] = "translate3d(" + this.x + "px," + this.y + "px," + this.z + "px) " + "rotateX(" + this.rotationX + "deg) " + "rotateY(" + this.rotationY + "deg) " + "rotateZ(" + this.rotationZ + "deg) " + "scale3d(" + this.scaleX + ", " + this.scaleY + ", " + this.scaleZ + ") ";
+            this.el.style[prefix + 'Transform'] = 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX + 'deg) ' + 'rotateY(' + this.rotationY + 'deg) ' + 'rotateZ(' + this.rotationZ + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
             return this;
         },
 
@@ -340,7 +351,7 @@
         },
 
         on: function (events) {
-            if (typeof (events) === "object") {
+            if (typeof (events) === 'object') {
                 for (var i in events) {
                     this.el.addEventListener(i, events[i], false);
                 }
@@ -352,7 +363,7 @@
             return this;
         },
         off: function (events) {
-            if (typeof (events) === "object") {
+            if (typeof (events) === 'object') {
                 for (var i in events) {
                     this.el.removeEventListener(i, events[i], false);
                 }
@@ -364,9 +375,9 @@
 
         buttonMode: function (bool) {
             if (bool) {
-                this.el.style.cursor = "pointer";
+                this.el.style.cursor = 'pointer';
             } else {
-                this.el.style.cursor = "auto";
+                this.el.style.cursor = 'auto';
             }
             return this;
         },
@@ -386,19 +397,19 @@
             C3D.Stage.__super__.init.apply(this, [params]);
 
             if (!(params && params.el)) {
-                this.el.style.top = "0px";
-                this.el.style.left = "0px";
-                this.el.style.width = "0px";
-                this.el.style.height = "0px";
+                this.el.style.top = '0px';
+                this.el.style.left = '0px';
+                this.el.style.width = '0px';
+                this.el.style.height = '0px';
             }
-            this.el.style[prefix + "Perspective"] = "800px";
-            this.el.style[prefix + "TransformStyle"] = "flat";
-            this.el.style[prefix + "Transform"] = "";
-            this.el.style.overflow = "hidden";
+            this.el.style[prefix + 'Perspective'] = '800px';
+            this.el.style[prefix + 'TransformStyle'] = 'flat';
+            this.el.style[prefix + 'Transform'] = '';
+            this.el.style.overflow = 'hidden';
 
             this.__fix1 = new C3D.Sprite3D();
-            this.__fix1.el.style.top = "50%";
-            this.__fix1.el.style.left = "50%";
+            this.__fix1.el.style.top = '50%';
+            this.__fix1.el.style.left = '50%';
             this.el.appendChild(this.__fix1.el);
 
             this.__fix2 = new C3D.Sprite3D();
@@ -408,13 +419,13 @@
         },
 
         updateS: function () {
-            this.el.style.width = parseInt(this.width) + "px";
-            this.el.style.height = parseInt(this.height) + "px";
+            this.el.style.width = parseInt(this.width) + 'px';
+            this.el.style.height = parseInt(this.height) + 'px';
             return this;
         },
         updateT: function () {
             var _fov = 0.5 / Math.tan((this.camera.fov * 0.5) / 180 * Math.PI) * this.height;
-            this.el.style[prefix + "Perspective"] = _fov + "px";
+            this.el.style[prefix + 'Perspective'] = _fov + 'px';
             this.__fix1.position(0, 0, _fov).rotation(-this.camera.rotationX, -this.camera.rotationY, -this.camera.rotationZ).updateT();
             this.__fix2.position(-this.camera.x, -this.camera.y, -this.camera.z).updateT();
             return this;
@@ -448,16 +459,16 @@
             var _w = parseInt(this.width);
             var _h = parseInt(this.height);
             var _d = 0;
-            this.el.style.width = _w + "px";
-            this.el.style.height = _h + "px";
-            this.el.style[prefix + "TransformOrigin"] = _w / 2 + "px " + _h / 2 + "px " + _d/2 + "px ";
+            this.el.style.width = _w + 'px';
+            this.el.style.height = _h + 'px';
+            this.el.style[prefix + 'TransformOrigin'] = _w / 2 + 'px ' + _h / 2 + 'px ' + _d / 2 + 'px ';
             return this;
         },
         updateT: function () {
             var _w = parseInt(this.width);
             var _h = parseInt(this.height);
             var _d = 0;
-            this.el.style[prefix + "Transform"] = "translate3d(" + (this.x - _w / 2) + "px," + (this.y - _h / 2) + "px," + (this.z - _d / 2) + "px) " + "rotateX(" + this.rotationX + "deg) " + "rotateY(" + this.rotationY + "deg) " + "rotateZ(" + this.rotationZ + "deg) " + "scale3d(" + this.scaleX + ", " + this.scaleY + ", " + this.scaleZ + ") ";
+            this.el.style[prefix + 'Transform'] = 'translate3d(' + (this.x - _w / 2) + 'px,' + (this.y - _h / 2) + 'px,' + (this.z - _d / 2) + 'px) ' + 'rotateX(' + this.rotationX + 'deg) ' + 'rotateY(' + this.rotationY + 'deg) ' + 'rotateZ(' + this.rotationZ + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
             return this;
         }
     });
@@ -489,7 +500,6 @@
 
             this.down = new C3D.Plane();
             this.addChild(this.down);
-
         },
 
         updateS: function () {
@@ -497,59 +507,60 @@
             var _h = parseInt(this.height);
             var _d = parseInt(this.depth);
 
-            this.front.size(_w, _h, 0).position(0, 0, -_d/2).rotation(0, 0, 0).updateS().updateT();
-            this.back.size(_w, _h, 0).position(0, 0, _d/2).rotation(0, 180, 0).updateS().updateT();
-            this.left.size(_d, _h, 0).position(-_w/2, 0, 0).rotation(0, 90, 0).updateS().updateT();
-            this.right.size(_d, _h, 0).position(_w/2, 0, 0).rotation(0, -90, 0).updateS().updateT();
-            this.up.size(_w, _d, 0).position(0, -_h/2, 0).rotation(-90, 0, 0).updateS().updateT();
-            this.down.size(_w, _d, 0).position(0, _h/2, 0).rotation(90, 0, 0).updateS().updateT();
+            this.front.size(_w, _h, 0).position(0, 0, -_d / 2).rotation(0, 0, 0).updateS().updateT();
+            this.back.size(_w, _h, 0).position(0, 0, _d / 2).rotation(0, 180, 0).updateS().updateT();
+            this.left.size(_d, _h, 0).position(-_w / 2, 0, 0).rotation(0, 90, 0).updateS().updateT();
+            this.right.size(_d, _h, 0).position(_w / 2, 0, 0).rotation(0, -90, 0).updateS().updateT();
+            this.up.size(_w, _d, 0).position(0, -_h / 2, 0).rotation(-90, 0, 0).updateS().updateT();
+            this.down.size(_w, _d, 0).position(0, _h / 2, 0).rotation(90, 0, 0).updateS().updateT();
 
             return this;
         },
         updateM: function () {
-            if (this.mat) {
-                if (this.mat.front)
-                    this.front.material({
-                        image: this.mat.front
-                    }).updateM();
-                else
-                    this.front.material(this.mat).updateM();
+            if (!this.mat) return this;
 
-                if (this.mat.back)
-                    this.back.material({
-                        image: this.mat.back
-                    }).updateM();
-                else
-                    this.back.material(this.mat).updateM();
+            if (this.mat.front)
+                this.front.material({
+                    image: this.mat.front
+                }).updateM();
+            else
+                this.front.material(this.mat).updateM();
 
-                if (this.mat.left)
-                    this.left.material({
-                        image: this.mat.left
-                    }).updateM();
-                else
-                    this.left.material(this.mat).updateM();
+            if (this.mat.back)
+                this.back.material({
+                    image: this.mat.back
+                }).updateM();
+            else
+                this.back.material(this.mat).updateM();
 
-                if (this.mat.right)
-                    this.right.material({
-                        image: this.mat.right
-                    }).updateM();
-                else
-                    this.right.material(this.mat).updateM();
+            if (this.mat.left)
+                this.left.material({
+                    image: this.mat.left
+                }).updateM();
+            else
+                this.left.material(this.mat).updateM();
 
-                if (this.mat.up)
-                    this.up.material({
-                        image: this.mat.up
-                    }).updateM();
-                else
-                    this.up.material(this.mat).updateM();
+            if (this.mat.right)
+                this.right.material({
+                    image: this.mat.right
+                }).updateM();
+            else
+                this.right.material(this.mat).updateM();
 
-                if (this.mat.down)
-                    this.down.material({
-                        image: this.mat.down
-                    }).updateM();
-                else
-                    this.down.material(this.mat).updateM();
-            }
+            if (this.mat.up)
+                this.up.material({
+                    image: this.mat.up
+                }).updateM();
+            else
+                this.up.material(this.mat).updateM();
+
+            if (this.mat.down)
+                this.down.material({
+                    image: this.mat.down
+                }).updateM();
+            else
+                this.down.material(this.mat).updateM();
+
             return this;
         }
     });
