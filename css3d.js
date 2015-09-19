@@ -308,25 +308,25 @@
         updateM: function () {
             if (!this.mat) return this;
 
-            if (this.mat.image)
+            if (this.mat.image != undefined)
                 this.el.style.backgroundImage = this.mat.image !== '' ? ('url(' + this.mat.image + ')') : '';
 
-            if (this.mat.color)
+            if (this.mat.color != undefined)
                 this.el.style.backgroundColor = this.mat.color;
 
-            if (this.mat.position)
+            if (this.mat.position != undefined)
                 this.el.style.backgroundPosition = this.mat.position;
 
-            if (this.mat.size)
+            if (this.mat.size != undefined)
                 this.el.style.backgroundSize = this.mat.size;
 
-            if (this.mat.repeat)
+            if (this.mat.repeat != undefined)
                 this.el.style.backgroundRepeat = this.mat.repeat;
 
-            if (this.mat.origin)
+            if (this.mat.origin != undefined)
                 this.el.style.backgroundOrigin = this.mat.origin;
 
-            if (this.mat.alpha)
+            if (this.mat.alpha != undefined)
                 this.el.style.opacity = this.mat.alpha;
 
             return this;
