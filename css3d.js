@@ -482,10 +482,10 @@
         },
 
         visibility: function (obj) {
-            if (obj.visible)
+            if (obj.visible != undefined)
                 this.visible = obj.visible;
 
-            if (obj.alpha)
+            if (obj.alpha != undefined)
                 this.visible = obj.alpha;
 
             return this;
