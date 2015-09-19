@@ -342,8 +342,8 @@
 
     C3D.Sprite3D = C3D.Object3D.extend({
         el: null,
-        alpha:1,
-        visible:true,
+        alpha: 1,
+        visible: true,
         mat: null,
         init: function (params) {
             C3D.Sprite3D.__super__.init.apply(this, [params]);
@@ -353,8 +353,8 @@
 
             var _dom;
 
-            for(var i in params){
-                switch(i){
+            for (var i in params) {
+                switch (i) {
                     case 'el':
                         _dom = params[i];
                         if (_dom.style.position === 'static')
@@ -366,7 +366,7 @@
                 }
             }
 
-            if(!_dom){
+            if (!_dom) {
                 _dom = document.createElement('div');
                 _dom.style.position = 'absolute';
             }
@@ -425,9 +425,9 @@
             return this;
         },
 
-        updateV:function(){
+        updateV: function () {
             this.el.style.opacity = this.alpha;
-            this.el.style.display = this.visible?'block':'none';
+            this.el.style.display = this.visible ? 'block' : 'none';
             return this;
         },
 
@@ -478,6 +478,16 @@
 
         material: function (obj) {
             this.mat = obj;
+            return this;
+        },
+
+        visibility: function (obj) {
+            if (obj.visible)
+                this.visible = obj.visible;
+
+            if (obj.alpha)
+                this.visible = obj.alpha;
+
             return this;
         }
     });

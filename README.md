@@ -10,7 +10,7 @@ demo:http://shrekwang.duapp.com/demo/c3d/
 ##类
 **Css3D.Object3D**  
 三维元素基类，拥有如下方法：  
-设置获取实例位置  
+设置位置  
 .x;  
 .y;  
 .z;  
@@ -18,7 +18,7 @@ demo:http://shrekwang.duapp.com/demo/c3d/
 增量移动  
 .move(x,y,z);  
 
-设置获取实例旋转角度  
+设置旋转角度  
 .rotationX;  
 .rotationY;  
 .rotationZ;  
@@ -26,21 +26,25 @@ demo:http://shrekwang.duapp.com/demo/c3d/
 增量旋转  
 .rotate(x,y,z);  
 
-设置获取实例缩放比  
+设置缩放比  
 .scaleX;  
 .scaleY;  
 .scaleZ;  
 .scale(x,y,z);  
 
-设置获取实例  
+设置尺寸  
 .width;  
 .height;  
 .depth;  
 .size(x,y,z);  
 
+设置材质(div的background相关的几种属性)  
+.material({image:'',color:'',position:'',size:'',repeat:'',origin:''});  
+
 设置可见性  
 .alpha;  
 .visible;  
+.visibility({visible:true,alpha:1});  
 
 添加删除子节点  
 .addChild(object3D);  
