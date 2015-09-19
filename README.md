@@ -38,6 +38,10 @@ demo:http://shrekwang.duapp.com/demo/c3d/
 .depth;  
 .size(x,y,z);  
 
+设置可见性  
+.alpha;  
+.visible;  
+
 添加删除子节点  
 .addChild(object3D);  
 .removeChild(object3D);  
@@ -53,6 +57,9 @@ demo:http://shrekwang.duapp.com/demo/c3d/
 
 刷新材质  
 .updateM();  
+
+刷新可见性  
+.updateV();  
 
 销毁自身，从场景中移除  
 .destroy();  
