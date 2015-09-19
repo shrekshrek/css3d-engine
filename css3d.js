@@ -486,7 +486,7 @@
                 this.visible = obj.visible;
 
             if (obj.alpha != undefined)
-                this.visible = obj.alpha;
+                this.alpha = obj.alpha;
 
             return this;
         }
