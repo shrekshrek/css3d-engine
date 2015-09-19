@@ -163,15 +163,41 @@
         y: 0,
         z: 0,
         position: function (x, y, z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            switch (arguments.length) {
+                case 1 :
+                    this.x = x;
+                    this.y = x;
+                    this.z = x;
+                    break;
+                case 2 :
+                    this.x = x;
+                    this.y = y;
+                    break;
+                case 3 :
+                    this.x = x;
+                    this.y = y;
+                    this.z = z;
+                    break;
+            }
             return this;
         },
         move: function (x, y, z) {
-            this.x += x;
-            this.y += y;
-            this.z += z;
+            switch (arguments.length) {
+                case 1 :
+                    this.x += x;
+                    this.y += x;
+                    this.z += x;
+                    break;
+                case 2 :
+                    this.x += x;
+                    this.y += y;
+                    break;
+                case 3 :
+                    this.x += x;
+                    this.y += y;
+                    this.z += z;
+                    break;
+            }
             return this;
         },
 
@@ -179,15 +205,41 @@
         rotationY: 0,
         rotationZ: 0,
         rotation: function (x, y, z) {
-            this.rotationX = x;
-            this.rotationY = y;
-            this.rotationZ = z;
+            switch (arguments.length) {
+                case 1 :
+                    this.rotationX = x;
+                    this.rotationY = x;
+                    this.rotationZ = x;
+                    break;
+                case 2 :
+                    this.rotationX = x;
+                    this.rotationY = y;
+                    break;
+                case 3 :
+                    this.rotationX = x;
+                    this.rotationY = y;
+                    this.rotationZ = z;
+                    break;
+            }
             return this;
         },
         rotate: function (x, y, z) {
-            this.rotationX += x;
-            this.rotationY += y;
-            this.rotationZ += z;
+            switch (arguments.length) {
+                case 1 :
+                    this.rotationX += x;
+                    this.rotationY += x;
+                    this.rotationZ += x;
+                    break;
+                case 2 :
+                    this.rotationX += x;
+                    this.rotationY += y;
+                    break;
+                case 3 :
+                    this.rotationX += x;
+                    this.rotationY += y;
+                    this.rotationZ += z;
+                    break;
+            }
             return this;
         },
 
@@ -195,9 +247,22 @@
         scaleY: 1,
         scaleZ: 1,
         scale: function (x, y, z) {
-            this.scaleX = x;
-            this.scaleY = y;
-            this.scaleZ = z;
+            switch (arguments.length) {
+                case 1 :
+                    this.scaleX = x;
+                    this.scaleY = x;
+                    this.scaleZ = x;
+                    break;
+                case 2 :
+                    this.scaleX = x;
+                    this.scaleY = y;
+                    break;
+                case 3 :
+                    this.scaleX = x;
+                    this.scaleY = y;
+                    this.scaleZ = z;
+                    break;
+            }
             return this;
         },
 
@@ -205,9 +270,22 @@
         height: 0,
         depth: 0,
         size: function (x, y, z) {
-            this.width = x;
-            this.height = y;
-            this.depth = z;
+            switch (arguments.length) {
+                case 1 :
+                    this.width = x;
+                    this.height = x;
+                    this.depth = x;
+                    break;
+                case 2 :
+                    this.width = x;
+                    this.height = y;
+                    break;
+                case 3 :
+                    this.width = x;
+                    this.height = y;
+                    this.depth = z;
+                    break;
+            }
             return this;
         },
 
@@ -264,28 +342,40 @@
 
     C3D.Sprite3D = C3D.Object3D.extend({
         el: null,
+        alpha:1,
+        visible:true,
         mat: null,
         init: function (params) {
             C3D.Sprite3D.__super__.init.apply(this, [params]);
 
+            this.alpha = 1;
+            this.visible = true;
+
             var _dom;
-            var _style;
-            if (params && params.el) {
-                _dom = params.el;
-                _style = _dom.style;
-                this.width = parseInt(_style.width);
-                this.height = parseInt(_style.height);
-                if (_style.position === 'static')
-                    _style.position = 'relative';
-            } else {
-                _dom = document.createElement('div');
-                _style = _dom.style;
-                _style.position = 'absolute';
+
+            for(var i in params){
+                switch(i){
+                    case 'el':
+                        _dom = params[i];
+                        if (_dom.style.position === 'static')
+                            _dom.style.position = 'relative';
+                        break;
+                    default:
+                        this[i] = params[i];
+                        break;
+                }
             }
+
+            if(!_dom){
+                _dom = document.createElement('div');
+                _dom.style.position = 'absolute';
+            }
+
             _dom.style[prefix + 'Transform'] = 'translateZ(0px)';
             _dom.style[prefix + 'TransformStyle'] = 'preserve-3d';
             this.el = _dom;
             _dom.le = this;
+
         },
         destroy: function () {
             C3D.Sprite3D.__super__.destroy.apply(this);
@@ -298,6 +388,7 @@
             this.updateS();
             this.updateM();
             this.updateT();
+            this.updateV();
             return this;
         },
 
@@ -326,14 +417,17 @@
             if (this.mat.origin != undefined)
                 this.el.style.backgroundOrigin = this.mat.origin;
 
-            if (this.mat.alpha != undefined)
-                this.el.style.opacity = this.mat.alpha;
-
             return this;
         },
 
         updateT: function () {
             this.el.style[prefix + 'Transform'] = 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX + 'deg) ' + 'rotateY(' + this.rotationY + 'deg) ' + 'rotateZ(' + this.rotationZ + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
+            return this;
+        },
+
+        updateV:function(){
+            this.el.style.opacity = this.alpha;
+            this.el.style.display = this.visible?'block':'none';
             return this;
         },
 
