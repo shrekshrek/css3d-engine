@@ -393,6 +393,7 @@
         },
 
         updateS: function () {
+            this.el.style[prefix + 'TransformOrigin'] = '50% 50%';
             return this;
         },
 
@@ -421,7 +422,7 @@
         },
 
         updateT: function () {
-            this.el.style[prefix + 'Transform'] = 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX + 'deg) ' + 'rotateY(' + this.rotationY + 'deg) ' + 'rotateZ(' + this.rotationZ + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
+            this.el.style[prefix + 'Transform'] = 'translate3d(-50%, -50%, 0px) ' + 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX + 'deg) ' + 'rotateY(' + this.rotationY + 'deg) ' + 'rotateZ(' + this.rotationZ + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
             return this;
         },
 
@@ -495,8 +496,9 @@
     // --------------------------------------------------------------------3d核心元件
     C3D.Stage = C3D.Sprite3D.extend({
         camera: null,
-        __fix1: null,
-        __fix2: null,
+        fov: null,
+        __rfix: null,
+        __pfix: null,
         init: function (params) {
             C3D.Stage.__super__.init.apply(this, [params]);
 
@@ -511,13 +513,11 @@
             this.el.style[prefix + 'Transform'] = '';
             this.el.style.overflow = 'hidden';
 
-            this.__fix1 = new C3D.Sprite3D();
-            this.__fix1.el.style.top = '50%';
-            this.__fix1.el.style.left = '50%';
-            this.el.appendChild(this.__fix1.el);
+            this.__rfix = new C3D.Sprite3D();
+            this.el.appendChild(this.__rfix.el);
 
-            this.__fix2 = new C3D.Sprite3D();
-            this.__fix1.el.appendChild(this.__fix2.el);
+            this.__pfix = new C3D.Sprite3D();
+            this.__rfix.el.appendChild(this.__pfix.el);
 
             this.camera = new C3D.Camera();
         },
@@ -528,19 +528,19 @@
             return this;
         },
         updateT: function () {
-            var _fov = 0.5 / Math.tan((this.camera.fov * 0.5) / 180 * Math.PI) * this.height;
-            this.el.style[prefix + 'Perspective'] = _fov + 'px';
-            this.__fix1.position(0, 0, _fov).rotation(-this.camera.rotationX, -this.camera.rotationY, -this.camera.rotationZ).updateT();
-            this.__fix2.position(-this.camera.x, -this.camera.y, -this.camera.z).updateT();
+            this.fov = parseInt(0.5 / Math.tan((this.camera.fov * 0.5) / 180 * Math.PI) * this.height);
+            this.el.style[prefix + 'Perspective'] = this.fov + 'px';
+            this.__rfix.position(this.width/2, this.height/2, this.fov).rotation(-this.camera.rotationX, -this.camera.rotationY, -this.camera.rotationZ).updateT();
+            this.__pfix.position(-this.camera.x, -this.camera.y, -this.camera.z).updateT();
             return this;
         },
 
         addChild: function (view) {
-            this.__fix2.addChild(view);
+            this.__pfix.addChild(view);
             return this;
         },
         removeChild: function (view) {
-            this.__fix2.removeChild(view);
+            this.__pfix.removeChild(view);
             return this;
         }
     });
@@ -560,19 +560,8 @@
         },
 
         updateS: function () {
-            var _w = parseInt(this.width);
-            var _h = parseInt(this.height);
-            var _d = 0;
-            this.el.style.width = _w + 'px';
-            this.el.style.height = _h + 'px';
-            this.el.style[prefix + 'TransformOrigin'] = _w / 2 + 'px ' + _h / 2 + 'px ' + _d / 2 + 'px ';
-            return this;
-        },
-        updateT: function () {
-            var _w = parseInt(this.width);
-            var _h = parseInt(this.height);
-            var _d = 0;
-            this.el.style[prefix + 'Transform'] = 'translate3d(' + (this.x - _w / 2) + 'px,' + (this.y - _h / 2) + 'px,' + (this.z - _d / 2) + 'px) ' + 'rotateX(' + this.rotationX + 'deg) ' + 'rotateY(' + this.rotationY + 'deg) ' + 'rotateZ(' + this.rotationZ + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
+            this.el.style.width = parseInt(this.width) + 'px';
+            this.el.style.height = parseInt(this.height) + 'px';
             return this;
         }
     });
