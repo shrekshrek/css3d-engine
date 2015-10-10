@@ -530,7 +530,7 @@
         updateT: function () {
             this.fov = parseInt(0.5 / Math.tan((this.camera.fov * 0.5) / 180 * Math.PI) * this.height);
             this.el.style[prefix + 'Perspective'] = this.fov + 'px';
-            this.__rfix.position(this.width/2, this.height/2, this.fov).rotation(-this.camera.rotationX, -this.camera.rotationY, -this.camera.rotationZ).updateT();
+            this.__rfix.position(parseInt(this.width/2), parseInt(this.height/2), this.fov).rotation(-this.camera.rotationX, -this.camera.rotationY, -this.camera.rotationZ).updateT();
             this.__pfix.position(-this.camera.x, -this.camera.y, -this.camera.z).updateT();
             return this;
         },
