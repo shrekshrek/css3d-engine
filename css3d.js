@@ -393,7 +393,7 @@
         },
 
         updateS: function () {
-            this.el.style[prefix + 'TransformOrigin'] = '50% 50%';
+            //this.el.style[prefix + 'TransformOrigin'] = '50% 50%';
             return this;
         },
 
