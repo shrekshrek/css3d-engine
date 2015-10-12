@@ -305,7 +305,7 @@
             this.children = [];
         },
         destroy: function () {
-            for (var i in this.children) {
+            for (var i = this.children.length - 1; i >= 0; i--) {
                 this.children[i].destroy();
             }
             this.children = [];
@@ -317,7 +317,7 @@
             if (view.parent)
                 view.parent.removeChild(view);
 
-            for (var i in this.children) {
+            for (var i = this.children.length - 1; i >= 0; i--) {
                 if (this.children[i] === view)
                     return this;
             }
