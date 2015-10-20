@@ -317,10 +317,6 @@
             if (view.parent)
                 view.parent.removeChild(view);
 
-            for (var i = this.children.length - 1; i >= 0; i--) {
-                if (this.children[i] === view)
-                    return this;
-            }
             view.parent = this;
             this.children.push(view);
             return this;
