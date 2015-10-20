@@ -326,10 +326,9 @@
             return this;
         },
         removeChild: function (view) {
-            var _self = this;
             for (var i = this.children.length - 1; i >= 0; i--) {
                 if (this.children[i] === view) {
-                    _self.children.splice(i, 1);
+                    this.children.splice(i, 1);
                     view.parent = null;
                     return this;
                 }
