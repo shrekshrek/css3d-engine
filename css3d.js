@@ -305,10 +305,8 @@
             this.children = [];
         },
         destroy: function () {
-            for (var i = this.children.length - 1; i >= 0; i--) {
-                this.children[i].destroy();
-            }
-            this.children = [];
+            if (this.parent)
+                this.parent.removeChild(this);
         },
 
         parent: null,
@@ -330,6 +328,12 @@
                 }
             }
             return this;
+        },
+        removeAllChild: function(){
+            for (var i = this.children.length - 1; i >= 0; i--) {
+                this.children[i].parent = null;
+            }
+            this.children = [];
         }
 
     });
@@ -371,12 +375,6 @@
             this.el = _dom;
             _dom.le = this;
 
-        },
-        destroy: function () {
-            C3D.Sprite3D.__super__.destroy.apply(this);
-            if (this.el && this.el.parentNode) {
-                this.el.parentNode.removeChild(this.el);
-            }
         },
 
         update: function () {
