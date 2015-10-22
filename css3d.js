@@ -334,6 +334,7 @@
                 this.children[i].parent = null;
             }
             this.children = [];
+            return this;
         }
 
     });
