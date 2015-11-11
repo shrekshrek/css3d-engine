@@ -155,7 +155,7 @@
 
     // --------------------------------------------------------------------3d元素基类
     C3D.Object3D = function () {
-        this.init.apply(this, arguments);
+        this.initialize.apply(this, arguments);
     };
 
     extend(C3D.Object3D.prototype, {
@@ -289,7 +289,7 @@
             return this;
         },
 
-        init: function () {
+        initialize: function () {
             this.x = 0;
             this.y = 0;
             this.z = 0;
@@ -329,7 +329,7 @@
             }
             return this;
         },
-        removeAllChild: function(){
+        removeAllChild: function () {
             for (var i = this.children.length - 1; i >= 0; i--) {
                 this.children[i].parent = null;
             }
@@ -345,8 +345,8 @@
         alpha: 1,
         visible: true,
         mat: null,
-        init: function (params) {
-            C3D.Sprite3D.__super__.init.apply(this, [params]);
+        initialize: function (params) {
+            C3D.Sprite3D.__super__.initialize.apply(this, [params]);
 
             this.alpha = 1;
             this.visible = true;
@@ -493,8 +493,8 @@
         fov: null,
         __rfix: null,
         __pfix: null,
-        init: function (params) {
-            C3D.Stage.__super__.init.apply(this, [params]);
+        initialize: function (params) {
+            C3D.Stage.__super__.initialize.apply(this, [params]);
 
             if (!(params && params.el)) {
                 this.el.style.top = '0px';
@@ -524,7 +524,7 @@
         updateT: function () {
             this.fov = parseInt(0.5 / Math.tan((this.camera.fov * 0.5) / 180 * Math.PI) * this.height);
             this.el.style[prefix + 'Perspective'] = this.fov + 'px';
-            this.__rfix.position(parseInt(this.width/2), parseInt(this.height/2), this.fov).rotation(-this.camera.rotationX, -this.camera.rotationY, -this.camera.rotationZ).updateT();
+            this.__rfix.position(parseInt(this.width / 2), parseInt(this.height / 2), this.fov).rotation(-this.camera.rotationX, -this.camera.rotationY, -this.camera.rotationZ).updateT();
             this.__pfix.position(-this.camera.x, -this.camera.y, -this.camera.z).updateT();
             return this;
         },
@@ -541,16 +541,16 @@
 
     C3D.Camera = C3D.Object3D.extend({
         fov: null,
-        init: function (params) {
-            C3D.Camera.__super__.init.apply(this, [params]);
+        initialize: function (params) {
+            C3D.Camera.__super__.initialize.apply(this, [params]);
             this.fov = 75;
         }
     });
 
     // --------------------------------------------------------------------3d显示元件
     C3D.Plane = C3D.Sprite3D.extend({
-        init: function (params) {
-            C3D.Plane.__super__.init.apply(this, [params]);
+        initialize: function (params) {
+            C3D.Plane.__super__.initialize.apply(this, [params]);
         },
 
         updateS: function () {
@@ -567,8 +567,8 @@
         right: null,
         up: null,
         down: null,
-        init: function (params) {
-            C3D.Cube.__super__.init.apply(this, [params]);
+        initialize: function (params) {
+            C3D.Cube.__super__.initialize.apply(this, [params]);
 
             this.front = new C3D.Plane();
             this.addChild(this.front);
