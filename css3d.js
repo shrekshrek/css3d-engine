@@ -117,16 +117,8 @@
 
 
     // --------------------------------------------------------------------其他辅助方法
-    function fixed0(n) {
+    function fixed0(n){
         return Math.round(n);
-    }
-
-    function fixed1(n) {
-        return Math.round(n * 10) / 10;
-    }
-
-    function fixed2(n) {
-        return Math.round(n * 100) / 100;
     }
 
 
@@ -430,12 +422,12 @@
         },
 
         updateT: function () {
-            this.el.style[prefix + 'Transform'] = 'translate3d(-50%, -50%, 0px) ' + 'translate3d(' + fixed0(this.x) + 'px,' + fixed0(this.y) + 'px,' + fixed0(this.z) + 'px) ' + 'rotateX(' + fixed1(this.rotationX) + 'deg) ' + 'rotateY(' + fixed1(this.rotationY) + 'deg) ' + 'rotateZ(' + fixed1(this.rotationZ) + 'deg) ' + 'scale3d(' + fixed2(this.scaleX) + ', ' + fixed2(this.scaleY) + ', ' + fixed2(this.scaleZ) + ') ';
+            this.el.style[prefix + 'Transform'] = 'translate3d(-50%, -50%, 0px) ' + 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX + 'deg) ' + 'rotateY(' + this.rotationY + 'deg) ' + 'rotateZ(' + this.rotationZ + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
             return this;
         },
 
         updateV: function () {
-            this.el.style.opacity = fixed2(this.alpha);
+            this.el.style.opacity = this.alpha;
             this.el.style.display = this.visible ? 'block' : 'none';
             return this;
         },
