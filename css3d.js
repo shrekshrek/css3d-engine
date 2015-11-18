@@ -116,6 +116,20 @@
     };
 
 
+    // --------------------------------------------------------------------其他辅助方法
+    function fixed0(n) {
+        return Math.round(n);
+    }
+
+    function fixed1(n) {
+        return Math.round(n * 10) / 10;
+    }
+
+    function fixed2(n) {
+        return Math.round(n * 100) / 100;
+    }
+
+
     // --------------------------------------------------------------------3d辅助方法
     //C3D.getDistance = function(o1, o2) {
     //    switch (arguments.length) {
@@ -416,12 +430,12 @@
         },
 
         updateT: function () {
-            this.el.style[prefix + 'Transform'] = 'translate3d(-50%, -50%, 0px) ' + 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX + 'deg) ' + 'rotateY(' + this.rotationY + 'deg) ' + 'rotateZ(' + this.rotationZ + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
+            this.el.style[prefix + 'Transform'] = 'translate3d(-50%, -50%, 0px) ' + 'translate3d(' + fixed0(this.x) + 'px,' + fixed0(this.y) + 'px,' + fixed0(this.z) + 'px) ' + 'rotateX(' + fixed1(this.rotationX) + 'deg) ' + 'rotateY(' + fixed1(this.rotationY) + 'deg) ' + 'rotateZ(' + fixed1(this.rotationZ) + 'deg) ' + 'scale3d(' + fixed2(this.scaleX) + ', ' + fixed2(this.scaleY) + ', ' + fixed2(this.scaleZ) + ') ';
             return this;
         },
 
         updateV: function () {
-            this.el.style.opacity = this.alpha;
+            this.el.style.opacity = fixed2(this.alpha);
             this.el.style.display = this.visible ? 'block' : 'none';
             return this;
         },
@@ -517,14 +531,14 @@
         },
 
         updateS: function () {
-            this.el.style.width = parseInt(this.width) + 'px';
-            this.el.style.height = parseInt(this.height) + 'px';
+            this.el.style.width = fixed0(this.width) + 'px';
+            this.el.style.height = fixed0(this.height) + 'px';
             return this;
         },
         updateT: function () {
-            this.fov = parseInt(0.5 / Math.tan((this.camera.fov * 0.5) / 180 * Math.PI) * this.height);
+            this.fov = fixed0(0.5 / Math.tan((this.camera.fov * 0.5) / 180 * Math.PI) * this.height);
             this.el.style[prefix + 'Perspective'] = this.fov + 'px';
-            this.__rfix.position(parseInt(this.width / 2), parseInt(this.height / 2), this.fov).rotation(-this.camera.rotationX, -this.camera.rotationY, -this.camera.rotationZ).updateT();
+            this.__rfix.position(fixed0(this.width / 2), fixed0(this.height / 2), this.fov).rotation(-this.camera.rotationX, -this.camera.rotationY, -this.camera.rotationZ).updateT();
             this.__pfix.position(-this.camera.x, -this.camera.y, -this.camera.z).updateT();
             return this;
         },
@@ -554,8 +568,8 @@
         },
 
         updateS: function () {
-            this.el.style.width = parseInt(this.width) + 'px';
-            this.el.style.height = parseInt(this.height) + 'px';
+            this.el.style.width = fixed0(this.width) + 'px';
+            this.el.style.height = fixed0(this.height) + 'px';
             return this;
         }
     });
@@ -590,9 +604,9 @@
         },
 
         updateS: function () {
-            var _w = parseInt(this.width);
-            var _h = parseInt(this.height);
-            var _d = parseInt(this.depth);
+            var _w = fixed0(this.width);
+            var _h = fixed0(this.height);
+            var _d = fixed0(this.depth);
 
             this.front.size(_w, _h, 0).position(0, 0, -_d / 2).rotation(0, 0, 0).updateS().updateT();
             this.back.size(_w, _h, 0).position(0, 0, _d / 2).rotation(0, 180, 0).updateS().updateT();
