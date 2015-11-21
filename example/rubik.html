@@ -14,14 +14,14 @@
     document.body.appendChild(s.el);
 
     //创建一个三维容器（创建以方便分组使用）
-    var sp = new C3D.Sprite3D();
+    var sp = new C3D.Sprite();
     sp.position(0, 0, -500).update();
     s.addChild(sp);
 
     //创建1个平面放入场景
     for (var j = 0; j < 6; j++) {
         for (var i = 0; i < 9; i++) {
-            var p = new C3D.Sprite3D();
+            var p = new C3D.Sprite();
             var p2 = new C3D.Plane();
             p.addChild(p2);
             var _x = 0;

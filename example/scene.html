@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<head>
+    <script src="../css3d.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+<script>
+    //创建场景
+    var s = new C3D.Stage();
+    s.size(window.innerWidth, window.innerHeight).material({
+        color: "#cccccc"
+    }).update();
+    document.body.appendChild(s.el);
+
+    //创建场景
+    var scene = C3D.createScene({
+        type: 'sprite', position: [0, 0, -s.fov], children: [
+            {
+                type: 'plane',
+                name: 'p1',
+                size: [100],
+                position: [100, 0, 0],
+                rotation: [45, 0, 0],
+                material: [{color: C3D.getRandomColor()}]
+            },
+            {
+                type: 'plane',
+                name: 'p2',
+                size: [100],
+                position: [-100, 0, 0],
+                rotation: [-45, 0, 0],
+                material: [{color: C3D.getRandomColor()}]
+            },
+            {
+                type: 'plane',
+                name: 'p3',
+                size: [100],
+                position: [0, 100, 0],
+                rotation: [0, 45, 0],
+                material: [{color: C3D.getRandomColor()}]
+            },
+            {
+                type: 'plane',
+                name: 'p4',
+                size: [100],
+                position: [0, -100, 0],
+                rotation: [0, -45, 0],
+                material: [{color: C3D.getRandomColor()}]
+            },
+        ]
+    });
+
+    s.addChild(scene);
+
+    //响应屏幕调整尺寸
+    function resize() {
+        s.size(window.innerWidth, window.innerHeight).update();
+//        scene.position(0, 0, -s.fov).updateT();
+    }
+
+    window.onresize = function () {
+        resize();
+    };
+    resize();
+
+    //刷新场景
+    requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame;
+
+    function go() {
+        scene.rotate(0, 1, 0).updateT();
+
+        scene.p3.rotate(-1, 0, 0).updateT();
+
+        requestAnimationFrame(go);
+    }
+
+    requestAnimationFrame(go);
+
+</script>
+</body>

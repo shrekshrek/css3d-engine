@@ -9,21 +9,22 @@
     //创建场景
     var s = new C3D.Stage();
     s.size(window.innerWidth, window.innerHeight).material({
-        color : "#cccccc"
+        color: "#cccccc"
     }).update();
     document.body.appendChild(s.el);
 
     //创建1个平面放入场景
     var p = new C3D.Plane();
     p.size(100).position(0, 100, -s.fov).rotation(0, 0, 0).material({
-        color : C3D.getRandomColor()
-    }).update();
+        color: C3D.getRandomColor(),
+        image: 'images/mouse.jpg'
+    }).filter({blur: ['5px'],brightness: [3]}).update();
     s.addChild(p);
 
     //创建1个立方体放入场景
     var c = new C3D.Cube();
     c.size(100).position(0, -100, -s.fov).rotation(0, 0, 0).material({
-        color : C3D.getRandomColor()
+        color: C3D.getRandomColor()
     }).update();
     s.addChild(c);
 
@@ -32,17 +33,15 @@
         s.size(window.innerWidth, window.innerHeight).update();
         p.position(0, 100, -s.fov).updateT();
         c.position(0, -100, -s.fov).updateT();
-    };
-    window.onresize = function() {
+    }
+
+    window.onresize = function () {
         resize();
     };
     resize();
 
     //刷新场景
-    requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame ||
-    function(callback) {
-        setTimeout(callback, 1000 / 60);
-    };
+    requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame;
 
     function go() {
         p.rotate(0, 1, 0).updateT();

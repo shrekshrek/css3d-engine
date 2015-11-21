@@ -1,6 +1,6 @@
 /*!
- * VERSION: 0.4.0
- * DATE: 2015-09-15
+ * VERSION: 0.5.0
+ * DATE: 2015-11-21
  * GIT:https://github.com/shrekshrek/css3d-engine
  *
  * @author: Shrek.wang, shrekshrek@gmail.com
@@ -23,7 +23,7 @@
 }(function (root, C3D) {
     var previousCss3D = root.C3D;
 
-    C3D.VERSION = '0.4.0';
+    C3D.VERSION = '0.5.0';
 
     C3D.noConflict = function () {
         root.C3D = previousCss3D;
@@ -117,47 +117,16 @@
 
 
     // --------------------------------------------------------------------其他辅助方法
-    function fixed0(n){
+    function fixed0(n) {
         return Math.round(n);
     }
 
-
-    // --------------------------------------------------------------------3d辅助方法
-    //C3D.getDistance = function(o1, o2) {
-    //    switch (arguments.length) {
-    //    case 1 :
-    //        return Math.pow(Math.pow(o1.x, 2) + Math.pow(o1.y, 2) + Math.pow(o1.z, 2), 0.5);
-    //    case 2 :
-    //        return Math.pow(Math.pow(o2.x - o1.x, 2) + Math.pow(o2.y - o1.y, 2) + Math.pow(o2.z - o1.z, 2), 0.5);
-    //    }
-    //};
-
-    //三维变换，css的rotation属性作用顺序依次是x,y,z.所以推倒计算时需要反过来，计算顺序是z,y,x
-    //C3D.positionRotate3D = function(o, r) {
-    //    var _sinz = Math.sin(r[2] / 180 * Math.PI);
-    //    var _cosz = Math.cos(r[2] / 180 * Math.PI);
-    //    var _x1 = o.x * _cosz - o.y * _sinz;
-    //    var _y1 = o.y * _cosz + o.x * _sinz;
-    //    var _z1 = o.z;
-    //
-    //    var _siny = Math.sin(r[1] / 180 * Math.PI);
-    //    var _cosy = Math.cos(r[1] / 180 * Math.PI);
-    //    var _x2 = _x1 * _cosy + _z1 * _siny;
-    //    var _y2 = _y1;
-    //    var _z2 = _z1 * _cosy - _x1 * _siny;
-    //
-    //    var _sinx = Math.sin(r[0] / 180 * Math.PI);
-    //    var _cosx = Math.cos(r[0] / 180 * Math.PI);
-    //    var _x3 = _x2;
-    //    var _y3 = _y2 * _cosx - _z2 * _sinx;
-    //    var _z3 = _z2 * _cosx + _y2 * _sinx;
-    //
-    //    return {
-    //        x : _x3,
-    //        y : _y3,
-    //        z : _z3
-    //    };
-    //};
+    //  webkitTransform 转 WebkitTransform
+    function firstUper(str) {
+        return str.replace(/\b(\w)|\s(\w)/g, function (m) {
+            return m.toUpperCase();
+        });
+    }
 
     // --------------------------------------------------------------------3d元素基类
     C3D.Object3D = function () {
@@ -346,13 +315,13 @@
     });
     C3D.Object3D.extend = extend2;
 
-    C3D.Sprite3D = C3D.Object3D.extend({
+    C3D.Sprite = C3D.Object3D.extend({
         el: null,
         alpha: 1,
         visible: true,
         mat: null,
         initialize: function (params) {
-            C3D.Sprite3D.__super__.initialize.apply(this, [params]);
+            C3D.Sprite.__super__.initialize.apply(this, [params]);
 
             this.alpha = 1;
             this.visible = true;
@@ -400,23 +369,16 @@
         updateM: function () {
             if (!this.mat) return this;
 
-            if (this.mat.image != undefined)
-                this.el.style.backgroundImage = this.mat.image !== '' ? ('url(' + this.mat.image + ')') : '';
-
-            if (this.mat.color != undefined)
-                this.el.style.backgroundColor = this.mat.color;
-
-            if (this.mat.position != undefined)
-                this.el.style.backgroundPosition = this.mat.position;
-
-            if (this.mat.size != undefined)
-                this.el.style.backgroundSize = this.mat.size;
-
-            if (this.mat.repeat != undefined)
-                this.el.style.backgroundRepeat = this.mat.repeat;
-
-            if (this.mat.origin != undefined)
-                this.el.style.backgroundOrigin = this.mat.origin;
+            for (var i in this.mat) {
+                switch (i) {
+                    case 'image':
+                        this.el.style['background' + firstUper(i)] = this.mat[i] !== '' ? ('url(' + this.mat[i] + ')') : '';
+                        break;
+                    default:
+                        this.el.style['background' + firstUper(i)] = this.mat[i];
+                        break;
+                }
+            }
 
             return this;
         },
@@ -433,13 +395,13 @@
         },
 
         addChild: function (view) {
-            C3D.Sprite3D.__super__.addChild.apply(this, [view]);
+            C3D.Sprite.__super__.addChild.apply(this, [view]);
             if (this.el && view.el)
                 this.el.appendChild(view.el);
             return this;
         },
         removeChild: function (view) {
-            C3D.Sprite3D.__super__.removeChild.apply(this, [view]);
+            C3D.Sprite.__super__.removeChild.apply(this, [view]);
             if (view.el && view.el.parentNode)
                 view.el.parentNode.removeChild(view.el);
             return this;
@@ -483,10 +445,10 @@
         },
 
         visibility: function (obj) {
-            if (obj.visible != undefined)
+            if (obj.visible !== undefined)
                 this.visible = obj.visible;
 
-            if (obj.alpha != undefined)
+            if (obj.alpha !== undefined)
                 this.alpha = obj.alpha;
 
             return this;
@@ -494,7 +456,7 @@
     });
 
     // --------------------------------------------------------------------3d核心元件
-    C3D.Stage = C3D.Sprite3D.extend({
+    C3D.Stage = C3D.Sprite.extend({
         camera: null,
         fov: null,
         __rfix: null,
@@ -513,10 +475,10 @@
             this.el.style[prefix + 'Transform'] = '';
             this.el.style.overflow = 'hidden';
 
-            this.__rfix = new C3D.Sprite3D();
+            this.__rfix = new C3D.Sprite();
             this.el.appendChild(this.__rfix.el);
 
-            this.__pfix = new C3D.Sprite3D();
+            this.__pfix = new C3D.Sprite();
             this.__rfix.el.appendChild(this.__pfix.el);
 
             this.camera = new C3D.Camera();
@@ -554,25 +516,50 @@
     });
 
     // --------------------------------------------------------------------3d显示元件
-    C3D.Plane = C3D.Sprite3D.extend({
+    C3D.Plane = C3D.Sprite.extend({
+        flt: null,
         initialize: function (params) {
             C3D.Plane.__super__.initialize.apply(this, [params]);
+        },
+
+        update: function () {
+            C3D.Plane.__super__.update.apply(this);
+            this.updateF();
+            return this;
         },
 
         updateS: function () {
             this.el.style.width = fixed0(this.width) + 'px';
             this.el.style.height = fixed0(this.height) + 'px';
             return this;
+        },
+
+        updateF: function () {
+            if (!this.flt) return this;
+
+            var _flt = '';
+            for (var i in this.flt) {
+                _flt += (this.flt[i] !== '' ? (i + '(' + this.flt[i].join(',') + ')') : '');
+            }
+            if (_flt !== '') this.el.style[prefix + 'Filter'] = _flt;
+
+            return this;
+        },
+
+        filter: function (obj) {
+            this.flt = obj;
+            return this;
         }
     });
 
-    C3D.Cube = C3D.Sprite3D.extend({
+    C3D.Cube = C3D.Sprite.extend({
         front: null,
         back: null,
         left: null,
         right: null,
         up: null,
         down: null,
+        flt: null,
         initialize: function (params) {
             C3D.Cube.__super__.initialize.apply(this, [params]);
 
@@ -595,6 +582,12 @@
             this.addChild(this.down);
         },
 
+        update: function () {
+            C3D.Cube.__super__.update.apply(this);
+            this.updateF();
+            return this;
+        },
+
         updateS: function () {
             var _w = fixed0(this.width);
             var _h = fixed0(this.height);
@@ -609,54 +602,104 @@
 
             return this;
         },
+
         updateM: function () {
             if (!this.mat) return this;
 
-            if (this.mat.front)
-                this.front.material({
-                    image: this.mat.front
-                }).updateM();
-            else
-                this.front.material(this.mat).updateM();
+            for (var i in this.mat) {
+                switch (i) {
+                    case 'front':
+                    case 'back':
+                    case 'left':
+                    case 'right':
+                    case 'up':
+                    case 'down':
+                        this[i].material({
+                            image: this.mat[i]
+                        }).updateM();
+                        break;
+                    default:
+                        this.front.material(this.mat).updateM();
+                        this.back.material(this.mat).updateM();
+                        this.left.material(this.mat).updateM();
+                        this.right.material(this.mat).updateM();
+                        this.up.material(this.mat).updateM();
+                        this.down.material(this.mat).updateM();
+                        break;
+                }
+            }
 
-            if (this.mat.back)
-                this.back.material({
-                    image: this.mat.back
-                }).updateM();
-            else
-                this.back.material(this.mat).updateM();
+            return this;
+        },
 
-            if (this.mat.left)
-                this.left.material({
-                    image: this.mat.left
-                }).updateM();
-            else
-                this.left.material(this.mat).updateM();
+        updateF: function () {
+            if (!this.flt) return this;
 
-            if (this.mat.right)
-                this.right.material({
-                    image: this.mat.right
-                }).updateM();
-            else
-                this.right.material(this.mat).updateM();
+            this.front.filter(this.flt).updateF();
+            this.back.filter(this.flt).updateF();
+            this.left.filter(this.flt).updateF();
+            this.right.filter(this.flt).updateF();
+            this.up.filter(this.flt).updateF();
+            this.down.filter(this.flt).updateF();
 
-            if (this.mat.up)
-                this.up.material({
-                    image: this.mat.up
-                }).updateM();
-            else
-                this.up.material(this.mat).updateM();
+            return this;
+        },
 
-            if (this.mat.down)
-                this.down.material({
-                    image: this.mat.down
-                }).updateM();
-            else
-                this.down.material(this.mat).updateM();
-
+        filter: function (obj) {
+            this.flt = obj;
             return this;
         }
     });
+
+
+    // --------------------------------------------------------------------创建场景
+    function createObj(obj) {
+        var _o;
+        switch (obj.type) {
+            case 'sprite':
+                _o = new C3D.Sprite();
+                break;
+            case 'plane':
+                _o = new C3D.Plane();
+                break;
+            case 'cube':
+                _o = new C3D.Cube();
+                break;
+        }
+
+        if (obj.size) _o.size.apply(_o, obj.size);
+        if (obj.position) _o.position.apply(_o, obj.position);
+        if (obj.rotation) _o.rotation.apply(_o, obj.rotation);
+        if (obj.scale) _o.scale.apply(_o, obj.scale);
+        if (obj.material) _o.material.apply(_o, obj.material);
+        _o.update();
+
+        if (obj.children) {
+            for (var i in obj.children) {
+                var _obj = obj.children[i];
+                var _o2 = createObj(_obj);
+                _o.addChild(_o2);
+                if (_obj.name) _o[_obj.name] = _o2;
+            }
+        }
+
+        return _o;
+    }
+
+    C3D.createScene = function (obj) {
+        switch (typeof(obj)) {
+            case 'array':
+                var _obj = {type: 'sprite', children: obj};
+                break;
+            case 'object':
+                var _obj = obj;
+                break;
+            default:
+                return;
+        }
+
+        return createObj(_obj);
+    };
 
     return C3D;
 }));

@@ -46,6 +46,9 @@ demo:http://shrekwang.duapp.com/demo/c3d/
 .visible;  
 .visibility({visible:true,alpha:1});  
 
+设置滤镜(css3滤镜:grayscale,blur,saturate,sepia,hue-rotate,invert,brightness,contrast,opacity)  
+.filter({filter-type:params});  
+
 添加删除子节点  
 .addChild(object3D);  
 .removeChild(object3D);  
@@ -65,6 +68,9 @@ demo:http://shrekwang.duapp.com/demo/c3d/
 刷新可见性  
 .updateV();  
 
+刷新滤镜  
+.updateF();  
+
 销毁自身，从场景中移除  
 .destroy();  
 
@@ -73,7 +79,7 @@ parent  父节点
 children  子节点数组  
 
 
-**C3D.Sprite3D**  
+**C3D.Sprite**  
 三维显示元素基类，继承自Object3D,是其他所有显示元素的基类。
 一般用于作为容器使用，自身只会刷新位置，角度，缩放信息。没有高宽深的体积信息。拥有如下方法：  
 绑定事件  
@@ -109,6 +115,9 @@ children  子节点数组
 欢迎研讨。QQ:274924021  
 
 
+
+ * VERSION: 0.5.0
+ * DATE: 2015-11-21
 
  * VERSION: 0.4.0
  * DATE: 2015-09-15

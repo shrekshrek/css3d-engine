@@ -8,13 +8,13 @@
     <script>
         //创建场景
         var s = new C3D.Stage();
-        s.size("100%", "100%").material({
+        s.size(window.innerWidth, window.innerHeight).material({
             color : "#cccccc"
         }).update();
         document.body.appendChild(s.el);
 
         //创建一个三维容器（创建以方便分组使用）
-        var sp = new C3D.Sprite3D();
+        var sp = new C3D.Sprite();
         sp.position(0, 0, -500).update();
         s.addChild(sp);
 
