@@ -112,6 +112,14 @@ children  子节点数组
 *eg.{front:"",back:"",left:"",right:"",up:"",down:""}*  
 
 
+
+其他全局方法:  
+C3D.getRandomColor();  
+C3D.rgb2hex();  
+C3D.hex2rgb();  
+C3D.createScene(obj);  
+
+
 欢迎研讨。QQ:274924021  
 
 
