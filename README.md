@@ -4,7 +4,7 @@ css3d-engine
 css 3d引擎，为方便工作需要制作
 
 具体使用请看案例
-demo:http://shrekwang.duapp.com/demo/c3d/
+demo:http://shrek.imdevsh.com/demo/css3d/space.html
 
 
 ##类
