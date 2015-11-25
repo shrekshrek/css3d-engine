@@ -481,7 +481,7 @@
             this.__pfix = new C3D.Sprite();
             this.__rfix.el.appendChild(this.__pfix.el);
 
-            this.camera = new C3D.Camera();
+            this.setCamera(new C3D.Camera());
         },
 
         updateS: function () {
@@ -504,14 +504,40 @@
         removeChild: function (view) {
             this.__pfix.removeChild(view);
             return this;
+        },
+        setCamera: function (cam) {
+            if (this.camera) {
+                this.camera.stage = null;
+            }
+            this.camera = cam;
+            this.camera.stage = this;
+            return this;
         }
     });
 
     C3D.Camera = C3D.Object3D.extend({
         fov: null,
+        stage: null,
         initialize: function (params) {
             C3D.Camera.__super__.initialize.apply(this, [params]);
             this.fov = 75;
+        },
+        update: function () {
+            this.updateT();
+            return this;
+        },
+        updateS: function () {
+            return this;
+        },
+        updateM: function () {
+            return this;
+        },
+        updateT: function () {
+            if (this.stage) this.stage.updateT();
+            return this;
+        },
+        updateV: function () {
+            return this;
         }
     });
 
