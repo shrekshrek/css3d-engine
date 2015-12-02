@@ -18,14 +18,14 @@
     p.size(100).position(0, 100, -s.fov).rotation(0, 0, 0).material({
         color: C3D.getRandomColor(),
         image: 'images/mouse.jpg'
-    }).filter({blur: ['5px'], brightness: [3]}).update();
+    }).filter({blur: ['5px'], brightness: [3]}).origin('20%','50%',0).update();
     s.addChild(p);
 
     //创建1个立方体放入场景
     var c = new C3D.Cube();
     c.size(100).position(0, -100, -s.fov).rotation(0, 0, 0).material({
         color: C3D.getRandomColor()
-    }).update();
+    }).origin(0).update();
     s.addChild(c);
 
     //响应屏幕调整尺寸

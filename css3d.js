@@ -267,12 +267,9 @@
         originX: 0,
         originY: 0,
         originZ: 0,
-        _originX: 0,
-        _originY: 0,
-        _originZ: 0,
-        _originX2: 0,
-        _originY2: 0,
-        _originZ2: 0,
+        _orgO: {x: 0, y: 0, z: 0},
+        _orgT: {x: 0, y: 0, z: 0},
+        _orgF: {x: 0, y: 0, z: 0},
         origin: function (x, y, z) {
             switch (arguments.length) {
                 case 1 :
@@ -306,12 +303,12 @@
             this.width = 0;
             this.height = 0;
             this.depth = 0;
-            this.originX = this._originX = '50%';
-            this.originY = this._originY = '50%';
-            this.originZ = this._originZ = '0px';
-            this._originX2 = '-50%';
-            this._originY2 = '-50%';
-            this._originZ2 = '0px';
+            this.originX = '50%';
+            this.originY = '50%';
+            this.originZ = '0px';
+            this._orgO = {x: '50%', y: '50%', z: '0px'};
+            this._orgT = {x: '-50%', y: '-50%', z: '0px'};
+            this._orgF = {x: 0, y: 0, z: 0};
             this.children = [];
         },
         destroy: function () {
@@ -418,34 +415,39 @@
 
         updateO: function () {
             if (typeof(this.originX) == 'number') {
-                this._originX = this.originX + 'px';
-                this._originX2 = -this.originX + 'px';
+                var _x = this.originX - this._orgF.x;
+                this._orgO.x = _x + 'px';
+                this._orgT.x = -_x + 'px';
             } else {
-                this._originX = this.originX;
-                this._originX2 = '-' + this.originX;
+                this._orgO.x = this.originX;
+                this._orgT.x = '-' + this.originX;
             }
 
             if (typeof(this.originY) == 'number') {
-                this._originY = this.originY + 'px';
-                this._originY2 = -this.originY + 'px';
+                var _y = this.originY - this._orgF.y;
+                this._orgO.y = _y + 'px';
+                this._orgT.y = -_y + 'px';
             } else {
-                this._originY = this.originY;
-                this._originY2 = '-' + this.originY;
+                this._orgO.y = this.originY;
+                this._orgT.y = '-' + this.originY;
             }
 
             if (typeof(this.originZ) == 'number') {
-                this._originZ = this.originZ + 'px';
-                this._originZ2 = -this.originZ + 'px';
+                var _z = this.originZ - this._orgF.z;
+                this._orgO.z = _z + 'px';
+                this._orgT.z = -_z + 'px';
             } else {
-                this._originZ = this.originZ;
-                this._originZ2 = '-' + this.originZ;
+                this._orgO.z = '0px';
+                this._orgT.z = '-' + '0px';
             }
 
-            this.el.style[prefix + 'TransformOrigin'] = this._originX + ' ' + this._originY + ' ' + this._originZ;
+            this.el.style[prefix + 'TransformOrigin'] = this._orgO.x + ' ' + this._orgO.y + ' ' + this._orgO.z;
+
+            return this;
         },
 
         updateT: function () {
-            this.el.style[prefix + 'Transform'] = 'translate3d(' + this._originX2 + ', ' + this._originY2 + ', ' + this._originZ2 + ') ' + 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX + 'deg) ' + 'rotateY(' + this.rotationY + 'deg) ' + 'rotateZ(' + this.rotationZ + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
+            this.el.style[prefix + 'Transform'] = 'translate3d(' + this._orgT.x + ', ' + this._orgT.y + ', ' + this._orgT.z + ') ' + 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX + 'deg) ' + 'rotateY(' + this.rotationY + 'deg) ' + 'rotateZ(' + this.rotationZ + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
             return this;
         },
 
@@ -680,6 +682,10 @@
             var _h = fixed0(this.height);
             var _d = fixed0(this.depth);
 
+            this._orgF.x = this.width / 2;
+            this._orgF.y = this.height / 2;
+            this._orgF.z = this.depth / 2;
+
             this.front.size(_w, _h, 0).position(0, 0, -_d / 2).rotation(0, 0, 0).updateS().updateT();
             this.back.size(_w, _h, 0).position(0, 0, _d / 2).rotation(0, 180, 0).updateS().updateT();
             this.left.size(_d, _h, 0).position(-_w / 2, 0, 0).rotation(0, 90, 0).updateS().updateT();
@@ -688,37 +694,6 @@
             this.down.size(_w, _d, 0).position(0, _h / 2, 0).rotation(90, 0, 0).updateS().updateT();
 
             return this;
-        },
-
-        updateO: function () {
-            if (typeof(this.originX) == 'number') {
-                var _x = this.originX - this.width / 2;
-                this._originX = _x + 'px';
-                this._originX2 = -_x + 'px';
-            } else {
-                this._originX = this.originX;
-                this._originX2 = '-' + this.originX;
-            }
-
-            if (typeof(this.originY) == 'number') {
-                var _y = this.originY - this.height / 2;
-                this._originY = _y + 'px';
-                this._originY2 = -_y + 'px';
-            } else {
-                this._originY = this.originY;
-                this._originY2 = '-' + this.originY;
-            }
-
-            if (typeof(this.originZ) == 'number') {
-                var _z = this.originZ - this.depth / 2;
-                this._originZ = _z + 'px';
-                this._originZ2 = -_z + 'px';
-            } else {
-                this._originZ = this.originZ;
-                this._originZ2 = '-' + this.originZ;
-            }
-
-            this.el.style[prefix + 'TransformOrigin'] = this._originX + ' ' + this._originY + ' ' + this._originZ;
         },
 
         updateM: function () {
