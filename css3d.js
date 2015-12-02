@@ -1,6 +1,6 @@
 /*!
- * VERSION: 0.5.0
- * DATE: 2015-11-21
+ * VERSION: 0.6.0
+ * DATE: 2015-12-2
  * GIT:https://github.com/shrekshrek/css3d-engine
  *
  * @author: Shrek.wang, shrekshrek@gmail.com
@@ -23,7 +23,7 @@
 }(function (root, C3D) {
     var previousCss3D = root.C3D;
 
-    C3D.VERSION = '0.5.0';
+    C3D.VERSION = '0.6.0';
 
     C3D.noConflict = function () {
         root.C3D = previousCss3D;
