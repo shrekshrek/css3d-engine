@@ -59,6 +59,9 @@ demo:http://shrek.imdevsh.com/demo/css3d/space.html
 刷新尺寸  
 .updateS();  
 
+刷新旋转中心  
+.updateO();  
+
 刷新位置，角度  
 .updateT();  
 
