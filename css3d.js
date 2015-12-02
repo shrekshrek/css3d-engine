@@ -447,7 +447,7 @@
         },
 
         updateT: function () {
-            this.el.style[prefix + 'Transform'] = 'translate3d(' + this._orgT.x + ', ' + this._orgT.y + ', ' + this._orgT.z + ') ' + 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX + 'deg) ' + 'rotateY(' + this.rotationY + 'deg) ' + 'rotateZ(' + this.rotationZ + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
+            this.el.style[prefix + 'Transform'] = 'translate3d(' + this._orgT.x + ', ' + this._orgT.y + ', ' + this._orgT.z + ') ' + 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX % 360 + 'deg) ' + 'rotateY(' + this.rotationY%360 + 'deg) ' + 'rotateZ(' + this.rotationZ%360 + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
             return this;
         },
 
