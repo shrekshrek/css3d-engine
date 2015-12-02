@@ -21,54 +21,34 @@
     //创建1个平面放入场景
     for (var j = 0; j < 6; j++) {
         for (var i = 0; i < 9; i++) {
-            var p = new C3D.Sprite();
-            var p2 = new C3D.Plane();
-            p.addChild(p2);
-            var _x = 0;
-            var _y = 0;
-            var _z = 0;
+            var p = new C3D.Plane();
+            var _x = 50-100 + (i % 3) * 100;
+            var _y = 50-100 + (i / 3 | 0) * 100;
+            var _z = -150;
+            p.size(100, 100, 0).origin(_x, _y, _z).material({
+                color: C3D.getRandomColor()
+            });
             switch (j) {
                 case 0:
-                    _x = -100 + (i % 3) * 100;
-                    _y = -100 + (i / 3 | 0) * 100;
-                    _z = -150;
-                    p2.rotation(0, 0, 0);
+                    p.rotation(0, 0, 0);
                     break;
                 case 1:
-                    _y = -100 + (i % 3) * 100;
-                    _z = -100 + (i / 3 | 0) * 100;
-                    _x = -150;
-                    p2.rotation(0, 90, 0);
+                    p.rotation(0, 90, 0);
                     break;
                 case 2:
-                    _x = 100 - (i % 3) * 100;
-                    _y = 100 - (i / 3 | 0) * 100;
-                    _z = 150;
-                    p2.rotation(0, 180, 0);
+                    p.rotation(0, 180, 0);
                     break;
                 case 3:
-                    _y = 100 - (i % 3) * 100;
-                    _z = 100 - (i / 3 | 0) * 100;
-                    _x = 150;
-                    p2.rotation(0, 270, 0);
+                    p.rotation(0, 270, 0);
                     break;
                 case 4:
-                    _z = -100 + (i % 3) * 100;
-                    _x = -100 + (i / 3 | 0) * 100;
-                    _y = -150;
-                    p2.rotation(90, 0, 0);
+                    p.rotation(90, 0, 0);
                     break;
                 case 5:
-                    _z = 100 - (i % 3) * 100;
-                    _x = 100 - (i / 3 | 0) * 100;
-                    _y = 150;
-                    p2.rotation(-90, 0, 0);
+                    p.rotation(-90, 0, 0);
                     break;
             }
-            p.position(_x, _y, _z).update();
-            p2.size(100, 100, 0).material({
-                color: C3D.getRandomColor()
-            }).update();
+            p.update();
             sp.addChild(p);
         }
     }
