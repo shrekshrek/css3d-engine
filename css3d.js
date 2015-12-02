@@ -437,8 +437,7 @@
                 this._orgO.z = _z + 'px';
                 this._orgT.z = -_z + 'px';
             } else {
-                this._orgO.z = '0px';
-                this._orgT.z = '-' + '0px';
+                this._orgO.z = this._orgT.z = '0px';
             }
 
             this.el.style[prefix + 'TransformOrigin'] = this._orgO.x + ' ' + this._orgO.y + ' ' + this._orgO.z;
