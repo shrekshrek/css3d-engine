@@ -129,11 +129,11 @@
     }
 
     // --------------------------------------------------------------------3d元素基类
-    C3D.Object3D = function () {
+    C3D.Object = function () {
         this.initialize.apply(this, arguments);
     };
 
-    extend(C3D.Object3D.prototype, {
+    extend(C3D.Object.prototype, {
         x: 0,
         y: 0,
         z: 0,
@@ -264,6 +264,35 @@
             return this;
         },
 
+        originX: 0,
+        originY: 0,
+        originZ: 0,
+        _originX: 0,
+        _originY: 0,
+        _originZ: 0,
+        _originX2: 0,
+        _originY2: 0,
+        _originZ2: 0,
+        origin: function (x, y, z) {
+            switch (arguments.length) {
+                case 1 :
+                    this.originX = x;
+                    this.originY = x;
+                    this.originZ = x;
+                    break;
+                case 2 :
+                    this.originX = x;
+                    this.originY = y;
+                    break;
+                case 3 :
+                    this.originX = x;
+                    this.originY = y;
+                    this.originZ = z;
+                    break;
+            }
+            return this;
+        },
+
         initialize: function () {
             this.x = 0;
             this.y = 0;
@@ -277,18 +306,22 @@
             this.width = 0;
             this.height = 0;
             this.depth = 0;
+            this.originX = this._originX = '50%';
+            this.originY = this._originY = '50%';
+            this.originZ = this._originZ = '0px';
+            this._originX2 = '-50%';
+            this._originY2 = '-50%';
+            this._originZ2 = '0px';
             this.children = [];
         },
         destroy: function () {
-            if (this.parent)
-                this.parent.removeChild(this);
+            if (this.parent) this.parent.removeChild(this);
         },
 
         parent: null,
         children: null,
         addChild: function (view) {
-            if (view.parent)
-                view.parent.removeChild(view);
+            if (view.parent) view.parent.removeChild(view);
 
             view.parent = this;
             this.children.push(view);
@@ -313,9 +346,9 @@
         }
 
     });
-    C3D.Object3D.extend = extend2;
+    C3D.Object.extend = extend2;
 
-    C3D.Sprite = C3D.Object3D.extend({
+    C3D.Sprite = C3D.Object.extend({
         el: null,
         alpha: 1,
         visible: true,
@@ -332,8 +365,7 @@
                 switch (i) {
                     case 'el':
                         _dom = params[i];
-                        if (_dom.style.position === 'static')
-                            _dom.style.position = 'relative';
+                        if (_dom.style.position === 'static') _dom.style.position = 'relative';
                         break;
                     default:
                         this[i] = params[i];
@@ -356,6 +388,7 @@
         update: function () {
             this.updateS();
             this.updateM();
+            this.updateO();
             this.updateT();
             this.updateV();
             return this;
@@ -383,8 +416,36 @@
             return this;
         },
 
+        updateO: function () {
+            if (typeof(this.originX) == 'number') {
+                this._originX = this.originX + 'px';
+                this._originX2 = -this.originX + 'px';
+            } else {
+                this._originX = this.originX;
+                this._originX2 = '-' + this.originX;
+            }
+
+            if (typeof(this.originY) == 'number') {
+                this._originY = this.originY + 'px';
+                this._originY2 = -this.originY + 'px';
+            } else {
+                this._originY = this.originY;
+                this._originY2 = '-' + this.originY;
+            }
+
+            if (typeof(this.originZ) == 'number') {
+                this._originZ = this.originZ + 'px';
+                this._originZ2 = -this.originZ + 'px';
+            } else {
+                this._originZ = this.originZ;
+                this._originZ2 = '-' + this.originZ;
+            }
+
+            this.el.style[prefix + 'TransformOrigin'] = this._originX + ' ' + this._originY + ' ' + this._originZ;
+        },
+
         updateT: function () {
-            this.el.style[prefix + 'Transform'] = 'translate3d(-50%, -50%, 0px) ' + 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX + 'deg) ' + 'rotateY(' + this.rotationY + 'deg) ' + 'rotateZ(' + this.rotationZ + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
+            this.el.style[prefix + 'Transform'] = 'translate3d(' + this._originX2 + ', ' + this._originY2 + ', ' + this._originZ2 + ') ' + 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX + 'deg) ' + 'rotateY(' + this.rotationY + 'deg) ' + 'rotateZ(' + this.rotationZ + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
             return this;
         },
 
@@ -515,7 +576,7 @@
         }
     });
 
-    C3D.Camera = C3D.Object3D.extend({
+    C3D.Camera = C3D.Object.extend({
         fov: null,
         stage: null,
         initialize: function (params) {
@@ -627,6 +688,37 @@
             this.down.size(_w, _d, 0).position(0, _h / 2, 0).rotation(90, 0, 0).updateS().updateT();
 
             return this;
+        },
+
+        updateO: function () {
+            if (typeof(this.originX) == 'number') {
+                var _x = this.originX - this.width / 2;
+                this._originX = _x + 'px';
+                this._originX2 = -_x + 'px';
+            } else {
+                this._originX = this.originX;
+                this._originX2 = '-' + this.originX;
+            }
+
+            if (typeof(this.originY) == 'number') {
+                var _y = this.originY - this.height / 2;
+                this._originY = _y + 'px';
+                this._originY2 = -_y + 'px';
+            } else {
+                this._originY = this.originY;
+                this._originY2 = '-' + this.originY;
+            }
+
+            if (typeof(this.originZ) == 'number') {
+                var _z = this.originZ - this.depth / 2;
+                this._originZ = _z + 'px';
+                this._originZ2 = -_z + 'px';
+            } else {
+                this._originZ = this.originZ;
+                this._originZ2 = '-' + this.originZ;
+            }
+
+            this.el.style[prefix + 'TransformOrigin'] = this._originX + ' ' + this._originY + ' ' + this._originZ;
         },
 
         updateM: function () {
