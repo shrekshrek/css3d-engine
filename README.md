@@ -8,7 +8,7 @@ demo:http://shrek.imdevsh.com/demo/css3d/space.html
 
 
 ##类
-**C3D.Object3D**  
+**C3D.Object**  
 三维元素基类，拥有如下方法：  
 设置位置  
 .x;  
