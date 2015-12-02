@@ -18,6 +18,12 @@ demo:http://shrek.imdevsh.com/demo/css3d/space.html
 增量移动  
 .move(x,y,z);  
 
+设置旋转中心  
+.originX;  
+.originY;  
+.originZ;  
+.origin(x,y,z);  
+
 设置旋转角度  
 .rotationX;  
 .rotationY;  
@@ -122,7 +128,7 @@ children  子节点数组
 **C3D.rgb2hex();**  
 **C3D.hex2rgb();**  
 **C3D.createScene(obj);**  
-
+此方法非常有用,可以帮助快速创建场景.  
 
 
 
