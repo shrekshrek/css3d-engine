@@ -128,6 +128,7 @@
         });
     }
 
+
     // --------------------------------------------------------------------3d元素基类
     C3D.Object = function () {
         this.initialize.apply(this, arguments);
@@ -358,14 +359,15 @@
 
             var _dom;
 
-            for (var i in params) {
-                switch (i) {
-                    case 'el':
-                        _dom = params[i];
-                        if (_dom.style.position === 'static') _dom.style.position = 'relative';
+            if (params.el) {
+                switch (typeof params.el) {
+                    case 'string':
+                        _dom = document.createElement('div');
+                        _dom.style.position = 'absolute';
+                        _dom.innerHTML = params.el;
                         break;
-                    default:
-                        this[i] = params[i];
+                    case 'object':
+                        if (params.el.nodeType === 1) _dom = params.el;
                         break;
                 }
             }
@@ -446,7 +448,7 @@
         },
 
         updateT: function () {
-            this.el.style[prefix + 'Transform'] = 'translate3d(' + this._orgT.x + ', ' + this._orgT.y + ', ' + this._orgT.z + ') ' + 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX % 360 + 'deg) ' + 'rotateY(' + this.rotationY%360 + 'deg) ' + 'rotateZ(' + this.rotationZ%360 + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
+            this.el.style[prefix + 'Transform'] = 'translate3d(' + this._orgT.x + ', ' + this._orgT.y + ', ' + this._orgT.z + ') ' + 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX % 360 + 'deg) ' + 'rotateY(' + this.rotationY % 360 + 'deg) ' + 'rotateZ(' + this.rotationZ % 360 + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
             return this;
         },
 
