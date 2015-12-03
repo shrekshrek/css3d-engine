@@ -359,7 +359,7 @@
 
             var _dom;
 
-            if (params.el) {
+            if (params && params.el) {
                 switch (typeof params.el) {
                     case 'string':
                         _dom = document.createElement('div');
