@@ -765,11 +765,13 @@
         if (obj.position) _o.position.apply(_o, obj.position);
         if (obj.rotation) _o.rotation.apply(_o, obj.rotation);
         if (obj.scale) _o.scale.apply(_o, obj.scale);
+        if (obj.origin) _o.origin.apply(_o, obj.origin);
         if (obj.material) _o.material.apply(_o, obj.material);
+        if (obj.filter) _o.filter.apply(_o, obj.filter);
         _o.update();
 
         if (obj.children) {
-            for (var i in obj.children) {
+            for (var i = 0, _len = obj.children.length; i < _len; i++) {
                 var _obj = obj.children[i];
                 var _o2 = createObj(_obj);
                 _o.addChild(_o2);
@@ -780,13 +782,14 @@
         return _o;
     }
 
-    C3D.createScene = function (obj) {
+    C3D.create = function (obj) {
+        var _obj;
         switch (typeof(obj)) {
             case 'array':
-                var _obj = {type: 'sprite', children: obj};
+                _obj = {type: 'sprite', children: obj};
                 break;
             case 'object':
-                var _obj = obj;
+                _obj = obj;
                 break;
             default:
                 return;
