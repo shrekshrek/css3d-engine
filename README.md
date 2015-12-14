@@ -127,7 +127,7 @@ children  子节点数组
 **C3D.getRandomColor();**  
 **C3D.rgb2hex();**  
 **C3D.hex2rgb();**  
-**C3D.createScene(obj);**  
+**C3D.create(obj);**  
 此方法非常有用,可以帮助快速创建场景.  
 
 
