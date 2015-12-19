@@ -56,7 +56,7 @@ demo:http://shrek.imdevsh.com/demo/css3d/space.html
 .filter({filter-type:params});  
 
 设置名称(当该元素有名称的话,被addChild添加进入到别的元素时,可以直接用元素的属性方式访问,比如名称为'b1'的元素被加入到名称为'a1'的元素,之后就可以直接用a1.b1获得该元素.反之,被removeChild移除时也会删除绑定的属性.)  
-.name(string);
+.name(string);  
 
 添加删除子节点  
 .addChild(object3D);  
