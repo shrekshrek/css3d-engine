@@ -1,6 +1,6 @@
 /*!
- * VERSION: 0.6.0
- * DATE: 2015-12-2
+ * VERSION: 0.7.0
+ * DATE: 2015-12-20
  * GIT:https://github.com/shrekshrek/css3d-engine
  *
  * @author: Shrek.wang, shrekshrek@gmail.com
@@ -23,7 +23,7 @@
 }(function (root, C3D) {
     var previousCss3D = root.C3D;
 
-    C3D.VERSION = '0.6.0';
+    C3D.VERSION = '0.7.0';
 
     C3D.noConflict = function () {
         root.C3D = previousCss3D;
@@ -291,6 +291,12 @@
             return this;
         },
 
+        _name:'',
+        name: function(str){
+            this._name = str;
+            return this;
+        },
+
         initialize: function () {
             this.x = 0;
             this.y = 0;
@@ -311,6 +317,7 @@
             this._orgT = {x: '-50%', y: '-50%', z: '0px'};
             this._orgF = {x: 0, y: 0, z: 0};
             this.children = [];
+            this._name = '';
         },
         destroy: function () {
             if (this.parent) this.parent.removeChild(this);
@@ -319,15 +326,16 @@
         parent: null,
         children: null,
         addChild: function (view) {
-            if (view.parent) view.parent.removeChild(view);
-
-            view.parent = this;
+            if (view.parent != null) view.parent.removeChild(view);
+            if(view._name != '') this[view._name] = view;
             this.children.push(view);
+            view.parent = this;
             return this;
         },
         removeChild: function (view) {
             for (var i = this.children.length - 1; i >= 0; i--) {
                 if (this.children[i] === view) {
+                    if(view._name != '') delete this[view._name];
                     this.children.splice(i, 1);
                     view.parent = null;
                     return this;
@@ -337,9 +345,17 @@
         },
         removeAllChild: function () {
             for (var i = this.children.length - 1; i >= 0; i--) {
-                this.children[i].parent = null;
+                var view = this.children[i];
+                if(view._name != '') delete this[view._name];
+                view.parent = null;
             }
             this.children = [];
+            return this;
+        },
+        remove: function(){
+            if(this.parent != null){
+                this.parent.removeChild(this);
+            }
             return this;
         }
 
@@ -464,10 +480,28 @@
                 this.el.appendChild(view.el);
             return this;
         },
+
         removeChild: function (view) {
-            C3D.Sprite.__super__.removeChild.apply(this, [view]);
-            if (view.el && view.el.parentNode)
-                view.el.parentNode.removeChild(view.el);
+            for (var i = this.children.length - 1; i >= 0; i--) {
+                if (this.children[i] === view) {
+                    if(view._name != '') delete this[view._name];
+                    this.children.splice(i, 1);
+                    view.parent = null;
+                    this.el.removeChild(view.el);
+                    return this;
+                }
+            }
+            return this;
+        },
+
+        removeAllChild: function () {
+            for (var i = this.children.length - 1; i >= 0; i--) {
+                var view = this.children[i];
+                if(view._name != '') delete this[view._name];
+                view.parent = null;
+                this.el.removeChild(view.el);
+            }
+            this.children = [];
             return this;
         },
 
@@ -768,6 +802,7 @@
         if (obj.origin) _o.origin.apply(_o, obj.origin);
         if (obj.material) _o.material.apply(_o, obj.material);
         if (obj.filter) _o.filter.apply(_o, obj.filter);
+        if (obj.name) _o.name.apply(_o, [obj.name]);
         _o.update();
 
         if (obj.children) {
@@ -775,7 +810,6 @@
                 var _obj = obj.children[i];
                 var _o2 = createObj(_obj);
                 _o.addChild(_o2);
-                if (_obj.name) _o[_obj.name] = _o2;
             }
         }
 
