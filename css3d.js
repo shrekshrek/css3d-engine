@@ -800,6 +800,7 @@
         if (obj.rotation) _o.rotation.apply(_o, obj.rotation);
         if (obj.scale) _o.scale.apply(_o, obj.scale);
         if (obj.origin) _o.origin.apply(_o, obj.origin);
+        if (obj.visibility) _o.visibility.apply(_o, obj.visibility);
         if (obj.material) _o.material.apply(_o, obj.material);
         if (obj.filter) _o.filter.apply(_o, obj.filter);
         if (obj.name) _o.name.apply(_o, [obj.name]);
