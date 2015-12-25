@@ -291,8 +291,8 @@
             return this;
         },
 
-        _name:'',
-        name: function(str){
+        _name: '',
+        name: function (str) {
             this._name = str;
             return this;
         },
@@ -327,7 +327,7 @@
         children: null,
         addChild: function (view) {
             if (view.parent != null) view.parent.removeChild(view);
-            if(view._name != '') this[view._name] = view;
+            if (view._name != '') this[view._name] = view;
             this.children.push(view);
             view.parent = this;
             return this;
@@ -335,7 +335,7 @@
         removeChild: function (view) {
             for (var i = this.children.length - 1; i >= 0; i--) {
                 if (this.children[i] === view) {
-                    if(view._name != '') delete this[view._name];
+                    if (view._name != '') delete this[view._name];
                     this.children.splice(i, 1);
                     view.parent = null;
                     return this;
@@ -346,14 +346,14 @@
         removeAllChild: function () {
             for (var i = this.children.length - 1; i >= 0; i--) {
                 var view = this.children[i];
-                if(view._name != '') delete this[view._name];
+                if (view._name != '') delete this[view._name];
                 view.parent = null;
             }
             this.children = [];
             return this;
         },
-        remove: function(){
-            if(this.parent != null){
+        remove: function () {
+            if (this.parent != null) {
                 this.parent.removeChild(this);
             }
             return this;
@@ -419,6 +419,9 @@
 
             for (var i in this.mat) {
                 switch (i) {
+                    case 'bothsides':
+                        this.el.style[prefix + 'BackfaceVisibility'] = this.mat[i] ? 'visible' : 'hidden';
+                        break;
                     case 'image':
                         this.el.style['background' + firstUper(i)] = this.mat[i] !== '' ? ('url(' + this.mat[i] + ')') : '';
                         break;
@@ -484,7 +487,7 @@
         removeChild: function (view) {
             for (var i = this.children.length - 1; i >= 0; i--) {
                 if (this.children[i] === view) {
-                    if(view._name != '') delete this[view._name];
+                    if (view._name != '') delete this[view._name];
                     this.children.splice(i, 1);
                     view.parent = null;
                     this.el.removeChild(view.el);
@@ -497,7 +500,7 @@
         removeAllChild: function () {
             for (var i = this.children.length - 1; i >= 0; i--) {
                 var view = this.children[i];
-                if(view._name != '') delete this[view._name];
+                if (view._name != '') delete this[view._name];
                 view.parent = null;
                 this.el.removeChild(view.el);
             }
