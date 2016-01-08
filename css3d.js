@@ -21,15 +21,6 @@
     }
 
 }(function (root, C3D) {
-    var previousCss3D = root.C3D;
-
-    C3D.VERSION = '0.7.0';
-
-    C3D.noConflict = function () {
-        root.C3D = previousCss3D;
-        return this;
-    };
-
     // --------------------------------------------------------------------extend
     var keys = function (obj) {
         var keys = [];
