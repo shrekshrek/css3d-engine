@@ -318,7 +318,10 @@
         children: null,
         addChild: function (view) {
             if (view.parent != null) view.parent.removeChild(view);
-            if (view._name != '') this[view._name] = view;
+            if (view._name != ''){
+                if(this[view._name] !== undefined) throw view._name + ' already exist!';
+                this[view._name] = view;
+            }
             this.children.push(view);
             view.parent = this;
             return this;
