@@ -15,7 +15,7 @@
 
     //创建1个平面放入场景
     var p = new C3D.Plane();
-    p.size(100).position(0, 100, -s.fov).rotation(0, 0, 0).material({
+    p.name('ppp').size(100).position(0, 100, -s.fov).rotation(0, 0, 0).material({
         color: C3D.getRandomColor(),
         image: 'images/mouse.jpg'
     }).filter({blur: ['5px'], brightness: [3]}).origin('50%','50%',50).update();

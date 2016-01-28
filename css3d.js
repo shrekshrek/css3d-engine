@@ -310,9 +310,6 @@
             this.children = [];
             this._name = '';
         },
-        destroy: function () {
-            if (this.parent) this.parent.removeChild(this);
-        },
 
         parent: null,
         children: null,
