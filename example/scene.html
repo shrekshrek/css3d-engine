@@ -5,6 +5,7 @@
     </style>
 </head>
 <body>
+<img id="mouse" src="images/mouse.jpg"/>
 <script>
     //创建场景
     var s = new C3D.Stage();
@@ -18,6 +19,7 @@
         type: 'sprite', position: [0, 0, -s.fov], children: [
             {
                 type: 'plane',
+                el: document.getElementById('mouse'),
                 name: 'p1',
                 size: [100],
                 position: [100, 0, 0],
