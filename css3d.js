@@ -370,20 +370,21 @@
                 switch (typeof params.el) {
                     case 'string':
                         _dom = document.createElement('div');
-                        _dom.style.position = 'absolute';
                         _dom.innerHTML = params.el;
                         break;
                     case 'object':
-                        if (params.el.nodeType === 1) _dom = params.el;
+                        if (params.el.nodeType === 1){
+                            _dom = params.el;
+                        }
                         break;
                 }
             }
 
             if (!_dom) {
                 _dom = document.createElement('div');
-                _dom.style.position = 'absolute';
             }
 
+            _dom.style.position = 'absolute';
             _dom.style[prefix + 'Transform'] = 'translateZ(0px)';
             _dom.style[prefix + 'TransformStyle'] = 'preserve-3d';
             this.el = _dom;
@@ -779,13 +780,13 @@
         var _o;
         switch (obj.type) {
             case 'sprite':
-                _o = new C3D.Sprite();
+                _o = new C3D.Sprite(obj.el ? {el: obj.el} : undefined);
                 break;
             case 'plane':
-                _o = new C3D.Plane();
+                _o = new C3D.Plane(obj.el ? {el: obj.el} : undefined);
                 break;
             case 'cube':
-                _o = new C3D.Cube();
+                _o = new C3D.Cube(obj.el ? {el: obj.el} : undefined);
                 break;
         }
 

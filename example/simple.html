@@ -5,6 +5,7 @@
     </style>
 </head>
 <body>
+<img id="mouse" src="images/mouse.jpg"/>
 <script>
     //创建场景
     var s = new C3D.Stage();
@@ -15,24 +16,32 @@
 
     //创建1个平面放入场景
     var p = new C3D.Plane();
-    p.name('ppp').size(100).position(0, 100, -s.fov).rotation(0, 0, 0).material({
+    p.name('ppp').size(100).position(0, 0, -s.fov).rotation(0, 0, 0).material({
         color: C3D.getRandomColor(),
         image: 'images/mouse.jpg'
-    }).filter({blur: ['5px'], brightness: [3]}).origin('50%','50%',50).update();
+    }).filter({blur: ['5px'], brightness: [3]}).update();
     s.addChild(p);
+
+
+    //创建1个图片放入场景
+    var p2 = new C3D.Plane({el:document.getElementById('mouse')});
+    p2.name('ppp2').size(100).position(0, 200, -s.fov).rotation(0, 0, 0).filter({blur: ['5px'], brightness: [3]}).update();
+    s.addChild(p2);
+
 
     //创建1个立方体放入场景
     var c = new C3D.Cube();
-    c.size(100).position(0, -100, -s.fov).rotation(0, 0, 0).material({
+    c.size(100).position(0, -200, -s.fov).rotation(0, 0, 0).visibility({alpha:0.5}).material({
         color: C3D.getRandomColor()
-    }).origin(50).update();
+    }).update();
     s.addChild(c);
 
     //响应屏幕调整尺寸
     function resize() {
         s.size(window.innerWidth, window.innerHeight).update();
-        p.position(0, 100, -s.fov).updateT();
-        c.position(0, -100, -s.fov).updateT();
+        p.position(0, 0, -s.fov).updateT();
+        c.position(0, -200, -s.fov).updateT();
+        p2.position(0, 200, -s.fov).updateT();
     }
 
     window.onresize = function () {
