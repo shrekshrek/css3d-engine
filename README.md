@@ -135,6 +135,12 @@ children  子节点数组
 
 
 
+实现案例:  
+http://drose6.adidasevent.com/  
+http://show.im20.com.cn/bbcny/  
+
+
+
 欢迎研讨。QQ:274924021  
 
 
