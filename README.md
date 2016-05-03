@@ -84,7 +84,7 @@ demo:http://shrek.imdevsh.com/demo/css3d/space.html
 .updateF();  
 
 销毁自身，从场景中移除  
-.destroy();  
+.remove();  
 
 拥有如下属性  
 parent  父节点  
