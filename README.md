@@ -83,7 +83,7 @@ demo:http://shrek.imdevsh.com/demo/css3d/space.html
 刷新滤镜  
 .updateF();  
 
-销毁自身，从场景中移除  
+移除自身，从场景中移除  
 .remove();  
 
 拥有如下属性  
