@@ -285,6 +285,8 @@
         _name: '',
         name: function (str) {
             this._name = str;
+            if (str == '') delete this.el.dataset.name;
+            else this.el.dataset.name = str;
             return this;
         },
 
@@ -315,8 +317,8 @@
         children: null,
         addChild: function (view) {
             if (view.parent != null) view.parent.removeChild(view);
-            if (view._name != ''){
-                if(this[view._name] !== undefined) throw view._name + ' already exist!';
+            if (view._name != '') {
+                if (this[view._name] !== undefined) throw view._name + ' already exist!';
                 this[view._name] = view;
             }
             this.children.push(view);
@@ -373,7 +375,7 @@
                         _dom.innerHTML = params.el;
                         break;
                     case 'object':
-                        if (params.el.nodeType === 1){
+                        if (params.el.nodeType === 1) {
                             _dom = params.el;
                         }
                         break;
@@ -790,15 +792,16 @@
                 break;
         }
 
-        if (obj.size) _o.size.apply(_o, obj.size);
-        if (obj.position) _o.position.apply(_o, obj.position);
-        if (obj.rotation) _o.rotation.apply(_o, obj.rotation);
-        if (obj.scale) _o.scale.apply(_o, obj.scale);
-        if (obj.origin) _o.origin.apply(_o, obj.origin);
-        if (obj.visibility) _o.visibility.apply(_o, obj.visibility);
-        if (obj.material) _o.material.apply(_o, obj.material);
-        if (obj.filter) _o.filter.apply(_o, obj.filter);
-        if (obj.name) _o.name.apply(_o, [obj.name]);
+        if (obj.size != undefined) _o.size.apply(_o, obj.size);
+        if (obj.position != undefined) _o.position.apply(_o, obj.position);
+        if (obj.rotation != undefined) _o.rotation.apply(_o, obj.rotation);
+        if (obj.scale != undefined) _o.scale.apply(_o, obj.scale);
+        if (obj.origin != undefined) _o.origin.apply(_o, obj.origin);
+        if (obj.visibility != undefined) _o.visibility.apply(_o, obj.visibility);
+        if (obj.material != undefined) _o.material.apply(_o, obj.material);
+        if (obj.filter != undefined) _o.filter.apply(_o, obj.filter);
+        if (obj.name != undefined) _o.name.apply(_o, [obj.name]);
+
         _o.update();
 
         if (obj.children) {
