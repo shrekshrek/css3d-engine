@@ -112,6 +112,10 @@
         return Math.round(n);
     }
 
+    function fixed2(n) {
+        return Math.round(n * 100) / 100;
+    }
+
     //  webkitTransform 转 WebkitTransform
     function firstUper(str) {
         return str.replace(/\b(\w)|\s(\w)/g, function (m) {
@@ -430,7 +434,7 @@
 
         updateO: function () {
             if (typeof(this.originX) == 'number') {
-                var _x = this.originX - this._orgF.x;
+                var _x = fixed0(this.originX - this._orgF.x);
                 this._orgO.x = _x + 'px';
                 this._orgT.x = -_x + 'px';
             } else {
@@ -439,7 +443,7 @@
             }
 
             if (typeof(this.originY) == 'number') {
-                var _y = this.originY - this._orgF.y;
+                var _y = fixed0(this.originY - this._orgF.y);
                 this._orgO.y = _y + 'px';
                 this._orgT.y = -_y + 'px';
             } else {
@@ -448,7 +452,7 @@
             }
 
             if (typeof(this.originZ) == 'number') {
-                var _z = this.originZ - this._orgF.z;
+                var _z = fixed0(this.originZ - this._orgF.z);
                 this._orgO.z = _z + 'px';
                 this._orgT.z = -_z + 'px';
             } else {
@@ -461,7 +465,7 @@
         },
 
         updateT: function () {
-            this.el.style[prefix + 'Transform'] = 'translate3d(' + this._orgT.x + ', ' + this._orgT.y + ', ' + this._orgT.z + ') ' + 'translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px) ' + 'rotateX(' + this.rotationX % 360 + 'deg) ' + 'rotateY(' + this.rotationY % 360 + 'deg) ' + 'rotateZ(' + this.rotationZ % 360 + 'deg) ' + 'scale3d(' + this.scaleX + ', ' + this.scaleY + ', ' + this.scaleZ + ') ';
+            this.el.style[prefix + 'Transform'] = 'translate3d(' + this._orgT.x + ', ' + this._orgT.y + ', ' + this._orgT.z + ') ' + 'translate3d(' + fixed2(this.x) + 'px,' + fixed2(this.y) + 'px,' + fixed2(this.z) + 'px) ' + 'rotateX(' + fixed2(this.rotationX) % 360 + 'deg) ' + 'rotateY(' + fixed2(this.rotationY) % 360 + 'deg) ' + 'rotateZ(' + fixed2(this.rotationZ) % 360 + 'deg) ' + 'scale3d(' + fixed2(this.scaleX) + ', ' + fixed2(this.scaleY) + ', ' + fixed2(this.scaleZ) + ') ';
             return this;
         },
 
