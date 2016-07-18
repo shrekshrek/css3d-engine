@@ -294,6 +294,13 @@
             return this;
         },
 
+        _sort: ['X', 'Y', 'Z'],
+        sort: function (s0, s1, s2) {
+            if (arguments.length > 3) throw 'sort arguments is wrong!';
+            this._sort = [s0, s1, s2];
+            return this;
+        },
+
         initialize: function () {
             this.x = 0;
             this.y = 0;
@@ -465,7 +472,10 @@
         },
 
         updateT: function () {
-            this.el.style[prefix + 'Transform'] = 'translate3d(' + this._orgT.x + ', ' + this._orgT.y + ', ' + this._orgT.z + ') ' + 'translate3d(' + fixed2(this.x) + 'px,' + fixed2(this.y) + 'px,' + fixed2(this.z) + 'px) ' + 'rotateX(' + fixed2(this.rotationX) % 360 + 'deg) ' + 'rotateY(' + fixed2(this.rotationY) % 360 + 'deg) ' + 'rotateZ(' + fixed2(this.rotationZ) % 360 + 'deg) ' + 'scale3d(' + fixed2(this.scaleX) + ', ' + fixed2(this.scaleY) + ', ' + fixed2(this.scaleZ) + ') ';
+            var _S0 = this._sort[0];
+            var _S1 = this._sort[1];
+            var _S2 = this._sort[2];
+            this.el.style[prefix + 'Transform'] = 'translate3d(' + this._orgT.x + ', ' + this._orgT.y + ', ' + this._orgT.z + ') ' + 'translate3d(' + fixed2(this.x) + 'px,' + fixed2(this.y) + 'px,' + fixed2(this.z) + 'px) ' + 'rotate' + _S0 + '(' + fixed2(this['rotation' + _S0]) % 360 + 'deg) ' + 'rotate' + _S1 + '(' + fixed2(this['rotation' + _S1]) % 360 + 'deg) ' + 'rotate' + _S2 + '(' + fixed2(this['rotation' + _S2]) % 360 + 'deg) ' + 'scale3d(' + fixed2(this.scaleX) + ', ' + fixed2(this.scaleY) + ', ' + fixed2(this.scaleZ) + ') ';
             return this;
         },
 
