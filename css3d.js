@@ -1,5 +1,5 @@
 /*!
- * VERSION: 0.7.0
+ * VERSION: 0.8.0
  * DATE: 2015-12-20
  * GIT:https://github.com/shrekshrek/css3d-engine
  *
@@ -263,9 +263,9 @@
         originX: 0,
         originY: 0,
         originZ: 0,
-        _orgO: {x: 0, y: 0, z: 0},
-        _orgT: {x: 0, y: 0, z: 0},
-        _orgF: {x: 0, y: 0, z: 0},
+        __orgO: {x: 0, y: 0, z: 0},
+        __orgT: {x: 0, y: 0, z: 0},
+        __orgF: {x: 0, y: 0, z: 0},
         origin: function (x, y, z) {
             switch (arguments.length) {
                 case 1 :
@@ -286,18 +286,18 @@
             return this;
         },
 
-        _name: '',
+        __name: '',
         name: function (str) {
-            this._name = str;
+            this.__name = str;
             if (str == '') delete this.el.dataset.name;
             else this.el.dataset.name = str;
             return this;
         },
 
-        _sort: ['X', 'Y', 'Z'],
+        __sort: ['X', 'Y', 'Z'],
         sort: function (s0, s1, s2) {
             if (arguments.length > 3) throw 'sort arguments is wrong!';
-            this._sort = [s0, s1, s2];
+            this.__sort = [s0, s1, s2];
             return this;
         },
 
@@ -317,20 +317,20 @@
             this.originX = '50%';
             this.originY = '50%';
             this.originZ = '0px';
-            this._orgO = {x: '50%', y: '50%', z: '0px'};
-            this._orgT = {x: '-50%', y: '-50%', z: '0px'};
-            this._orgF = {x: 0, y: 0, z: 0};
+            this.__orgO = {x: '50%', y: '50%', z: '0px'};
+            this.__orgT = {x: '-50%', y: '-50%', z: '0px'};
+            this.__orgF = {x: 0, y: 0, z: 0};
             this.children = [];
-            this._name = '';
+            this.__name = '';
         },
 
         parent: null,
         children: null,
         addChild: function (view) {
             if (view.parent != null) view.parent.removeChild(view);
-            if (view._name != '') {
-                if (this[view._name] !== undefined) throw view._name + ' already exist!';
-                this[view._name] = view;
+            if (view.__name != '') {
+                if (this[view.__name] !== undefined) throw view.__name + ' already exist!';
+                this[view.__name] = view;
             }
             this.children.push(view);
             view.parent = this;
@@ -339,7 +339,7 @@
         removeChild: function (view) {
             for (var i = this.children.length - 1; i >= 0; i--) {
                 if (this.children[i] === view) {
-                    if (view._name != '') delete this[view._name];
+                    if (view.__name != '') delete this[view.__name];
                     this.children.splice(i, 1);
                     view.parent = null;
                     return this;
@@ -350,7 +350,7 @@
         removeAllChild: function () {
             for (var i = this.children.length - 1; i >= 0; i--) {
                 var view = this.children[i];
-                if (view._name != '') delete this[view._name];
+                if (view.__name != '') delete this[view.__name];
                 view.parent = null;
             }
             this.children = [];
@@ -370,7 +370,6 @@
         el: null,
         alpha: 1,
         visible: true,
-        mat: null,
         initialize: function (params) {
             C3D.Sprite.__super__.initialize.apply(this, [params]);
 
@@ -420,18 +419,18 @@
         },
 
         updateM: function () {
-            if (!this.mat) return this;
+            if (!this.__mat) return this;
 
-            for (var i in this.mat) {
+            for (var i in this.__mat) {
                 switch (i) {
                     case 'bothsides':
-                        this.el.style[prefix + 'BackfaceVisibility'] = this.mat[i] ? 'visible' : 'hidden';
+                        this.el.style[prefix + 'BackfaceVisibility'] = this.__mat[i] ? 'visible' : 'hidden';
                         break;
                     case 'image':
-                        this.el.style['background' + firstUper(i)] = this.mat[i] !== '' ? ('url(' + this.mat[i] + ')') : '';
+                        this.el.style['background' + firstUper(i)] = this.__mat[i] !== '' ? ('url(' + this.__mat[i] + ')') : '';
                         break;
                     default:
-                        this.el.style['background' + firstUper(i)] = this.mat[i];
+                        this.el.style['background' + firstUper(i)] = this.__mat[i];
                         break;
                 }
             }
@@ -441,41 +440,41 @@
 
         updateO: function () {
             if (typeof(this.originX) == 'number') {
-                var _x = fixed0(this.originX - this._orgF.x);
-                this._orgO.x = _x + 'px';
-                this._orgT.x = -_x + 'px';
+                var _x = fixed0(this.originX - this.__orgF.x);
+                this.__orgO.x = _x + 'px';
+                this.__orgT.x = -_x + 'px';
             } else {
-                this._orgO.x = this.originX;
-                this._orgT.x = '-' + this.originX;
+                this.__orgO.x = this.originX;
+                this.__orgT.x = '-' + this.originX;
             }
 
             if (typeof(this.originY) == 'number') {
-                var _y = fixed0(this.originY - this._orgF.y);
-                this._orgO.y = _y + 'px';
-                this._orgT.y = -_y + 'px';
+                var _y = fixed0(this.originY - this.__orgF.y);
+                this.__orgO.y = _y + 'px';
+                this.__orgT.y = -_y + 'px';
             } else {
-                this._orgO.y = this.originY;
-                this._orgT.y = '-' + this.originY;
+                this.__orgO.y = this.originY;
+                this.__orgT.y = '-' + this.originY;
             }
 
             if (typeof(this.originZ) == 'number') {
-                var _z = fixed0(this.originZ - this._orgF.z);
-                this._orgO.z = _z + 'px';
-                this._orgT.z = -_z + 'px';
+                var _z = fixed0(this.originZ - this.__orgF.z);
+                this.__orgO.z = _z + 'px';
+                this.__orgT.z = -_z + 'px';
             } else {
-                this._orgO.z = this._orgT.z = '0px';
+                this.__orgO.z = this.__orgT.z = '0px';
             }
 
-            this.el.style[prefix + 'TransformOrigin'] = this._orgO.x + ' ' + this._orgO.y + ' ' + this._orgO.z;
+            this.el.style[prefix + 'TransformOrigin'] = this.__orgO.x + ' ' + this.__orgO.y + ' ' + this.__orgO.z;
 
             return this;
         },
 
         updateT: function () {
-            var _S0 = this._sort[0];
-            var _S1 = this._sort[1];
-            var _S2 = this._sort[2];
-            this.el.style[prefix + 'Transform'] = 'translate3d(' + this._orgT.x + ', ' + this._orgT.y + ', ' + this._orgT.z + ') ' + 'translate3d(' + fixed2(this.x) + 'px,' + fixed2(this.y) + 'px,' + fixed2(this.z) + 'px) ' + 'rotate' + _S0 + '(' + fixed2(this['rotation' + _S0]) % 360 + 'deg) ' + 'rotate' + _S1 + '(' + fixed2(this['rotation' + _S1]) % 360 + 'deg) ' + 'rotate' + _S2 + '(' + fixed2(this['rotation' + _S2]) % 360 + 'deg) ' + 'scale3d(' + fixed2(this.scaleX) + ', ' + fixed2(this.scaleY) + ', ' + fixed2(this.scaleZ) + ') ';
+            var _S0 = this.__sort[0];
+            var _S1 = this.__sort[1];
+            var _S2 = this.__sort[2];
+            this.el.style[prefix + 'Transform'] = 'translate3d(' + this.__orgT.x + ', ' + this.__orgT.y + ', ' + this.__orgT.z + ') ' + 'translate3d(' + fixed2(this.x) + 'px,' + fixed2(this.y) + 'px,' + fixed2(this.z) + 'px) ' + 'rotate' + _S0 + '(' + fixed2(this['rotation' + _S0]) % 360 + 'deg) ' + 'rotate' + _S1 + '(' + fixed2(this['rotation' + _S1]) % 360 + 'deg) ' + 'rotate' + _S2 + '(' + fixed2(this['rotation' + _S2]) % 360 + 'deg) ' + 'scale3d(' + fixed2(this.scaleX) + ', ' + fixed2(this.scaleY) + ', ' + fixed2(this.scaleZ) + ') ';
             return this;
         },
 
@@ -495,7 +494,7 @@
         removeChild: function (view) {
             for (var i = this.children.length - 1; i >= 0; i--) {
                 if (this.children[i] === view) {
-                    if (view._name != '') delete this[view._name];
+                    if (view.__name != '') delete this[view.__name];
                     this.children.splice(i, 1);
                     view.parent = null;
                     this.el.removeChild(view.el);
@@ -508,7 +507,7 @@
         removeAllChild: function () {
             for (var i = this.children.length - 1; i >= 0; i--) {
                 var view = this.children[i];
-                if (view._name != '') delete this[view._name];
+                if (view.__name != '') delete this[view.__name];
                 view.parent = null;
                 this.el.removeChild(view.el);
             }
@@ -548,8 +547,9 @@
             return this;
         },
 
+        __mat: null,
         material: function (obj) {
-            this.mat = obj;
+            this.__mat = obj;
             return this;
         },
 
@@ -652,7 +652,6 @@
 
     // --------------------------------------------------------------------3d显示元件
     C3D.Plane = C3D.Sprite.extend({
-        flt: null,
         initialize: function (params) {
             C3D.Plane.__super__.initialize.apply(this, [params]);
         },
@@ -670,33 +669,33 @@
         },
 
         updateF: function () {
-            if (!this.flt) return this;
+            if (!this.__flt) return this;
 
             var _flt = '';
-            for (var i in this.flt) {
-                _flt += (this.flt[i] !== '' ? (i + '(' + this.flt[i].join(',') + ')') : '');
+            for (var i in this.__flt) {
+                _flt += (this.__flt[i] !== '' ? (i + '(' + this.__flt[i].join(',') + ')') : '');
             }
             if (_flt !== '') this.el.style[prefix + 'Filter'] = _flt;
 
             return this;
         },
 
+        __flt: null,
         filter: function (obj) {
-            this.flt = obj;
+            this.__flt = obj;
             return this;
         }
     });
 
-    C3D.Cube = C3D.Sprite.extend({
+    C3D.Box = C3D.Sprite.extend({
         front: null,
         back: null,
         left: null,
         right: null,
         up: null,
         down: null,
-        flt: null,
         initialize: function (params) {
-            C3D.Cube.__super__.initialize.apply(this, [params]);
+            C3D.Box.__super__.initialize.apply(this, [params]);
 
             this.front = new C3D.Plane();
             this.addChild(this.front);
@@ -718,7 +717,7 @@
         },
 
         update: function () {
-            C3D.Cube.__super__.update.apply(this);
+            C3D.Box.__super__.update.apply(this);
             this.updateF();
             return this;
         },
@@ -728,9 +727,79 @@
             var _h = fixed0(this.height);
             var _d = fixed0(this.depth);
 
-            this._orgF.x = this.width / 2;
-            this._orgF.y = this.height / 2;
-            this._orgF.z = this.depth / 2;
+            this.__orgF.x = this.width / 2;
+            this.__orgF.y = this.height / 2;
+            this.__orgF.z = this.depth / 2;
+
+            this.front.size(_w, _h, 0).position(0, 0, _d / 2).rotation(0, 0, 0).updateS().updateT();
+            this.back.size(_w, _h, 0).position(0, 0, -_d / 2).rotation(0, 180, 0).updateS().updateT();
+            this.left.size(_d, _h, 0).position(-_w / 2, 0, 0).rotation(0, -90, 0).updateS().updateT();
+            this.right.size(_d, _h, 0).position(_w / 2, 0, 0).rotation(0, 90, 0).updateS().updateT();
+            this.up.size(_w, _d, 0).position(0, -_h / 2, 0).rotation(90, 0, 0).updateS().updateT();
+            this.down.size(_w, _d, 0).position(0, _h / 2, 0).rotation(-90, 0, 0).updateS().updateT();
+
+            return this;
+        },
+
+        updateM: function () {
+            if (!this.__mat) return this;
+
+            for (var i in this.__mat) {
+                switch (i) {
+                    case 'front':
+                    case 'back':
+                    case 'left':
+                    case 'right':
+                    case 'up':
+                    case 'down':
+                        this[i].material({
+                            image: this.__mat[i],
+                            bothsides: false,
+                        }).updateM();
+                        break;
+                    default:
+                        this.front.material(this.__mat).updateM();
+                        this.back.material(this.__mat).updateM();
+                        this.left.material(this.__mat).updateM();
+                        this.right.material(this.__mat).updateM();
+                        this.up.material(this.__mat).updateM();
+                        this.down.material(this.__mat).updateM();
+                        break;
+                }
+            }
+
+            return this;
+        },
+
+        updateF: function () {
+            if (!this.__flt) return this;
+
+            this.front.filter(this.__flt).updateF();
+            this.back.filter(this.__flt).updateF();
+            this.left.filter(this.__flt).updateF();
+            this.right.filter(this.__flt).updateF();
+            this.up.filter(this.__flt).updateF();
+            this.down.filter(this.__flt).updateF();
+
+            return this;
+        },
+
+        __flt: null,
+        filter: function (obj) {
+            this.__flt = obj;
+            return this;
+        }
+    });
+
+    C3D.Skybox = C3D.Box.extend({
+        updateS: function () {
+            var _w = fixed0(this.width);
+            var _h = fixed0(this.height);
+            var _d = fixed0(this.depth);
+
+            this.__orgF.x = this.width / 2;
+            this.__orgF.y = this.height / 2;
+            this.__orgF.z = this.depth / 2;
 
             this.front.size(_w, _h, 0).position(0, 0, -_d / 2).rotation(0, 0, 0).updateS().updateT();
             this.back.size(_w, _h, 0).position(0, 0, _d / 2).rotation(0, 180, 0).updateS().updateT();
@@ -742,52 +811,6 @@
             return this;
         },
 
-        updateM: function () {
-            if (!this.mat) return this;
-
-            for (var i in this.mat) {
-                switch (i) {
-                    case 'front':
-                    case 'back':
-                    case 'left':
-                    case 'right':
-                    case 'up':
-                    case 'down':
-                        this[i].material({
-                            image: this.mat[i]
-                        }).updateM();
-                        break;
-                    default:
-                        this.front.material(this.mat).updateM();
-                        this.back.material(this.mat).updateM();
-                        this.left.material(this.mat).updateM();
-                        this.right.material(this.mat).updateM();
-                        this.up.material(this.mat).updateM();
-                        this.down.material(this.mat).updateM();
-                        break;
-                }
-            }
-
-            return this;
-        },
-
-        updateF: function () {
-            if (!this.flt) return this;
-
-            this.front.filter(this.flt).updateF();
-            this.back.filter(this.flt).updateF();
-            this.left.filter(this.flt).updateF();
-            this.right.filter(this.flt).updateF();
-            this.up.filter(this.flt).updateF();
-            this.down.filter(this.flt).updateF();
-
-            return this;
-        },
-
-        filter: function (obj) {
-            this.flt = obj;
-            return this;
-        }
     });
 
 
@@ -801,8 +824,11 @@
             case 'plane':
                 _o = new C3D.Plane(obj.el ? {el: obj.el} : undefined);
                 break;
-            case 'cube':
-                _o = new C3D.Cube(obj.el ? {el: obj.el} : undefined);
+            case 'box':
+                _o = new C3D.Box(obj.el ? {el: obj.el} : undefined);
+                break;
+            case 'skybox':
+                _o = new C3D.Skybox(obj.el ? {el: obj.el} : undefined);
                 break;
         }
 

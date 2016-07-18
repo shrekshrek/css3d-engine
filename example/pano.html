@@ -22,7 +22,7 @@
         document.getElementById('main').appendChild(s.el);
 
         //创建1个立方体放入场景
-        var c = new C3D.Cube();
+        var c = new C3D.Skybox();
         c.size(1024).position(0, 0, 0).material({
             front : "images/cube_FR.jpg",
             back : "images/cube_BK.jpg",
@@ -31,14 +31,6 @@
             up : "images/cube_UP.jpg",
             down : "images/cube_DN.jpg"
         }).update();
-//        c.size(1500).position(0, 0, 0).rotation(30,0,0).material({
-//            front : "pano/front.jpg",
-//            back : "pano/back.jpg",
-//            left : "pano/left.jpg",
-//            right : "pano/right.jpg",
-//            up : "pano/up.jpg",
-//            down : "pano/down.jpg"
-//        }).update();
         s.addChild(c);
 
         //响应屏幕调整尺寸
@@ -58,8 +50,6 @@
 
         function go() {
 //            c.rotate(0, 0.1, 0).updateT();
-
-            // sp.move(0, 1, 0).update();
 
             s.camera.rotate(0,0.3,0).updateT();
 

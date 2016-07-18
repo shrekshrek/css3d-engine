@@ -1,7 +1,12 @@
 css3d-engine
 ============
 
-css 3d引擎，为方便工作需要制作
+css 3d引擎，为方便工作需要制作  
+优势:因为是基于div+css3实现,相对canvas webgl拥有更好的平台兼容性  
+劣势:渲染性能相比canvas webgl要弱,只适合创建较小的三维面片场景  
+注意:为了节约计算量,transform部分没有使用matrix,只用了最基本的translate,rotation,scale等属性的排列,默认的旋转顺序是rotationX(),rotationY(),rotationZ(),这样无法解决万象锁等问题,所以在使用时需要了解适应这点。如果需要调整可以使用sort()命令调整旋转顺序。  
+注2:旧版的Cube更新为Box  
+
 
 具体使用请看案例
 demo:http://shrek.imdevsh.com/demo/css3d/space.html
@@ -54,6 +59,9 @@ demo:http://shrek.imdevsh.com/demo/css3d/space.html
 
 设置滤镜(css3滤镜:grayscale,blur,saturate,sepia,hue-rotate,invert,brightness,contrast,opacity)  
 .filter({filter-type:params});  
+
+设置旋转顺序,默认是.sort('X','Y','Z'),可以根据需要调整,必须是这三个参数,顺序自理  
+.sort()  
 
 设置名称(当该元素有名称的话,被addChild添加进入到别的元素时,可以直接用元素的属性方式访问,比如名称为'b1'的元素被加入到名称为'a1'的元素,之后就可以直接用a1.b1获得该元素.反之,被removeChild移除时也会删除绑定的属性.)  
 .name(string);  
@@ -119,8 +127,12 @@ children  子节点数组
 平面，顾名思义。  
 
 
-**C3D.Cube**  
-立方体，顾名思义，指定材质时可以添加6面的图片定义。  
+**C3D.Box**  
+一个立方体，指定材质时可以添加6面的图片定义。  
+*eg.{front:"",back:"",left:"",right:"",up:"",down:""}*  
+
+**C3D.Skybox**  
+天空盒子，适合用来制作全景背景，指定材质时可以添加6面的图片定义。  
 *eg.{front:"",back:"",left:"",right:"",up:"",down:""}*  
 
 
@@ -130,6 +142,7 @@ children  子节点数组
 **C3D.getRandomColor();**  
 **C3D.rgb2hex();**  
 **C3D.hex2rgb();**  
+
 **C3D.create(obj);**  
 此方法非常有用,可以帮助快速创建场景.  
 
@@ -139,6 +152,8 @@ children  子节点数组
 http://drose6.adidasevent.com/  
 http://show.im20.com.cn/bbcny/  
 http://crazylight.adidasevent.com/  
+http://zwj360.im20.com.cn/  
+
 
 
 
