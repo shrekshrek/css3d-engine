@@ -1,5 +1,5 @@
 /*!
- * VERSION: 0.8.0
+ * VERSION: 0.8.1
  * DATE: 2015-12-20
  * GIT:https://github.com/shrekshrek/css3d-engine
  *
@@ -698,21 +698,27 @@
             C3D.Box.__super__.initialize.apply(this, [params]);
 
             this.front = new C3D.Plane();
+            this.front.name = 'front';
             this.addChild(this.front);
 
             this.back = new C3D.Plane();
+            this.back.name = 'back';
             this.addChild(this.back);
 
             this.left = new C3D.Plane();
+            this.left.name = 'left';
             this.addChild(this.left);
 
             this.right = new C3D.Plane();
+            this.right.name = 'right';
             this.addChild(this.right);
 
             this.up = new C3D.Plane();
+            this.up.name = 'up';
             this.addChild(this.up);
 
             this.down = new C3D.Plane();
+            this.down.name = 'down';
             this.addChild(this.down);
         },
 
