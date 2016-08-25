@@ -19,42 +19,157 @@ demo:http://shrek.imdevsh.com/demo/css3d/space.html
 ##类
 **C3D.Object**  
 三维元素基类，拥有如下方法：  
-设置位置  
-.x;  
-.y;  
-.z;  
-.position(x,y,z);  
-增量移动  
-.move(x,y,z);  
+设置位置,物体坐标原点以旋转中心为准  
+```js
+obj.position(a,b,c);  
+//等价于  
+obj.x = a;  
+obj.y = b;  
+obj.z = c;  
 
-设置旋转中心  
-.originX;  
-.originY;  
-.originZ;  
-.origin(x,y,z);  
+obj.position(a,b);  
+//等价于  
+obj.x = a;  
+obj.y = b;  
+
+obj.position(a);  
+//等价于  
+obj.x = a;  
+obj.y = a;  
+obj.z = a;  
+```
+
+
+增量移动,在原来基础值上增加  
+```js
+obj.move(a,b,c);  
+等价于  
+obj.x += a;  
+obj.y += b;  
+obj.z += c;  
+
+obj.move(a,b);  
+等价于  
+obj.x += a;  
+obj.y += b;  
+
+obj.move(a);  
+等价于  
+obj.x += a;  
+obj.y += a;  
+obj.z += a;  
+```
+
+
+设置旋转中心,默认旋转中心是在物体中心  
+```js
+obj.origin(a,b,c);  
+等价于  
+obj.originX = a;  
+obj.originY = b;  
+obj.originZ = c;  
+
+obj.origin(a,b);  
+等价于  
+obj.originX = a;  
+obj.originY = b;  
+
+obj.origin(a);  
+等价于  
+obj.originX = a;  
+obj.originY = a;  
+obj.originZ = a;  
+```
+
 
 设置旋转角度  
-.rotationX;  
-.rotationY;  
-.rotationZ;  
-.rotation(x,y,z);  
+```js
+obj.rotation(a,b,c);  
+等价于  
+obj.rotationX = a;  
+obj.rotationY = b;  
+obj.rotationZ = c;  
+
+obj.rotation(a,b);  
+等价于  
+obj.rotationX = a;  
+obj.rotationY = b;  
+
+obj.rotation(a);  
+等价于  
+obj.rotationX = a;  
+obj.rotationY = a;  
+obj.rotationZ = a;  
+```
+
+
 增量旋转  
-.rotate(x,y,z);  
+```js
+obj.rotate(a,b,c);  
+等价于  
+obj.rotationX += a;  
+obj.rotationY += b;  
+obj.rotationZ += c;  
+
+obj.rotate(a,b);  
+等价于  
+obj.rotationX += a;  
+obj.rotationY += b;  
+
+obj.rotate(a);  
+等价于  
+obj.rotationX += a;  
+obj.rotationY += a;  
+obj.rotationZ += a;  
+```
+
 
 设置缩放比  
-.scaleX;  
-.scaleY;  
-.scaleZ;  
-.scale(x,y,z);  
+```js
+obj.scale(a,b,c);  
+等价于  
+obj.scaleX = a;  
+obj.scaleY = b;  
+obj.scaleZ = c;  
+
+obj.scale(a,b);  
+等价于  
+obj.scaleX = a;  
+obj.scaleY = b;  
+
+obj.scale(a);  
+等价于  
+obj.scaleX = a;  
+obj.scaleY = a;  
+obj.scaleZ = a;  
+```
+
 
 设置尺寸  
-.width;  
-.height;  
-.depth;  
-.size(x,y,z);  
+```js
+obj.size(a,b,c);  
+等价于  
+obj.width = a;  
+obj.height = b;  
+obj.depth = c;  
+
+obj.size(a,b);  
+等价于  
+obj.width = a;  
+obj.height = b;  
+
+obj.size(a);  
+等价于  
+obj.width = a;  
+obj.height = a;  
+obj.depth = a;  
+```
+
+
 
 设置材质(div的background相关的几种属性)  
 .material({image:'',color:'',position:'',size:'',repeat:'',origin:''});  
+
 
 设置可见性  
 .alpha;  
