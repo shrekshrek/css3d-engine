@@ -759,7 +759,7 @@
                     case 'right':
                     case 'up':
                     case 'down':
-                        this.__mat[i].bothside = false;
+                        if (this.__mat[i].bothsides == undefined) this.__mat[i].bothsides = false;
                         this[i].material(this.__mat[i]).updateM();
                         _unique = false;
                         break;
@@ -767,6 +767,7 @@
             }
 
             if (_unique) {
+                if (this.__mat.bothsides == undefined) this.__mat.bothsides = false;
                 this.front.material(this.__mat).updateM();
                 this.back.material(this.__mat).updateM();
                 this.left.material(this.__mat).updateM();

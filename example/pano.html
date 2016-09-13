@@ -24,7 +24,7 @@
     //创建1个立方体放入场景
     var c = new C3D.Skybox();
     c.size(1024).position(0, 0, 0).material({
-        front: {image: "images/cube_FR.jpg"},
+        front: {image: "images/cube_FR.jpg",bothsides: true},
         back: {image: "images/cube_BK.jpg"},
         left: {image: "images/cube_LF.jpg"},
         right: {image: "images/cube_RT.jpg"},
@@ -38,7 +38,7 @@
     function resize() {
         s.size(window.innerWidth, window.innerHeight).update();
     }
-    ;
+
     window.onresize = function () {
         resize();
     };
