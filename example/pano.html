@@ -2,7 +2,7 @@
 <head>
     <script src="../css3d.js"></script>
     <style>
-        #main{
+        #main {
             width: 500px;
             width: 500px;
         }
@@ -13,50 +13,52 @@
 <div id="main">
 
 </div>
-    <script>
-        //创建场景
-        var s = new C3D.Stage();
-        s.size(window.innerWidth, window.innerHeight).material({
-            color : "#cccccc"
-        }).update();
-        document.getElementById('main').appendChild(s.el);
+<script>
+    //创建场景
+    var s = new C3D.Stage();
+    s.size(window.innerWidth, window.innerHeight).material({
+        color: "#cccccc"
+    }).update();
+    document.getElementById('main').appendChild(s.el);
 
-        //创建1个立方体放入场景
-        var c = new C3D.Skybox();
-        c.size(1024).position(0, 0, 0).material({
-            front : "images/cube_FR.jpg",
-            back : "images/cube_BK.jpg",
-            left : "images/cube_LF.jpg",
-            right : "images/cube_RT.jpg",
-            up : "images/cube_UP.jpg",
-            down : "images/cube_DN.jpg"
-        }).update();
-        s.addChild(c);
+    //创建1个立方体放入场景
+    var c = new C3D.Skybox();
+    c.size(1024).position(0, 0, 0).material({
+        front: {image: "images/cube_FR.jpg"},
+        back: {image: "images/cube_BK.jpg"},
+        left: {image: "images/cube_LF.jpg"},
+        right: {image: "images/cube_RT.jpg"},
+        up: {image: "images/cube_UP.jpg"},
+        down: {image: "images/cube_DN.jpg"},
 
-        //响应屏幕调整尺寸
-        function resize() {
-            s.size(window.innerWidth, window.innerHeight).update();
-        };
-        window.onresize = function() {
-            resize();
-        };
+    }).update();
+    s.addChild(c);
+
+    //响应屏幕调整尺寸
+    function resize() {
+        s.size(window.innerWidth, window.innerHeight).update();
+    }
+    ;
+    window.onresize = function () {
         resize();
+    };
+    resize();
 
-        //刷新场景
-        requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame ||
-        function(callback) {
-            setTimeout(callback, 1000 / 60);
-        };
+    //刷新场景
+    requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame ||
+            function (callback) {
+                setTimeout(callback, 1000 / 60);
+            };
 
-        function go() {
+    function go() {
 //            c.rotate(0, 0.1, 0).updateT();
 
-            s.camera.rotate(0,0.3,0).updateT();
-
-            requestAnimationFrame(go);
-        }
+        s.camera.rotate(0, 0.3, 0).updateT();
 
         requestAnimationFrame(go);
+    }
 
-    </script>
+    requestAnimationFrame(go);
+
+</script>
 </body>

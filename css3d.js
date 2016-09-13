@@ -1,6 +1,6 @@
 /*!
- * VERSION: 0.8.1
- * DATE: 2015-12-20
+ * VERSION: 0.8.2
+ * DATE: 2016-09-13
  * GIT:https://github.com/shrekshrek/css3d-engine
  *
  * @author: Shrek.wang, shrekshrek@gmail.com
@@ -750,6 +750,7 @@
         updateM: function () {
             if (!this.__mat) return this;
 
+            var _unique = true;
             for (var i in this.__mat) {
                 switch (i) {
                     case 'front':
@@ -758,20 +759,20 @@
                     case 'right':
                     case 'up':
                     case 'down':
-                        this[i].material({
-                            image: this.__mat[i],
-                            bothsides: false,
-                        }).updateM();
-                        break;
-                    default:
-                        this.front.material(this.__mat).updateM();
-                        this.back.material(this.__mat).updateM();
-                        this.left.material(this.__mat).updateM();
-                        this.right.material(this.__mat).updateM();
-                        this.up.material(this.__mat).updateM();
-                        this.down.material(this.__mat).updateM();
+                        this.__mat[i].bothside = false;
+                        this[i].material(this.__mat[i]).updateM();
+                        _unique = false;
                         break;
                 }
+            }
+
+            if (_unique) {
+                this.front.material(this.__mat).updateM();
+                this.back.material(this.__mat).updateM();
+                this.left.material(this.__mat).updateM();
+                this.right.material(this.__mat).updateM();
+                this.up.material(this.__mat).updateM();
+                this.down.material(this.__mat).updateM();
             }
 
             return this;
