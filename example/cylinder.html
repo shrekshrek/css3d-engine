@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<head>
+    <script src="../css3d.js"></script>
+    <style>
+        #main {
+            width: 500px;
+            width: 500px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="main">
+
+</div>
+<script>
+    //创建场景
+    var s = new C3D.Stage();
+    s.size(window.innerWidth, window.innerHeight).material({
+        color: "#cccccc"
+    }).update();
+    document.getElementById('main').appendChild(s.el);
+
+    //创建1个立方体放入场景
+    var panoRect = {w: 2586, h: 1170};
+    var bgData = [
+        {url: 'images/zwj/p1.png'},
+        {url: 'images/zwj/p2.png'},
+        {url: 'images/zwj/p3.png'},
+        {url: 'images/zwj/p4.png'},
+        {url: 'images/zwj/p5.png'},
+        {url: 'images/zwj/p6.png'},
+        {url: 'images/zwj/p7.png'},
+        {url: 'images/zwj/p8.png'},
+        {url: 'images/zwj/p9.png'},
+        {url: 'images/zwj/p10.png'},
+        {url: 'images/zwj/p11.png'},
+        {url: 'images/zwj/p12.png'},
+        {url: 'images/zwj/p13.png'},
+        {url: 'images/zwj/p14.png'},
+        {url: 'images/zwj/p15.png'},
+        {url: 'images/zwj/p16.png'},
+        {url: 'images/zwj/p17.png'},
+        {url: 'images/zwj/p18.png'},
+        {url: 'images/zwj/p19.png'},
+        {url: 'images/zwj/p20.png'},
+    ];
+
+    function createPano(imgs, rect) {
+        var _len = imgs.length;
+        var _step = rect.w / _len;
+        var _radius = Math.floor(_step / 2 / Math.tan(Math.PI / _len));
+
+        var _sp = new C3D.Sprite();
+        for (var i = 0; i < _len; i++) {
+            var _p = new C3D.Plane();
+            var _r = 360 / _len * i;
+            var _a = Math.PI * 2 / _len * i;
+            _p.size(_step, rect.h).position(Math.sin(_a) * _radius, 0, -Math.cos(_a) * _radius).rotation(0, -_r, 0).material({
+                image: imgs[i].url,
+                repeat: 'no-repeat',
+                bothsides: false,
+            }).update();
+            _sp.addChild(_p);
+        }
+
+        return _sp;
+    }
+
+    var pano = this.createPano(bgData, panoRect);
+    pano.position(0, 0, -400).updateT();
+    s.addChild(pano);
+
+    //响应屏幕调整尺寸
+    function resize() {
+        s.size(window.innerWidth, window.innerHeight).update();
+    }
+
+    window.onresize = function () {
+        resize();
+    };
+    resize();
+
+    //刷新场景
+    requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame ||
+            function (callback) {
+                setTimeout(callback, 1000 / 60);
+            };
+
+    function go() {
+        pano.rotate(0, 1, 0).updateT();
+
+        requestAnimationFrame(go);
+    }
+
+    requestAnimationFrame(go);
+
+</script>
+</body>
