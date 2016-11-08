@@ -19,9 +19,8 @@
     p.name('ppp').size(100).position(0, 0, -s.fov).rotation(0, 0, 0).material({
         color: C3D.getRandomColor(),
         image: 'images/mouse.jpg'
-    }).filter({blur: ['5px'], brightness: [3]}).update();
+    }).filter({blur: ['5px'], brightness: [3]}).class('abg').id('bbb').update();
     s.addChild(p);
-
 
     //创建1个图片放入场景
     var p2 = new C3D.Plane({el:document.getElementById('mouse')});

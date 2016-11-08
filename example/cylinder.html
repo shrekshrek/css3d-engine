@@ -68,7 +68,7 @@
     }
 
     var pano = this.createPano(bgData, panoRect);
-    pano.position(0, 0, -400).updateT();
+    pano.position(0, 0, -400).updateT().visibility({alpha: 0.5}).updateV();
     s.addChild(pano);
 
     //响应屏幕调整尺寸
@@ -88,7 +88,7 @@
             };
 
     function go() {
-        pano.rotate(0, 1, 0).updateT();
+        pano.rotate(0, 0.1, 0).updateT();
 
         requestAnimationFrame(go);
     }

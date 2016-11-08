@@ -286,14 +286,6 @@
             return this;
         },
 
-        __name: '',
-        name: function (str) {
-            this.__name = str;
-            if (str == '') delete this.el.dataset.name;
-            else this.el.dataset.name = str;
-            return this;
-        },
-
         __sort: ['X', 'Y', 'Z'],
         sort: function (s0, s1, s2) {
             if (arguments.length > 3) throw 'sort arguments is wrong!';
@@ -321,7 +313,6 @@
             this.__orgT = {x: '-50%', y: '-50%', z: '0px'};
             this.__orgF = {x: 0, y: 0, z: 0};
             this.children = [];
-            this.__name = '';
         },
 
         parent: null,
@@ -373,6 +364,10 @@
         initialize: function (params) {
             C3D.Sprite.__super__.initialize.apply(this, [params]);
 
+            this.__name = '';
+            this.__id = '';
+            this.__class = '';
+
             this.alpha = 1;
             this.visible = true;
 
@@ -402,6 +397,28 @@
             this.el = _dom;
             _dom.le = this;
 
+        },
+
+        __name: '',
+        name: function (str) {
+            this.__name = str;
+            if (str == '') delete this.el.dataset.name;
+            else this.el.dataset.name = str;
+            return this;
+        },
+
+        __id: '',
+        id: function (str) {
+            this.__id = str;
+            this.el.id = str;
+            return this;
+        },
+
+        __class: '',
+        class: function (str) {
+            this.__class = str;
+            this.el.className = str;
+            return this;
         },
 
         update: function () {
@@ -849,6 +866,8 @@
         if (obj.material != undefined) _o.material.apply(_o, obj.material);
         if (obj.filter != undefined) _o.filter.apply(_o, obj.filter);
         if (obj.name != undefined) _o.name.apply(_o, [obj.name]);
+        if (obj.id != undefined) _o.id.apply(_o, [obj.id]);
+        if (obj.class != undefined) _o.class.apply(_o, [obj.class]);
 
         _o.update();
 
