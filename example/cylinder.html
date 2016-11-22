@@ -49,7 +49,7 @@
     function createPano(imgs, rect) {
         var _len = imgs.length;
         var _step = rect.w / _len;
-        var _radius = Math.floor(_step / 2 / Math.tan(Math.PI / _len));
+        var _radius = Math.floor(_step / 2 / Math.tan(Math.PI / _len)) - 1;
 
         var _sp = new C3D.Sprite();
         for (var i = 0; i < _len; i++) {

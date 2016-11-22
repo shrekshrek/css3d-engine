@@ -1,26 +1,23 @@
 /*!
  * VERSION: 0.8.2
  * DATE: 2016-09-13
- * GIT:https://github.com/shrekshrek/css3d-engine
- *
- * @author: Shrek.wang, shrekshrek@gmail.com
+ * GIT: https://github.com/shrekshrek/css3d-engine
+ * @author: Shrek.wang
  **/
 
 (function (factory) {
-    var root = (typeof self == 'object' && self.self == self && self) ||
-        (typeof global == 'object' && global.global == global && global);
 
     if (typeof define === 'function' && define.amd) {
-        define(['exports'], function (exports) {
-            root.C3D = factory(root, exports);
+        define(['exports'], function(exports) {
+            window.C3D = factory(exports);
         });
     } else if (typeof exports !== 'undefined') {
-        factory(root, exports);
+        factory(exports);
     } else {
-        root.C3D = factory(root, {});
+        window.C3D = factory({});
     }
 
-}(function (root, C3D) {
+}(function (C3D) {
     // --------------------------------------------------------------------extend
     var keys = function (obj) {
         var keys = [];
