@@ -131,9 +131,9 @@
         y: 0,
         z: 0,
         position: function (x, y, z) {
-            if(x == undefined){
+            if (x == undefined) {
                 throw 'position arguments is wrong!';
-            }else{
+            } else {
                 this.x = x;
                 this.y = y == undefined ? x : y;
                 this.z = z == undefined ? x : z;
@@ -141,9 +141,9 @@
             return this;
         },
         move: function (x, y, z) {
-            if(x == undefined){
+            if (x == undefined) {
                 throw 'move arguments is wrong!';
-            }else{
+            } else {
                 this.x += x;
                 this.y += y == undefined ? x : y;
                 this.z += z == undefined ? x : z;
@@ -155,9 +155,9 @@
         rotationY: 0,
         rotationZ: 0,
         rotation: function (x, y, z) {
-            if(x == undefined){
+            if (x == undefined) {
                 throw 'rotation arguments is wrong!';
-            }else{
+            } else {
                 this.rotationX = x;
                 this.rotationY = y == undefined ? x : y;
                 this.rotationZ = z == undefined ? x : z;
@@ -165,9 +165,9 @@
             return this;
         },
         rotate: function (x, y, z) {
-            if(x == undefined){
+            if (x == undefined) {
                 throw 'rotate arguments is wrong!';
-            }else{
+            } else {
                 this.rotationX += x;
                 this.rotationY += y == undefined ? x : y;
                 this.rotationZ += z == undefined ? x : z;
@@ -179,9 +179,9 @@
         scaleY: 1,
         scaleZ: 1,
         scale: function (x, y, z) {
-            if(x == undefined){
+            if (x == undefined) {
                 throw 'scale arguments is wrong!';
-            }else{
+            } else {
                 this.scaleX = x;
                 this.scaleY = y == undefined ? x : y;
                 this.scaleZ = z == undefined ? x : z;
@@ -193,9 +193,9 @@
         height: 0,
         depth: 0,
         size: function (x, y, z) {
-            if(x == undefined){
+            if (x == undefined) {
                 throw 'size arguments is wrong!';
-            }else{
+            } else {
                 this.width = x;
                 this.height = y == undefined ? x : y;
                 this.depth = z == undefined ? x : z;
@@ -210,9 +210,9 @@
         __orgT: {x: 0, y: 0, z: 0},
         __orgF: {x: 0, y: 0, z: 0},
         origin: function (x, y, z) {
-            if(x == undefined){
+            if (x == undefined) {
                 throw 'size arguments is wrong!';
-            }else{
+            } else {
                 this.originX = x;
                 this.originY = y == undefined ? x : y;
                 this.originZ = z == undefined ? x : z;
@@ -565,6 +565,10 @@
             this.__pfix.removeChild(view);
             return this;
         },
+        removeAllChild: function () {
+            this.__pfix.removeAllChild();
+            return this;
+        },
         setCamera: function (cam) {
             if (this.camera) {
                 this.camera.stage = null;
@@ -817,19 +821,12 @@
     }
 
     C3D.create = function (obj) {
-        var _obj;
-        switch (typeof(obj)) {
-            case 'array':
-                _obj = {type: 'sprite', children: obj};
-                break;
-            case 'object':
-                _obj = obj;
-                break;
-            default:
-                return;
+        if (typeof(obj) == 'object') {
+            var _obj = obj instanceof Array ? {type: 'sprite', children: obj} : obj;
+            return createObj(_obj);
+        } else {
+            throw 'create arguments is wrong!';
         }
-
-        return createObj(_obj);
     };
 
     return C3D;
