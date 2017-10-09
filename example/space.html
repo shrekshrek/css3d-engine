@@ -21,7 +21,7 @@
         //创建20个平面放入容器，并定义鼠标事件
         for (var i = 0; i < 20; i++) {
             var p = new C3D.Plane();
-            p.size(100, 100, 100)
+            p.size(100)
                     .position(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 250)
                     .rotation(Math.random() * 300 - 150, Math.random() * 300 - 150, Math.random() * 300 - 150)
                     .material({
@@ -41,7 +41,7 @@
         //创建4个立方体放入容器，并定义鼠标事件
         for (var i = 0; i < 4; i++) {
             var p = new C3D.Box();
-            p.size(100, 100, 100)
+            p.size(100)
                     .position(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 250)
                     .rotation(Math.random() * 300 - 150, Math.random() * 300 - 150, Math.random() * 300 - 150)
                     .material({

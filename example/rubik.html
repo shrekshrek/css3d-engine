@@ -20,8 +20,9 @@
 
     //创建1个平面放入场景
     for (var j = 0; j < 6; j++) {
-        var _color = C3D.getRandomColor();
+//        var _color = C3D.getRandomColor();
         for (var i = 0; i < 9; i++) {
+            var _color = C3D.getRandomColor();
             var p = new C3D.Plane();
             var _x = 50-100 + (i % 3) * 100;
             var _y = 50-100 + (i / 3 | 0) * 100;

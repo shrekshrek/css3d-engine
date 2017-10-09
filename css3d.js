@@ -1,6 +1,6 @@
 /*!
- * VERSION: 0.8.2
- * DATE: 2016-09-13
+ * VERSION: 0.8.3
+ * DATE: 2017-10-09
  * GIT: https://github.com/shrekshrek/css3d-engine
  * @author: Shrek.wang
  **/
@@ -8,7 +8,7 @@
 (function (factory) {
 
     if (typeof define === 'function' && define.amd) {
-        define(['exports'], function(exports) {
+        define(['exports'], function (exports) {
             window.C3D = factory(exports);
         });
     } else if (typeof exports !== 'undefined') {
@@ -131,40 +131,22 @@
         y: 0,
         z: 0,
         position: function (x, y, z) {
-            switch (arguments.length) {
-                case 1 :
-                    this.x = x;
-                    this.y = x;
-                    this.z = x;
-                    break;
-                case 2 :
-                    this.x = x;
-                    this.y = y;
-                    break;
-                case 3 :
-                    this.x = x;
-                    this.y = y;
-                    this.z = z;
-                    break;
+            if(x == undefined){
+                throw 'position arguments is wrong!';
+            }else{
+                this.x = x;
+                this.y = y == undefined ? x : y;
+                this.z = z == undefined ? x : z;
             }
             return this;
         },
         move: function (x, y, z) {
-            switch (arguments.length) {
-                case 1 :
-                    this.x += x;
-                    this.y += x;
-                    this.z += x;
-                    break;
-                case 2 :
-                    this.x += x;
-                    this.y += y;
-                    break;
-                case 3 :
-                    this.x += x;
-                    this.y += y;
-                    this.z += z;
-                    break;
+            if(x == undefined){
+                throw 'move arguments is wrong!';
+            }else{
+                this.x += x;
+                this.y += y == undefined ? x : y;
+                this.z += z == undefined ? x : z;
             }
             return this;
         },
@@ -173,40 +155,22 @@
         rotationY: 0,
         rotationZ: 0,
         rotation: function (x, y, z) {
-            switch (arguments.length) {
-                case 1 :
-                    this.rotationX = x;
-                    this.rotationY = x;
-                    this.rotationZ = x;
-                    break;
-                case 2 :
-                    this.rotationX = x;
-                    this.rotationY = y;
-                    break;
-                case 3 :
-                    this.rotationX = x;
-                    this.rotationY = y;
-                    this.rotationZ = z;
-                    break;
+            if(x == undefined){
+                throw 'rotation arguments is wrong!';
+            }else{
+                this.rotationX = x;
+                this.rotationY = y == undefined ? x : y;
+                this.rotationZ = z == undefined ? x : z;
             }
             return this;
         },
         rotate: function (x, y, z) {
-            switch (arguments.length) {
-                case 1 :
-                    this.rotationX += x;
-                    this.rotationY += x;
-                    this.rotationZ += x;
-                    break;
-                case 2 :
-                    this.rotationX += x;
-                    this.rotationY += y;
-                    break;
-                case 3 :
-                    this.rotationX += x;
-                    this.rotationY += y;
-                    this.rotationZ += z;
-                    break;
+            if(x == undefined){
+                throw 'rotate arguments is wrong!';
+            }else{
+                this.rotationX += x;
+                this.rotationY += y == undefined ? x : y;
+                this.rotationZ += z == undefined ? x : z;
             }
             return this;
         },
@@ -215,21 +179,12 @@
         scaleY: 1,
         scaleZ: 1,
         scale: function (x, y, z) {
-            switch (arguments.length) {
-                case 1 :
-                    this.scaleX = x;
-                    this.scaleY = x;
-                    this.scaleZ = x;
-                    break;
-                case 2 :
-                    this.scaleX = x;
-                    this.scaleY = y;
-                    break;
-                case 3 :
-                    this.scaleX = x;
-                    this.scaleY = y;
-                    this.scaleZ = z;
-                    break;
+            if(x == undefined){
+                throw 'scale arguments is wrong!';
+            }else{
+                this.scaleX = x;
+                this.scaleY = y == undefined ? x : y;
+                this.scaleZ = z == undefined ? x : z;
             }
             return this;
         },
@@ -238,21 +193,12 @@
         height: 0,
         depth: 0,
         size: function (x, y, z) {
-            switch (arguments.length) {
-                case 1 :
-                    this.width = x;
-                    this.height = x;
-                    this.depth = x;
-                    break;
-                case 2 :
-                    this.width = x;
-                    this.height = y;
-                    break;
-                case 3 :
-                    this.width = x;
-                    this.height = y;
-                    this.depth = z;
-                    break;
+            if(x == undefined){
+                throw 'size arguments is wrong!';
+            }else{
+                this.width = x;
+                this.height = y == undefined ? x : y;
+                this.depth = z == undefined ? x : z;
             }
             return this;
         },
@@ -264,21 +210,12 @@
         __orgT: {x: 0, y: 0, z: 0},
         __orgF: {x: 0, y: 0, z: 0},
         origin: function (x, y, z) {
-            switch (arguments.length) {
-                case 1 :
-                    this.originX = x;
-                    this.originY = x;
-                    this.originZ = x;
-                    break;
-                case 2 :
-                    this.originX = x;
-                    this.originY = y;
-                    break;
-                case 3 :
-                    this.originX = x;
-                    this.originY = y;
-                    this.originZ = z;
-                    break;
+            if(x == undefined){
+                throw 'size arguments is wrong!';
+            }else{
+                this.originX = x;
+                this.originY = y == undefined ? x : y;
+                this.originZ = z == undefined ? x : z;
             }
             return this;
         },
