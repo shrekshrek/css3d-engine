@@ -1,5 +1,5 @@
 /*!
- * VERSION: 0.8.3
+ * VERSION: 0.8.4
  * DATE: 2017-10-09
  * GIT: https://github.com/shrekshrek/css3d-engine
  * @author: Shrek.wang
@@ -19,30 +19,7 @@
 
 }(function (C3D) {
     // --------------------------------------------------------------------extend
-    var keys = function (obj) {
-        var keys = [];
-        for (var key in obj) {
-            keys.push(key);
-        }
-        return keys;
-    };
-
-    var extend = function (obj) {
-        var length = arguments.length;
-        if (length < 2 || obj == null) return obj;
-        for (var index = 1; index < length; index++) {
-            var source = arguments[index],
-                ks = keys(source),
-                l = ks.length;
-            for (var i = 0; i < l; i++) {
-                var key = ks[i];
-                obj[key] = source[key];
-            }
-        }
-        return obj;
-    };
-
-    var extend2 = function (protoProps, staticProps) {
+    var extend = function (protoProps, staticProps) {
         var parent = this;
         var child;
 
@@ -54,7 +31,7 @@
             };
         }
 
-        extend(child, parent, staticProps);
+        Object.assign(child, parent, staticProps);
 
         var Surrogate = function () {
             this.constructor = child;
@@ -62,7 +39,7 @@
         Surrogate.prototype = parent.prototype;
         child.prototype = new Surrogate;
 
-        if (protoProps) extend(child.prototype, protoProps);
+        if (protoProps) Object.assign(child.prototype, protoProps);
 
         child.__super__ = parent.prototype;
 
@@ -126,7 +103,7 @@
         this.initialize.apply(this, arguments);
     };
 
-    extend(C3D.Object.prototype, {
+    Object.assign(C3D.Object.prototype, {
         x: 0,
         y: 0,
         z: 0,
@@ -289,7 +266,7 @@
         }
 
     });
-    C3D.Object.extend = extend2;
+    C3D.Object.extend = extend;
 
     C3D.Sprite = C3D.Object.extend({
         el: null,
