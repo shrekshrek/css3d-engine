@@ -1,5 +1,5 @@
-css3d-engine
-============
+# css3d-engine
+
 
 css 3d引擎，为方便工作需要制作  
 优势:因为是基于div+css3实现,相对canvas webgl拥有更好的平台兼容性。  
@@ -9,7 +9,9 @@ css 3d引擎，为方便工作需要制作
 
 注意1:为了节约计算量,transform部分没有使用matrix,只用了最基本的translate,rotation,scale等属性的排列,默认的旋转顺序是rotationX(),rotationY(),rotationZ(),这样无法解决万向锁等问题,所以在使用时需要了解适应这点。如果需要调整可以使用sort()命令调整旋转顺序。  
 
-注意2:旧版的Cube更新为Box  
+注意2:旧版的Cube更新为Box。  
+
+这个库只是基于原生css transform中除了matrix之外的属性，优缺点上面也有说明，这个库可以使用比较容易理解的欧拉角来控制旋转，建立简单的3D应用，其他关于更通用的3d基础学习案例，可以参考https://github.com/shrekshrek/css3d-matrix-es6，这里抽取出three中3D核心类库，组织了一个简化版的3D引擎，并做了大量的注释，可以帮助了解3D算法基础中的矢量，矩阵及四元数等的相互关系。  
 
 
 具体使用请看案例
@@ -287,7 +289,7 @@ http://show.im20.com.cn/zwj/
 
 
 
-欢迎研讨。QQ:274924021  
+欢迎研讨。QQ群:572807793（webgl技术交流）  
 
 
 
