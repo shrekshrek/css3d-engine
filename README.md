@@ -289,7 +289,7 @@ obj.updateF();  //刷新滤镜
 http://shrek.imdevsh.com/show/drose/
 http://show.im20.com.cn/bbcny/
 http://shrek.imdevsh.com/show/crazylight/
-http://show.im20.com.cn/zwj/  
+http://show.im20.com.cn/zwj/
 
 
 
