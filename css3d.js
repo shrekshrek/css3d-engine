@@ -1,8 +1,5 @@
 /*!
- * VERSION: 0.8.4
- * DATE: 2017-10-09
  * GIT: https://github.com/shrekshrek/css3d-engine
- * @author: Shrek.wang
  **/
 
 (function (factory) {
