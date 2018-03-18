@@ -15,35 +15,6 @@
     }
 
 }(function (C3D) {
-    // --------------------------------------------------------------------extend
-    var extend = function (protoProps, staticProps) {
-        var parent = this;
-        var child;
-
-        if (protoProps && Object.prototype.hasOwnProperty.call(protoProps, 'constructor')) {
-            child = protoProps.constructor;
-        } else {
-            child = function () {
-                return parent.apply(this, arguments);
-            };
-        }
-
-        Object.assign(child, parent, staticProps);
-
-        var Surrogate = function () {
-            this.constructor = child;
-        };
-        Surrogate.prototype = parent.prototype;
-        child.prototype = new Surrogate;
-
-        if (protoProps) Object.assign(child.prototype, protoProps);
-
-        child.__super__ = parent.prototype;
-
-        return child;
-    };
-
-
     // --------------------------------------------------------------------检测是否支持,浏览器补全方法
     var prefix = '';
 
@@ -95,12 +66,12 @@
     }
 
 
-    // --------------------------------------------------------------------3d元素基类
-    C3D.Object = function () {
+    // --------------------------------------------------------------------Object3D
+    var Object3D = function () {
         this.initialize.apply(this, arguments);
     };
 
-    Object.assign(C3D.Object.prototype, {
+    Object.assign(Object3D.prototype, {
         x: 0,
         y: 0,
         z: 0,
@@ -263,14 +234,21 @@
         }
 
     });
-    C3D.Object.extend = extend;
 
-    C3D.Sprite = C3D.Object.extend({
+
+    // --------------------------------------------------------------------Sprite3D
+    var Sprite3D = function () {
+        Object3D.apply(this, arguments);
+    };
+
+    Sprite3D.prototype = Object.assign(Object.create(Object3D.prototype), {
+        constructor: Sprite3D,
+
         el: null,
         alpha: 1,
         visible: true,
         initialize: function (params) {
-            C3D.Sprite.__super__.initialize.apply(this, [params]);
+            Object3D.prototype.initialize.apply(this, [params]);
 
             this.__name = '';
             this.__id = '';
@@ -410,7 +388,7 @@
         },
 
         addChild: function (view) {
-            C3D.Sprite.__super__.addChild.apply(this, [view]);
+            Object3D.prototype.addChild.apply(this, [view]);
             if (this.el && view.el)
                 this.el.appendChild(view.el);
             return this;
@@ -487,16 +465,24 @@
 
             return this;
         }
+
     });
 
-    // --------------------------------------------------------------------3d核心元件
-    C3D.Stage = C3D.Sprite.extend({
+
+    // --------------------------------------------------------------------Stage3D
+    var Stage3D = function () {
+        Sprite3D.apply(this, arguments);
+    };
+
+    Stage3D.prototype = Object.assign(Object.create(Sprite3D.prototype), {
+        constructor: Stage3D,
+
         camera: null,
         fov: null,
         __rfix: null,
         __pfix: null,
         initialize: function (params) {
-            C3D.Stage.__super__.initialize.apply(this, [params]);
+            Sprite3D.prototype.initialize.apply(this, [params]);
 
             if (!(params && params.el)) {
                 this.el.style.top = '0px';
@@ -551,13 +537,22 @@
             this.camera.stage = this;
             return this;
         }
+
     });
 
-    C3D.Camera = C3D.Object.extend({
+
+    // --------------------------------------------------------------------Camera3D
+    var Camera3D = function () {
+        Object3D.apply(this, arguments);
+    };
+
+    Camera3D.prototype = Object.assign(Object.create(Object3D.prototype), {
+        constructor: Camera3D,
+
         fov: null,
         stage: null,
         initialize: function (params) {
-            C3D.Camera.__super__.initialize.apply(this, [params]);
+            Object3D.prototype.initialize.apply(this, [params]);
             this.fov = 75;
         },
         update: function () {
@@ -577,16 +572,24 @@
         updateV: function () {
             return this;
         }
+
     });
 
-    // --------------------------------------------------------------------3d显示元件
-    C3D.Plane = C3D.Sprite.extend({
+
+    // --------------------------------------------------------------------Plane3D
+    var Plane3D = function () {
+        Sprite3D.apply(this, arguments);
+    };
+
+    Plane3D.prototype = Object.assign(Object.create(Sprite3D.prototype), {
+        constructor: Plane3D,
+
         initialize: function (params) {
-            C3D.Plane.__super__.initialize.apply(this, [params]);
+            Sprite3D.prototype.initialize.apply(this, [params]);
         },
 
         update: function () {
-            C3D.Plane.__super__.update.apply(this);
+            Sprite3D.prototype.update.apply(this);
             this.updateF();
             return this;
         },
@@ -614,9 +617,17 @@
             this.__flt = obj;
             return this;
         }
+
     });
 
-    C3D.Box = C3D.Sprite.extend({
+    // --------------------------------------------------------------------Box3D
+    var Box3D = function () {
+        Sprite3D.apply(this, arguments);
+    };
+
+    Box3D.prototype = Object.assign(Object.create(Sprite3D.prototype), {
+        constructor: Box3D,
+
         front: null,
         back: null,
         left: null,
@@ -624,7 +635,7 @@
         up: null,
         down: null,
         initialize: function (params) {
-            C3D.Box.__super__.initialize.apply(this, [params]);
+            Sprite3D.prototype.initialize.apply(this, [params]);
 
             this.front = new C3D.Plane();
             this.front.name = 'front';
@@ -652,7 +663,7 @@
         },
 
         update: function () {
-            C3D.Box.__super__.update.apply(this);
+            Sprite3D.prototype.update.apply(this);
             this.updateF();
             return this;
         },
@@ -726,9 +737,17 @@
             this.__flt = obj;
             return this;
         }
+
     });
 
-    C3D.Skybox = C3D.Box.extend({
+    // --------------------------------------------------------------------Skybox3D
+    var Skybox3D = function () {
+        Box3D.apply(this, arguments);
+    };
+
+    Skybox3D.prototype = Object.assign(Object.create(Box3D.prototype), {
+        constructor: Skybox3D,
+
         updateS: function () {
             var _w = fixed0(this.width);
             var _h = fixed0(this.height);
@@ -746,8 +765,18 @@
             this.down.size(_w, _d, 0).position(0, _h / 2, 0).rotation(90, 0, 0).updateS().updateT();
 
             return this;
-        },
+        }
 
+    });
+
+    Object.assign(C3D, {
+        Object: Object3D,
+        Sprite: Sprite3D,
+        Stage: Stage3D,
+        Camera: Camera3D,
+        Plane: Plane3D,
+        Box: Box3D,
+        Skybox: Skybox3D
     });
 
 
