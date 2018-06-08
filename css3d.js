@@ -2,19 +2,15 @@
  * GIT: https://github.com/shrekshrek/css3d-engine
  **/
 
-(function (factory) {
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+        typeof define === 'function' && define.amd ? define(factory) :
+            (global.C3D = factory());
+}(this, (function () {
+    'use strict';
 
-    if (typeof define === 'function' && define.amd) {
-        define(['exports'], function (exports) {
-            window.C3D = factory(exports);
-        });
-    } else if (typeof exports !== 'undefined') {
-        factory(exports);
-    } else {
-        window.C3D = factory({});
-    }
+    var C3D = {};
 
-}(function (C3D) {
     // --------------------------------------------------------------------检测是否支持,浏览器补全方法
     var prefix = '';
 
@@ -833,4 +829,5 @@
     };
 
     return C3D;
-}));
+
+})));
