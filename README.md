@@ -11,8 +11,7 @@ https://github.com/shrekshrek/css3d-matrix-es6
 抽取出three中3D核心类库，组织了一个简化版的3D引擎，并做了大量的注释，可以帮助了解3D算法基础中的矢量，矩阵及四元数等的相互关系。 
 
 有3d问题欢迎加入研讨。QQ群:572807793（webgl技术交流）  
- 
-
+  
 
 注意1:为了节约计算量,transform部分没有使用matrix,只用了最基本的translate,rotation,scale等属性的排列,默认的旋转顺序是rotationX(),rotationY(),rotationZ(),这样无法解决万向锁等问题,所以在使用时需要了解适应这点。如果需要调整可以使用sort()命令调整旋转顺序。  
 
@@ -296,6 +295,8 @@ http://shrek.imdevsh.com/show/crazylight/
 http://show.im20.com.cn/zwj/
 
 
+这种Interactive 3d motion graphic类型的网站已经使用更先进高效的内部工具套装开发，demo地址如下：  
+https://github.com/shrekshrek/aep  
 
 
 
