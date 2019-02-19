@@ -295,7 +295,7 @@ http://shrek.imdevsh.com/show/crazylight/
 http://show.im20.com.cn/zwj/
 
 
-这种Interactive 3d motion graphic类型的网站从18年初，已经改用更先进高效的内部工具套装AEP开发，demo地址如下：  
+这种Interactive 3d motion graphic类型的网站从2018年初，已经改用更先进高效的内部工具套装AEP开发，demo地址如下：  
 https://github.com/shrekshrek/aep  
 
 
