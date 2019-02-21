@@ -223,7 +223,7 @@ obj.visible = true;
 
 设置滤镜(css3滤镜:grayscale,blur,saturate,sepia,hue-rotate,invert,brightness,contrast,opacity)  
 ```js
-obj.filter({filter-type:params});  
+obj.filter({filterType:params});  
 ```
 
 设置材质(div的background相关的几种属性),在Sprite3D中，因为没有体积，  
@@ -295,7 +295,7 @@ http://shrek.imdevsh.com/show/crazylight/
 http://show.im20.com.cn/zwj/
 
 
-这种Interactive 3d motion graphic类型的网站从2018年初，已经改用更先进高效的内部工具套装AEP开发，demo地址如下：  
+这种Interactive 3d motion graphic类型的网站开发，以前都是程序来做动画，需要书写大量的tween代码，开发效率难以提高。从2018年初开始已经改用更先进高效的内部工具套装AEP开发，demo地址如下：  
 https://github.com/shrekshrek/aep  
 
 
