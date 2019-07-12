@@ -26,7 +26,7 @@ adidas胜势全开 https://shrek.imdevsh.com/show/bbcny/
 
 adidas绝不跟随 https://shrek.imdevsh.com/show/crazylight/
 
-https://shrek.imdevsh.com/show/zwj/
+淘宝造物节 https://shrek.imdevsh.com/show/zwj/
 
 
 这种Interactive 3d motion graphic类型的网站开发，以前都是程序来做动画，需要书写大量的tween代码，开发效率难以提高。从2018年初开始已经改用更先进高效的内部工具套装AEP开发，demo地址如下：  
