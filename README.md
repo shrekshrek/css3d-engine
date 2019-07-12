@@ -18,7 +18,7 @@ https://github.com/shrekshrek/css3d-matrix-es6
 注意2:旧版的Cube更新为Box。  
 
 
-实现案例:
+实现案例（移动端H5）:
 
 adidas绝不凋谢 https://shrek.imdevsh.com/show/drose/
 
