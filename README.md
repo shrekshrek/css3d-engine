@@ -20,11 +20,11 @@ https://github.com/shrekshrek/css3d-matrix-es6
 
 实现案例:
 
-https://shrek.imdevsh.com/show/drose/
+adidas绝不凋谢 https://shrek.imdevsh.com/show/drose/
 
-https://shrek.imdevsh.com/show/bbcny/
+adidas胜势全开 https://shrek.imdevsh.com/show/bbcny/
 
-https://shrek.imdevsh.com/show/crazylight/
+adidas绝不跟随 https://shrek.imdevsh.com/show/crazylight/
 
 https://shrek.imdevsh.com/show/zwj/
 
