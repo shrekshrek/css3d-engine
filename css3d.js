@@ -795,6 +795,7 @@
         }
 
         if (obj.size != undefined) _o.size.apply(_o, obj.size);
+        if (obj.sort != undefined) _o.sort.apply(_o, obj.sort);
         if (obj.position != undefined) _o.position.apply(_o, obj.position);
         if (obj.rotation != undefined) _o.rotation.apply(_o, obj.rotation);
         if (obj.scale != undefined) _o.scale.apply(_o, obj.scale);
