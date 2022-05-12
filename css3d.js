@@ -7,7 +7,7 @@
         typeof define === 'function' && define.amd ? define(factory) :
             (global.C3D = factory());
 }(this, (function () {
-    'use strict';
+    'use strict'; 
 
     var C3D = {};
 
