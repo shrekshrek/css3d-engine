@@ -338,7 +338,7 @@
         },
 
         updateO: function () {
-            if (typeof(this.originX) == 'number') {
+            if (typeof (this.originX) == 'number') {
                 var _x = fixed0(this.originX - this.__orgF.x);
                 this.__orgO.x = _x + 'px';
                 this.__orgT.x = -_x + 'px';
@@ -347,7 +347,7 @@
                 this.__orgT.x = '-' + this.originX;
             }
 
-            if (typeof(this.originY) == 'number') {
+            if (typeof (this.originY) == 'number') {
                 var _y = fixed0(this.originY - this.__orgF.y);
                 this.__orgO.y = _y + 'px';
                 this.__orgT.y = -_y + 'px';
@@ -356,7 +356,7 @@
                 this.__orgT.y = '-' + this.originY;
             }
 
-            if (typeof(this.originZ) == 'number') {
+            if (typeof (this.originZ) == 'number') {
                 var _z = fixed0(this.originZ - this.__orgF.z);
                 this.__orgO.z = _z + 'px';
                 this.__orgT.z = -_z + 'px';
@@ -373,7 +373,7 @@
             var _S0 = this.__sort[0];
             var _S1 = this.__sort[1];
             var _S2 = this.__sort[2];
-            this.el.style[prefix + 'Transform'] = 'translate3d(' + this.__orgT.x + ', ' + this.__orgT.y + ', ' + this.__orgT.z + ') ' + 'translate3d(' + fixed2(this.x) + 'px,' + fixed2(this.y) + 'px,' + fixed2(this.z) + 'px) ' + 'scale3d(' + fixed2(this.scaleX) + ', ' + fixed2(this.scaleY) + ', ' + fixed2(this.scaleZ) + ') ' + 'rotate' + _S0 + '(' + fixed2(this['rotation' + _S0]) % 360 + 'deg) ' + 'rotate' + _S1 + '(' + fixed2(this['rotation' + _S1]) % 360 + 'deg) ' + 'rotate' + _S2 + '(' + fixed2(this['rotation' + _S2]) % 360 + 'deg) ';
+            this.el.style[prefix + 'Transform'] = 'translate3d(' + this.__orgT.x + ', ' + this.__orgT.y + ', ' + this.__orgT.z + ') ' + 'translate3d(' + fixed2(this.x) + 'px,' + fixed2(this.y) + 'px,' + fixed2(this.z) + 'px) ' + 'rotate' + _S0 + '(' + fixed2(this['rotation' + _S0]) % 360 + 'deg) ' + 'rotate' + _S1 + '(' + fixed2(this['rotation' + _S1]) % 360 + 'deg) ' + 'rotate' + _S2 + '(' + fixed2(this['rotation' + _S2]) % 360 + 'deg) ' + 'scale3d(' + fixed2(this.scaleX) + ', ' + fixed2(this.scaleY) + ', ' + fixed2(this.scaleZ) + ')';
             return this;
         },
 
@@ -820,7 +820,7 @@
     }
 
     C3D.create = function (obj) {
-        if (typeof(obj) == 'object') {
+        if (typeof (obj) == 'object') {
             var _obj = obj instanceof Array ? {type: 'sprite', children: obj} : obj;
             return createObj(_obj);
         } else {
